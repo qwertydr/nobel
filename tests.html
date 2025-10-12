@@ -37,12 +37,13 @@ button.secondary{background:#eee;color:var(--text)}
 .sig .role{font-size:12px;color:var(--muted)}
 .watermark{position:absolute;left:50%;top:46%;transform:translate(-50%,-50%);opacity:0.06;font-size:120px;font-family:Merriweather,serif;color:var(--text);pointer-events:none;user-select:none}
 
-/* Fixed coin position */
+/* Responsive Coin */
 .coin{
   position:absolute;
   top:36px;
-  right:36px;
-  width:100px;
+  left:36px;
+  width:12%;   /* scales with page width */
+  max-width:120px; /* never bigger than 120px */
   height:auto;
   z-index:2;
 }
@@ -53,8 +54,7 @@ button.secondary{background:#eee;color:var(--text)}
 @media (max-width:900px){
   .page{padding:20px;border-width:8px}
   .page-inner{padding:18px}
-  .coin{width:80px;top:24px;right:24px}
-  .sig img{max-width:80px}
+  .coin{width:80px;top:24px;left:24px}
 }
 </style>
 </head>

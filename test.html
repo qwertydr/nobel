@@ -1,45 +1,52 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Nobel Prize Certificate Generator</title>
-<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;700;1,300&family=Montserrat:wght@300;500;700&display=swap" rel="stylesheet">
-<style>
-:root{--paper:#fbf9f4;--accent:#b78b2f;--text:#222;--muted:#666}
-*{box-sizing:border-box}
-body{font-family:Montserrat,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;margin:0;background:linear-gradient(180deg,#efefef 0%, #fafafa 100%);color:var(--text)}
-.app{max-width:1200px;margin:28px auto;padding:18px;display:grid;grid-template-columns:1fr 1fr;gap:20px}
-@media (max-width:1000px){.app{grid-template-columns:1fr}}
-.panel{background:#fff;border-radius:12px;padding:18px;box-shadow:0 6px 20px rgba(20,20,20,0.06)}
-.panel h2{margin:0 0 12px;font-size:18px}
-.field{display:flex;flex-direction:column;margin-bottom:10px}
-.field label{font-size:13px;color:var(--muted);margin-bottom:6px}
-.field input[type=text], .field textarea, .field input[type=date]{padding:10px;border:1px solid #e2e2e2;border-radius:8px;font-size:14px}
-textarea{min-height:90px;resize:vertical}
-.row{display:flex;gap:10px}
-.small{flex:1}
-.actions{display:flex;gap:10px;align-items:center;margin-top:8px}
-button{background:var(--accent);color:white;border:none;padding:10px 14px;border-radius:8px;cursor:pointer;font-weight:600}
-button.secondary{background:#eee;color:var(--text)}
-.note{font-size:13px;color:var(--muted)}
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Nobel Prize Certificate Generator Satire</title>
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;700;1,300&family=Montserrat:wght@300;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root{--paper:#fbf9f4;--accent:#b78b2f;--text:#222;--muted:#666}
+    *{box-sizing:border-box}
+    body{font-family:Montserrat,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;margin:0;background:linear-gradient(180deg,#efefef 0%, #fafafa 100%);color:var(--text)}
+    .app{max-width:1200px;margin:28px auto;padding:18px;display:grid;grid-template-columns:1fr 1fr;gap:20px}
+    @media (max-width:1000px){.app{grid-template-columns:1fr}}
+    .panel{background:#fff;border-radius:12px;padding:18px;box-shadow:0 6px 20px rgba(20,20,20,0.06)}
+    .panel h2{margin:0 0 12px;font-size:18px}
+    .field{display:flex;flex-direction:column;margin-bottom:10px}
+    .field label{font-size:13px;color:var(--muted);margin-bottom:6px}
+    .field input[type=text], .field textarea, .field input[type=date], .field select{padding:10px;border:1px solid #e2e2e2;border-radius:8px;font-size:14px}
+    textarea{min-height:90px;resize:vertical}
+    .row{display:flex;gap:10px}
+    .small{flex:1}
+    .actions{display:flex;gap:10px;align-items:center;margin-top:8px}
+    button{background:var(--accent);color:white;border:none;padding:10px 14px;border-radius:8px;cursor:pointer;font-weight:600}
+    button.secondary{background:#eee;color:var(--text)}
+    .note{font-size:13px;color:var(--muted)}
 
-.preview{display:flex;flex-direction:column;gap:18px;align-items:center}
-.page{width:100%;max-width:820px;background:var(--paper);padding:36px;border:12px solid rgba(183,139,47,0.14);border-radius:6px;position:relative;box-shadow:0 10px 30px rgba(30,30,30,0.06)}
-.page-inner{background:linear-gradient(180deg, rgba(255,255,255,0.98), rgba(255,255,255,0.96));padding:24px;border:4px solid rgba(183,139,47,0.06)}
-.title{font-family:Merriweather,serif;font-size:26px;text-align:center;color:var(--text);letter-spacing:1px;margin-bottom:6px}
-.subtitle{font-size:13px;text-align:center;color:var(--muted);margin-bottom:12px}
-.recipient{font-family:Merriweather,serif;font-size:30px;text-align:center;margin:18px 0;color:var(--text)}
-.desc{text-align:center;font-size:15px;color:var(--muted);line-height:1.6;max-width:760px;margin:0 auto}
-.meta{display:flex;justify-content:space-between;align-items:center;margin-top:28px}
-.sig-row{display:flex;justify-content:space-between;margin-top:22px;gap:20px}
-.sig{display:flex;flex-direction:column;align-items:center;flex:1}
-.sig img{max-width:160px;height:auto;border-radius:2px}
-.sig .name{font-weight:700}
-.sig .role{font-size:12px;color:var(--muted)}
-.watermark{position:absolute;left:50%;top:46%;transform:translate(-50%,-50%);opacity:0.06;font-size:120px;font-family:Merriweather,serif;color:var(--text);pointer-events:none;user-select:none}
+    /* pages preview */
+    .preview{display:flex;flex-direction:column;gap:18px;align-items:center}
+    .page{width:100%;max-width:820px;background:var(--paper);padding:36px;border:12px solid rgba(183,139,47,0.14);border-radius:6px;position:relative;box-shadow:0 10px 30px rgba(30,30,30,0.06)}
+    .page-inner{background:linear-gradient(180deg, rgba(255,255,255,0.98), rgba(255,255,255,0.96));padding:24px;border:4px solid rgba(183,139,47,0.06)}
+    .title{font-family:Merriweather,serif;font-size:26px;text-align:center;color:var(--text);letter-spacing:1px;margin-bottom:6px}
+    .subtitle{font-size:13px;text-align:center;color:var(--muted);margin-bottom:12px}
+    .recipient{font-family:Merriweather,serif;font-size:30px;text-align:center;margin:18px 0;color:var(--text)}
+    .desc{text-align:center;font-size:15px;color:var(--muted);line-height:1.6;max-width:760px;margin:0 auto}
+    .meta{display:flex;justify-content:space-between;align-items:center;margin-top:28px}
+    .sig-row{display:flex;justify-content:space-between;margin-top:22px;gap:20px}
+    .sig{display:flex;flex-direction:column;align-items:center;flex:1}
+    .sig img{max-width:160px;height:auto;border-radius:2px}
+    .sig .name{font-weight:700}
+    .sig .role{font-size:12px;color:var(--muted)}
+    .watermark{position:absolute;left:50%;top:46%;transform:translate(-50%,-50%);opacity:0.06;font-size:120px;font-family:Merriweather,serif;color:var(--text);pointer-events:none;user-select:none}
+    
+    .idbox{font-size:12px;color:var(--muted);margin-top:10px;text-align:right}
+    .disclaimer{font-size:12px;color:var(--muted);text-align:center;margin-top:10px}
 
-/* Responsive Coin */
+    /* small screens */
+    @media (max-width:900px){.page{padding:20px;border-width:8px}.page-inner{padding:18px}}
+
+    /* Responsive Coin */
 .coin{
   position:absolute;
   top:36px;
@@ -58,366 +65,429 @@ button.secondary{background:#eee;color:var(--text)}
   .page-inner{padding:18px}
   .coin{width:80px;top:24px;left:24px}
 }
-</style>
+  </style>
 </head>
 <body>
-<div class="app">
-  <div class="panel">
-    <h2>Certificate Data & Controls</h2>
+  <div class="app">
+    <div class="panel">
+      <h2>Certificate Data & Controls</h2>
 
-    <div class="field">
-      <label>Recipient full name</label>
-      <input id="recipient" type="text" placeholder="Enter recipient name">
-    </div>
-
-    <div class="field">
-      <label>Award title</label>
-      <input id="award" type="text" placeholder="Enter award title">
-      <button id="randomAward" class="secondary" style="margin-top:6px;width:100%">Random Award</button>
-    </div>
-
-    <div class="field">
-      <label>Reason / Citation</label>
-      <textarea id="citation" placeholder="Citation will update when you pick a random award"></textarea>
-    </div>
-
-    <div class="row">
-      <div class="field small">
-        <label>Date (auto uses system date)</label>
-        <input id="date" type="date">
+      <div class="field">
+        <label>Recipient full name</label>
+        <input id="recipient" type="text" placeholder="Enter recipient name">
       </div>
-      <div class="field small">
-        <label>Location</label>
-        <input id="location" type="text" value="Stockholm, Sweden">
+
+      <div class="row">
+        <div class="field small">
+          <label>Award title</label>
+          <input id="award" type="text" placeholder="Select or type an award title">
+        </div>
+        <div style="width:140px;display:flex;align-items:flex-end">
+          <button id="randomAward" class="secondary" style="width:100%">Random</button>
+        </div>
       </div>
+
+      <div class="field">
+        <label>Reason / Citation</label>
+        <textarea id="citation" placeholder="Citation will update when you pick a random award"></textarea>
+      </div>
+
+      <div class="row">
+        <div class="field small">
+          <label>Date (auto uses system date)</label>
+          <input id="date" type="date">
+        </div>
+        <div class="field small">
+          <label>Location</label>
+          <input id="location" type="text" value="Stockholm, Sweden">
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="field small">
+          <label>Issuer name</label>
+          <input id="issuer" type="text" value="The Nobel Foundation">
+        </div>
+        <div class="field small">
+          <label>Issuer role</label>
+          <input id="issuerRole" type="text" value="Nobel Committee">
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Editable JSON: awards array — each item may include title, citation, coinImage, signatures (array of local filenames or URLs).</label>
+        <textarea id="awardsJson">[
+{"title":"Nobel Prize in Twitter Diplomacy","citation":"For mastering the art of global politics through late-night tweets and caps lock.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Alternative Facts","citation":"For creating reality in ways that defy physics, logic, and occasionally common sense.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Wall Construction","citation":"For insisting walls are the solution to every complex international problem.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Golf Diplomacy","citation":"For solving world issues one golf swing at a time, often on foreign soil.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Name Calling","citation":"For elevating insults like 'Crooked' and 'Sleepy' into national political strategy.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Reality TV Governance","citation":"For treating global leadership like a reality TV show, complete with dramatic exits.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Meme Presidency","citation":"For turning politics into a 24/7 viral content stream of questionable quality.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Fact Avoidance","citation":"For skillfully dodging inconvenient truths with confidence and flair.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Executive Orders","citation":"For issuing executive decisions faster than most people check email, sometimes legally ambiguous.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Trade Tweets","citation":"For managing international trade wars via 280-character wisdom.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Cabinet Chaos","citation":"For replacing advisors faster than most replace light bulbs.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Inflated Crowds","citation":"For ensuring that every event looks more crowded than physics allows.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Presidential Nicknames","citation":"For branding opponents with unforgettable monikers, unforgettable and mostly unflattering.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Border Wall Negotiation","citation":"For negotiating borders with slogans, tweets, and executive authority.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Impeachment Resilience","citation":"For surviving political scandals with sheer bravado and golf breaks.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Press Aversion","citation":"For managing media coverage with insults, avoidance, and constant tweeting.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Handshake Technique","citation":"For creating legendary moments of awkward handshakes that dominate headlines.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Celebrity Endorsements","citation":"For turning celebrity connections into political currency with theatrical flair.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Question Dodging","citation":"For answering nothing with conviction while keeping cameras entertained.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Rally Chants","citation":"For inventing slogans that repeat, resonate, and occasionally rhyme.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Golf Diplomacy Part II","citation":"For scheduling peace talks only after a full round on the links.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Twitter Investigations","citation":"For conducting national inquiries with the power of a single smartphone.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Executive Ignorance","citation":"For issuing policies without reading the fine print, yet calling them 'perfect.'","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Press Room Domination","citation":"For turning briefings into performance art that confounds journalists.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Celebrity Golf","citation":"For combining world politics and celebrity networking on the golf course.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Spontaneous Declarations","citation":"For declaring everything 'tremendous' while inventing new political realities.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Fact Spin","citation":"For taking true statements and twisting them like circus acrobatics.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Twitter Diplomacy Part II","citation":"For single-handedly negotiating international relations using memes, all caps, and punctuation errors.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Marketing America","citation":"For branding the nation as 'YUGE' while redefining facts creatively.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Political Branding","citation":"For ensuring every political move comes with a Trump brand flair.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Apology Avoidance","citation":"For never apologizing while creating headlines that demand it.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Cabinet Turnover","citation":"For making job security in the White House a thrilling spectator sport.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Mocking Opponents","citation":"For transforming political debate into stand-up comedy with nicknames and theatrics.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Wall Vision","citation":"For dreaming big walls, tweeting bigger walls, and planning the tallest wall in history.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Golf & Governance Fusion","citation":"For blending leisure and policy in ways that only Trump could imagine.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Presidential Hyperbole","citation":"For claiming every achievement is 'the best, ever, in history,' without exception.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Reality TV Foreign Policy","citation":"For making global crises feel like live entertainment.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Rally Showmanship","citation":"For transforming political rallies into theatrical spectacles of epic proportions.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Negotiation via Tweets","citation":"For proving that diplomacy can happen in 280 characters or less.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Cabinet Drama","citation":"For ensuring every new hire sparks headlines, intrigue, or both.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Media Diversion","citation":"For keeping the press busy while substantive matters quietly evolve.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Social Media Strategy","citation":"For using Twitter as a platform for policy announcements, insults, and morning wake-up calls.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Historical Revision","citation":"For inventing alternate histories with confidence unmatched in modern times.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Golf Diplomacy Part III","citation":"For conducting international negotiations with a golf club in one hand and a tweet in the other.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Branding Everything","citation":"For making even political crises feel like personal brand opportunities.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Unforgettable Quotes","citation":"For leaving the public with phrases that linger, confuse, and amuse for decades.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Alternative Reality Management","citation":"For maintaining belief in improbable claims while managing a nation.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Media Wrestling","citation":"For turning news cycles into dramatic wrestling matches of ego and rhetoric.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Presidential Showmanship","citation":"For orchestrating events that blend policy, media, and spectacle into memorable moments.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Surreal Diplomacy","citation":"For making world leaders adjust expectations in real time to accommodate unpredictability.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Tweetstorms","citation":"For delivering policy, insult, and drama simultaneously in rapid succession.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Branding Controversy","citation":"For ensuring that every scandal becomes a signature Trump moment.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Alternative Facts II","citation":"For evolving the concept of truth into a flexible, entertaining art form.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Procrastination","citation":"For expertly delaying responsibilities while convincing everyone else they're busy.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Office Politics","citation":"For mastering the art of nodding and smiling while secretly plotting world domination in the break room.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Overcomplicated Emails","citation":"For writing emails longer than the constitution that nobody reads but everyone forwards.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Coffee Addiction","citation":"For maintaining human civilization solely on caffeine and sheer panic.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Social Media Flexing","citation":"For posting inspirational quotes while living off instant noodles and regrets.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Awkward Small Talk","citation":"For turning elevator rides into existential crises for strangers.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Memeology","citation":"For advancing the science of memes and wasting hours of human potential.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Political Nonsense","citation":"For making speeches sound important while meaning absolutely nothing.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Netflix Bingeing","citation":"For consuming entire seasons in one night and calling it 'research.'","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Bathroom Singing","citation":"For performing private concerts to a captive audience of soap and shampoo bottles.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Fake Expertise","citation":"For confidently explaining things you clearly don't understand to anyone who will listen.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Unread Terms & Conditions","citation":"For blindly agreeing to everything, ensuring corporate profits flourish.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Awful Karaoke","citation":"For bravely subjecting innocent ears to off-key renditions of pop classics.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Last-Minute Genius","citation":"For solving problems 5 minutes before the deadline and calling it brilliance.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Shady Internet Research","citation":"For consulting Wikipedia at 2 AM and claiming a PhD-level discovery.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Office Snacks Hoarding","citation":"For keeping the communal cookie jar under strict personal control.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Conspiracy Theories","citation":"For connecting unrelated events and blaming aliens, politicians, or both.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Awful Jokes","citation":"For making terrible puns that somehow still make colleagues laugh.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Late-Night Tweets","citation":"For posting reckless opinions at 2:37 AM with zero regret.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Dodging Responsibilities","citation":"For avoiding tasks with creativity that rivals professional magicians.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Fake Accents","citation":"For adopting accents in public spaces with zero historical accuracy.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Politically Incorrect Comedy","citation":"For offending everyone equally and laughing at the chaos.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Awful DIY","citation":"For turning a simple furniture project into a full-blown disaster zone.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Internet Rage","citation":"For yelling at strangers online with passion and zero effect.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Oversharing","citation":"For telling too much information about every bodily function publicly.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Sleep Deprivation","citation":"For surviving on energy drinks and existential dread for years.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Unsolicited Advice","citation":"For giving life guidance nobody asked for with unwavering confidence.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in TikTok Fame","citation":"For dancing awkwardly and becoming an overnight influencer.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Pretentious Art Critique","citation":"For describing a stick figure as 'postmodern commentary on human despair.'","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Awful Pickup Lines","citation":"For attempting romantic advances that should legally be banned.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Breaking Zoom","citation":"For causing technical disasters while simply trying to unmute themselves.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Overpriced Coffee Knowledge","citation":"For knowing the origin of obscure beans nobody asked about.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Political Spin","citation":"For making terrible news sound like a victory for humanity.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Awful Fashion Choices","citation":"For confidently wearing socks with sandals in public.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Obvious Lies","citation":"For fabricating stories so bold they almost become believable.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Social Awkwardness","citation":"For ensuring every party has at least one cringe-worthy moment.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Never Responding to Texts","citation":"For achieving ghosting mastery that borders on performance art.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Workplace Slacking","citation":"For perfecting the art of looking busy while doing nothing.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Awful TikTok Duets","citation":"For joining trends that should have remained forgotten.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Awkward Family Dinners","citation":"For turning normal meals into emotional rollercoasters.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Political Corruption","citation":"For making bribes, favors, and nepotism an Olympic sport.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Awful PR Statements","citation":"For turning apologies into public disasters with grace and skill.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Endless Meetings","citation":"For talking for hours without anyone remembering what was said.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Overpriced Avocado Toast","citation":"For spending more on brunch than most pay rent.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Keyboard Warrior Skills","citation":"For typing furious comments from the comfort of their couch.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Awful Customer Service Calls","citation":"For screaming into a phone with zero resolution achieved.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Dumpster Fire Solutions","citation":"For fixing problems by creating new, equally disastrous problems.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Meme Warfare","citation":"For starting online arguments using only cats and sarcastic GIFs.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Terrible Poetry","citation":"For rhyming things that should never rhyme and calling it art.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Fake Apologies","citation":"For saying sorry while making sure nobody believes it.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Unreadable Texts","citation":"For sending messages that require a decoder ring and several guesses.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Reality TV Analysis","citation":"For analyzing television nonsense like it's nuclear physics.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Awful Roommates","citation":"For leaving dirty dishes as a form of abstract protest.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Awful Party Planning","citation":"For making birthdays unforgettable for all the wrong reasons.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Awful Driving","citation":"For turning every commute into a terrifying adventure.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]},
+{"title":"Nobel Prize in Awful TikTok Advice","citation":"For giving life tips that lead to hilariously poor decisions.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]}
+]</textarea>
+        <div style="display:flex;gap:8px;margin-top:8px">
+          <button id="saveAwards" class="secondary">Save list</button>
+          <div class="note">Edit this JSON to change coin image filenames or signature filenames. Keep the files in the same folder as this HTML file.</div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button id="generateBtn">Generate JPGs (2 pages)</button>
+        <button id="previewBtn" class="secondary">Preview</button>
+        <div style="flex:1" class="note">Tip: Place <strong>coin.png</strong>, <strong>signature1.png</strong>, and <strong>signature2.png</strong> in the same folder as this HTML file.</div>
+      </div>
+
+      <div class="disclaimer">For comedy only. Not an official or exact replica of any real award certificate. Generated from nobelprize.me</div>
     </div>
 
-    <div class="row">
-      <div class="field small">
-        <label>Issuer name</label>
-        <input id="issuer" type="text" value="The Nobel Foundation">
+    <div class="preview">
+      <!-- Page 1 -->
+      <div class="page" id="page1">
+        <div class="watermark" id="wm1">AWARD</div>
+        <img id="coinImg1" class="coin" src="coin.png" alt="coin" style="display:none">
+        <div class="page-inner">
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <div>
+              <div class="title" id="title1">— Award title —</div>
+              <div class="subtitle">Presented to</div>
+            </div>
+            <div style="text-align:right">
+              <div style="font-size:12px;color:var(--muted)">Certificate ID</div>
+              <div id="certId" style="font-weight:700;margin-top:6px">ID-000000</div>
+            </div>
+          </div>
+
+          <div class="recipient" id="recipient1">— Recipient —</div>
+          <div style="height:1px;background:linear-gradient(90deg,transparent,#e0cfa0,transparent);margin:18px 0"></div>
+          <div class="desc" id="citation1">— Citation —</div>
+
+          <div class="meta" style="margin-top:28px">
+            <div>
+              <div style="font-size:13px;color:var(--muted)">Date & place</div>
+              <div style="font-weight:700" id="date1">—</div>
+            </div>
+            <div style="text-align:right">
+              <div style="font-size:13px;color:var(--muted)">Issued by</div>
+              <div style="font-weight:700" id="issuer1">The Nobel Foundation</div>
+              <div style="font-size:12px;color:var(--muted)" id="issuerRole1">Nobel Committee</div>
+            </div>
+          </div>
+
+          <div class="sig-row" id="sigRow1">
+            <!-- signature placeholders inserted here -->
+          </div>
+
+          <div class="idbox" id="idbox1">ID: —</div>
+          <div class="disclaimer">This certificate recognizes the recipient's contribution to Mockary. It is issued for satire purposes only and does not imply any affiliation with or endorsement by the Nobel Foundation.</div>
+        </div>
       </div>
-      <div class="field small">
-        <label>Issuer role</label>
-        <input id="issuerRole" type="text" value="Nobel Committee">
+
+      <!-- Page 2: details, citation full, program info -->
+      <div class="page" id="page2">
+        <div class="watermark" id="wm2">NOBEL</div>
+        <img id="coinImg2" class="coin" src="coin.png" alt="coin" style="display:none">
+        <div class="page-inner">
+          <div style="text-align:center;margin-bottom:10px">
+            <div class="title" id="title2">— Award title —</div>
+            <div class="subtitle">Certificate of Merit and Details</div>
+          </div>
+
+          <div style="display:flex;gap:18px">
+            <div style="flex:1">
+              <div style="font-weight:700;margin-bottom:6px">Recipient</div>
+              <div id="recipient2">— Recipient —</div>
+
+              <div style="font-weight:700;margin-top:14px;margin-bottom:6px">Citation</div>
+              <div id="citation2" style="color:var(--muted);line-height:1.6">— Citation —</div>
+            </div>
+            <div style="width:220px">
+              <div style="font-weight:700;margin-bottom:6px">Issuer</div>
+              <div id="issuer2">The Nobel Foundation</div>
+              <div style="font-size:13px;color:var(--muted);margin-top:10px">Issuer role</div>
+              <div id="issuerRole2">Nobel Committee</div>
+
+              <div style="font-weight:700;margin-top:16px;margin-bottom:6px">Location</div>
+              <div id="location2">Stockholm, Sweden</div>
+
+              <div style="font-weight:700;margin-top:16px;margin-bottom:6px">Date</div>
+              <div id="date2">—</div>
+            </div>
+          </div>
+
+          <div style="margin-top:26px">
+            <div style="font-weight:700;margin-bottom:6px">Program notes</div>
+            <div style="color:var(--muted);line-height:1.5">This certificate recognizes the recipient's contribution to research and scholarship. It is issued for educational purposes only and does not imply any affiliation with or endorsement by the Nobel Foundation.</div>
+          </div>
+
+          <div style="margin-top:22px;display:flex;justify-content:flex-end">
+            <div style="text-align:right">
+              <div style="font-size:12px;color:var(--muted)">Signed electronically</div>
+              <div style="font-weight:700" id="issuerSign2">The Nobel Foundation</div>
+              <div style="font-size:12px;color:var(--muted)" id="issuerRoleSign2">Nobel Committee</div>
+            </div>
+          </div>
+
+          <div class="idbox" id="idbox2">ID: —</div>
+        </div>
       </div>
     </div>
-
-    <div class="actions">
-      <button id="generateBtn">Generate JPGs (2 pages)</button>
-      <button id="previewBtn" class="secondary">Flash Preview</button>
-    </div>
-
-    <div class="disclaimer">For comedy only. Not an official or exact replica of any real award certificate.</div>
   </div>
 
-  <div class="preview">
-    <div class="page" id="page1">
-      <div class="watermark" id="wm1">AWARD</div>
-      <img id="coinImg1" class="coin" src="coin.png" alt="coin">
-      <div class="page-inner">
-        <div style="display:flex;align-items:center;justify-content:space-between">
-          <div>
-            <div class="title" id="title1">— Award title —</div>
-            <div class="subtitle">Presented to</div>
-          </div>
-          <div style="text-align:right">
-            <div style="font-size:12px;color:var(--muted)">Certificate ID</div>
-            <div id="certId" style="font-weight:700;margin-top:6px">ID-000000</div>
-          </div>
-        </div>
-        <div class="recipient" id="recipient1">— Recipient —</div>
-        <div style="height:1px;background:linear-gradient(90deg,transparent,#e0cfa0,transparent);margin:18px 0"></div>
-        <div class="desc" id="citation1">— Citation —</div>
-        <div class="meta" style="margin-top:28px">
-          <div>
-            <div style="font-size:13px;color:var(--muted)">Date & place</div>
-            <div style="font-weight:700" id="date1">—</div>
-          </div>
-          <div style="text-align:right">
-            <div style="font-size:13px;color:var(--muted)">Issued by</div>
-            <div style="font-weight:700" id="issuer1">The Nobel Foundation</div>
-            <div style="font-size:12px;color:var(--muted)" id="issuerRole1">Nobel Committee</div>
-          </div>
-        </div>
-        <div class="sig-row" id="sigRow1"></div>
-        <div class="idbox" id="idbox1">ID: —</div>
-      </div>
-    </div>
+  <!-- include html2canvas from CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <script>
+    // Elements
+    const recipient = document.getElementById('recipient');
+    const award = document.getElementById('award');
+    const citation = document.getElementById('citation');
+    const dateInput = document.getElementById('date');
+    const locationInput = document.getElementById('location');
+    const issuer = document.getElementById('issuer');
+    const issuerRole = document.getElementById('issuerRole');
 
-    <div class="page" id="page2">
-      <div class="watermark" id="wm2">NOBEL</div>
-      <img id="coinImg2" class="coin" src="coin.png" alt="coin">
-      <div class="page-inner">
-        <div style="text-align:center;margin-bottom:10px">
-          <div class="title" id="title2">— Award title —</div>
-          <div class="subtitle">Certificate of Merit and Details</div>
-        </div>
-        <div style="display:flex;gap:18px">
-          <div style="flex:1">
-            <div style="font-weight:700;margin-bottom:6px">Recipient</div>
-            <div id="recipient2">— Recipient —</div>
-            <div style="font-weight:700;margin-top:14px;margin-bottom:6px">Citation</div>
-            <div id="citation2" style="color:var(--muted);line-height:1.6">— Citation —</div>
-          </div>
-          <div style="width:220px">
-            <div style="font-weight:700;margin-bottom:6px">Issuer</div>
-            <div id="issuer2">The Nobel Foundation</div>
-            <div style="font-size:13px;color:var(--muted);margin-top:10px">Issuer role</div>
-            <div id="issuerRole2">Nobel Committee</div>
-            <div style="font-weight:700;margin-top:16px;margin-bottom:6px">Location</div>
-            <div id="location2">Stockholm, Sweden</div>
-            <div style="font-weight:700;margin-top:16px;margin-bottom:6px">Date</div>
-            <div id="date2">—</div>
-          </div>
-        </div>
-        <div style="margin-top:26px">
-          <div style="font-weight:700;margin-bottom:6px">Program notes</div>
-          <div style="color:var(--muted);line-height:1.5">This certificate recognizes the recipient's contribution to Mockary. It is issued for satire purposes only and does not imply any affiliation with or endorsement by the Nobel Foundation.</div>
-        </div>
-        <div style="margin-top:22px;display:flex;justify-content:flex-end">
-          <div style="text-align:right">
-            <div style="font-size:12px;color:var(--muted)">Signed electronically</div>
-            <div style="font-weight:700" id="issuerSign2">The Nobel Foundation</div>
-            <div style="font-size:12px;color:var(--muted)" id="issuerRoleSign2">Nobel Committee</div>
-          </div>
-        </div>
-        <div class="idbox" id="idbox2">ID: —</div>
-      </div>
-    </div>
-  </div>
-</div>
+    const title1 = document.getElementById('title1');
+    const recipient1 = document.getElementById('recipient1');
+    const citation1 = document.getElementById('citation1');
+    const date1 = document.getElementById('date1');
+    const issuer1 = document.getElementById('issuer1');
+    const issuerRole1 = document.getElementById('issuerRole1');
+    const sigRow1 = document.getElementById('sigRow1');
+    const certId = document.getElementById('certId');
+    const idbox1 = document.getElementById('idbox1');
 
-<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
-<script>
-const recipient = document.getElementById('recipient');
-const award = document.getElementById('award');
-const citation = document.getElementById('citation');
-const dateInput = document.getElementById('date');
-const locationInput = document.getElementById('location');
-const issuer = document.getElementById('issuer');
-const issuerRole = document.getElementById('issuerRole');
+    const title2 = document.getElementById('title2');
+    const recipient2 = document.getElementById('recipient2');
+    const citation2 = document.getElementById('citation2');
+    const issuer2 = document.getElementById('issuer2');
+    const issuerRole2 = document.getElementById('issuerRole2');
+    const location2 = document.getElementById('location2');
+    const date2 = document.getElementById('date2');
+    const idbox2 = document.getElementById('idbox2');
 
-const title1 = document.getElementById('title1');
-const recipient1 = document.getElementById('recipient1');
-const citation1 = document.getElementById('citation1');
-const date1 = document.getElementById('date1');
-const issuer1 = document.getElementById('issuer1');
-const issuerRole1 = document.getElementById('issuerRole1');
-const sigRow1 = document.getElementById('sigRow1');
-const certId = document.getElementById('certId');
-const idbox1 = document.getElementById('idbox1');
+    const coinImg1 = document.getElementById('coinImg1');
+    const coinImg2 = document.getElementById('coinImg2');
 
-const title2 = document.getElementById('title2');
-const recipient2 = document.getElementById('recipient2');
-const citation2 = document.getElementById('citation2');
-const issuer2 = document.getElementById('issuer2');
-const issuerRole2 = document.getElementById('issuerRole2');
-const location2 = document.getElementById('location2');
-const date2 = document.getElementById('date2');
-const idbox2 = document.getElementById('idbox2');
+    const awardsJson = document.getElementById('awardsJson');
 
-const coinImg1 = document.getElementById('coinImg1');
-const coinImg2 = document.getElementById('coinImg2');
+    // Default awards list (editable JSON). Uses local filenames coin.png and signature1.png, signature2.png by default.
+    let awardsList = [];
+    try{ awardsList = JSON.parse(awardsJson.value); }catch(e){ awardsList = []; }
 
-const awardsList = [
-{"title":"Nobel Prize in Twitter Diplomacy","citation":"For mastering the art of global politics through late-night tweets and caps lock."},
-{"title":"Nobel Prize in Alternative Facts","citation":"For creating reality in ways that defy physics, logic, and occasionally common sense."},
-{"title":"Nobel Prize in Wall Construction","citation":"For insisting walls are the solution to every complex international problem."},
-{"title":"Nobel Prize in Golf Diplomacy","citation":"For solving world issues one golf swing at a time, often on foreign soil."},
-{"title":"Nobel Prize in Name Calling","citation":"For elevating insults like 'Crooked' and 'Sleepy' into national political strategy."},
-{"title":"Nobel Prize in Reality TV Governance","citation":"For treating global leadership like a reality TV show, complete with dramatic exits."},
-{"title":"Nobel Prize in Meme Presidency","citation":"For turning politics into a 24/7 viral content stream of questionable quality."},
-{"title":"Nobel Prize in Fact Avoidance","citation":"For skillfully dodging inconvenient truths with confidence and flair."},
-{"title":"Nobel Prize in Executive Orders","citation":"For issuing executive decisions faster than most people check email, sometimes legally ambiguous."},
-{"title":"Nobel Prize in Trade Tweets","citation":"For managing international trade wars via 280-character wisdom."},
-{"title":"Nobel Prize in Cabinet Chaos","citation":"For replacing advisors faster than most replace light bulbs."},
-{"title":"Nobel Prize in Inflated Crowds","citation":"For ensuring that every event looks more crowded than physics allows."},
-{"title":"Nobel Prize in Presidential Nicknames","citation":"For branding opponents with unforgettable monikers, unforgettable and mostly unflattering."},
-{"title":"Nobel Prize in Border Wall Negotiation","citation":"For negotiating borders with slogans, tweets, and executive authority."},
-{"title":"Nobel Prize in Impeachment Resilience","citation":"For surviving political scandals with sheer bravado and golf breaks."},
-{"title":"Nobel Prize in Press Aversion","citation":"For managing media coverage with insults, avoidance, and constant tweeting."},
-{"title":"Nobel Prize in Handshake Technique","citation":"For creating legendary moments of awkward handshakes that dominate headlines."},
-{"title":"Nobel Prize in Celebrity Endorsements","citation":"For turning celebrity connections into political currency with theatrical flair."},
-{"title":"Nobel Prize in Question Dodging","citation":"For answering nothing with conviction while keeping cameras entertained."},
-{"title":"Nobel Prize in Rally Chants","citation":"For inventing slogans that repeat, resonate, and occasionally rhyme."},
-{"title":"Nobel Prize in Golf Diplomacy Part II","citation":"For scheduling peace talks only after a full round on the links."},
-{"title":"Nobel Prize in Twitter Investigations","citation":"For conducting national inquiries with the power of a single smartphone."},
-{"title":"Nobel Prize in Executive Ignorance","citation":"For issuing policies without reading the fine print, yet calling them 'perfect.'"},
-{"title":"Nobel Prize in Press Room Domination","citation":"For turning briefings into performance art that confounds journalists."},
-{"title":"Nobel Prize in Celebrity Golf","citation":"For combining world politics and celebrity networking on the golf course."},
-{"title":"Nobel Prize in Spontaneous Declarations","citation":"For declaring everything 'tremendous' while inventing new political realities."},
-{"title":"Nobel Prize in Fact Spin","citation":"For taking true statements and twisting them like circus acrobatics."},
-{"title":"Nobel Prize in Twitter Diplomacy Part II","citation":"For single-handedly negotiating international relations using memes, all caps, and punctuation errors."},
-{"title":"Nobel Prize in Marketing America","citation":"For branding the nation as 'YUGE' while redefining facts creatively."},
-{"title":"Nobel Prize in Political Branding","citation":"For ensuring every political move comes with a Trump brand flair."},
-{"title":"Nobel Prize in Apology Avoidance","citation":"For never apologizing while creating headlines that demand it."},
-{"title":"Nobel Prize in Cabinet Turnover","citation":"For making job security in the White House a thrilling spectator sport."},
-{"title":"Nobel Prize in Mocking Opponents","citation":"For transforming political debate into stand-up comedy with nicknames and theatrics."},
-{"title":"Nobel Prize in Wall Vision","citation":"For dreaming big walls, tweeting bigger walls, and planning the tallest wall in history."},
-{"title":"Nobel Prize in Golf & Governance Fusion","citation":"For blending leisure and policy in ways that only Trump could imagine."},
-{"title":"Nobel Prize in Presidential Hyperbole","citation":"For claiming every achievement is 'the best, ever, in history,' without exception."},
-{"title":"Nobel Prize in Reality TV Foreign Policy","citation":"For making global crises feel like live entertainment."},
-{"title":"Nobel Prize in Rally Showmanship","citation":"For transforming political rallies into theatrical spectacles of epic proportions."},
-{"title":"Nobel Prize in Negotiation via Tweets","citation":"For proving that diplomacy can happen in 280 characters or less."},
-{"title":"Nobel Prize in Cabinet Drama","citation":"For ensuring every new hire sparks headlines, intrigue, or both."},
-{"title":"Nobel Prize in Media Diversion","citation":"For keeping the press busy while substantive matters quietly evolve."},
-{"title":"Nobel Prize in Social Media Strategy","citation":"For using Twitter as a platform for policy announcements, insults, and morning wake-up calls."},
-{"title":"Nobel Prize in Historical Revision","citation":"For inventing alternate histories with confidence unmatched in modern times."},
-{"title":"Nobel Prize in Golf Diplomacy Part III","citation":"For conducting international negotiations with a golf club in one hand and a tweet in the other."},
-{"title":"Nobel Prize in Branding Everything","citation":"For making even political crises feel like personal brand opportunities."},
-{"title":"Nobel Prize in Unforgettable Quotes","citation":"For leaving the public with phrases that linger, confuse, and amuse for decades."},
-{"title":"Nobel Prize in Alternative Reality Management","citation":"For maintaining belief in improbable claims while managing a nation."},
-{"title":"Nobel Prize in Media Wrestling","citation":"For turning news cycles into dramatic wrestling matches of ego and rhetoric."},
-{"title":"Nobel Prize in Presidential Showmanship","citation":"For orchestrating events that blend policy, media, and spectacle into memorable moments."},
-{"title":"Nobel Prize in Surreal Diplomacy","citation":"For making world leaders adjust expectations in real time to accommodate unpredictability."},
-{"title":"Nobel Prize in Tweetstorms","citation":"For delivering policy, insult, and drama simultaneously in rapid succession."},
-{"title":"Nobel Prize in Branding Controversy","citation":"For ensuring that every scandal becomes a signature Trump moment."},
-{"title":"Nobel Prize in Alternative Facts II","citation":"For evolving the concept of truth into a flexible, entertaining art form."},  
-{"title":"Nobel Prize in Procrastination","citation":"For expertly delaying responsibilities while convincing everyone else they’re busy."},
-{"title":"Nobel Prize in Office Politics","citation":"For mastering the art of nodding and smiling while secretly plotting world domination in the break room."},
-{"title":"Nobel Prize in Overcomplicated Emails","citation":"For writing emails longer than the constitution that nobody reads but everyone forwards."},
-{"title":"Nobel Prize in Coffee Addiction","citation":"For maintaining human civilization solely on caffeine and sheer panic."},
-{"title":"Nobel Prize in Social Media Flexing","citation":"For posting inspirational quotes while living off instant noodles and regrets."},
-{"title":"Nobel Prize in Awkward Small Talk","citation":"For turning elevator rides into existential crises for strangers."},
-{"title":"Nobel Prize in Memeology","citation":"For advancing the science of memes and wasting hours of human potential."},
-{"title":"Nobel Prize in Political Nonsense","citation":"For making speeches sound important while meaning absolutely nothing."},
-{"title":"Nobel Prize in Netflix Bingeing","citation":"For consuming entire seasons in one night and calling it 'research.'"},
-{"title":"Nobel Prize in Bathroom Singing","citation":"For performing private concerts to a captive audience of soap and shampoo bottles."},
-{"title":"Nobel Prize in Fake Expertise","citation":"For confidently explaining things you clearly don’t understand to anyone who will listen."},
-{"title":"Nobel Prize in Unread Terms & Conditions","citation":"For blindly agreeing to everything, ensuring corporate profits flourish."},
-{"title":"Nobel Prize in Awful Karaoke","citation":"For bravely subjecting innocent ears to off-key renditions of pop classics."},
-{"title":"Nobel Prize in Last-Minute Genius","citation":"For solving problems 5 minutes before the deadline and calling it brilliance."},
-{"title":"Nobel Prize in Shady Internet Research","citation":"For consulting Wikipedia at 2 AM and claiming a PhD-level discovery."},
-{"title":"Nobel Prize in Office Snacks Hoarding","citation":"For keeping the communal cookie jar under strict personal control."},
-{"title":"Nobel Prize in Conspiracy Theories","citation":"For connecting unrelated events and blaming aliens, politicians, or both."},
-{"title":"Nobel Prize in Awful Jokes","citation":"For making terrible puns that somehow still make colleagues laugh."},
-{"title":"Nobel Prize in Late-Night Tweets","citation":"For posting reckless opinions at 2:37 AM with zero regret."},
-{"title":"Nobel Prize in Dodging Responsibilities","citation":"For avoiding tasks with creativity that rivals professional magicians."},
-{"title":"Nobel Prize in Fake Accents","citation":"For adopting accents in public spaces with zero historical accuracy."},
-{"title":"Nobel Prize in Politically Incorrect Comedy","citation":"For offending everyone equally and laughing at the chaos."},
-{"title":"Nobel Prize in Awful DIY","citation":"For turning a simple furniture project into a full-blown disaster zone."},
-{"title":"Nobel Prize in Internet Rage","citation":"For yelling at strangers online with passion and zero effect."},
-{"title":"Nobel Prize in Oversharing","citation":"For telling too much information about every bodily function publicly."},
-{"title":"Nobel Prize in Sleep Deprivation","citation":"For surviving on energy drinks and existential dread for years."},
-{"title":"Nobel Prize in Unsolicited Advice","citation":"For giving life guidance nobody asked for with unwavering confidence."},
-{"title":"Nobel Prize in TikTok Fame","citation":"For dancing awkwardly and becoming an overnight influencer."},
-{"title":"Nobel Prize in Pretentious Art Critique","citation":"For describing a stick figure as 'postmodern commentary on human despair.'"},
-{"title":"Nobel Prize in Awful Pickup Lines","citation":"For attempting romantic advances that should legally be banned."},
-{"title":"Nobel Prize in Breaking Zoom","citation":"For causing technical disasters while simply trying to unmute themselves."},
-{"title":"Nobel Prize in Overpriced Coffee Knowledge","citation":"For knowing the origin of obscure beans nobody asked about."},
-{"title":"Nobel Prize in Political Spin","citation":"For making terrible news sound like a victory for humanity."},
-{"title":"Nobel Prize in Awful Fashion Choices","citation":"For confidently wearing socks with sandals in public."},
-{"title":"Nobel Prize in Obvious Lies","citation":"For fabricating stories so bold they almost become believable."},
-{"title":"Nobel Prize in Social Awkwardness","citation":"For ensuring every party has at least one cringe-worthy moment."},
-{"title":"Nobel Prize in Never Responding to Texts","citation":"For achieving ghosting mastery that borders on performance art."},
-{"title":"Nobel Prize in Workplace Slacking","citation":"For perfecting the art of looking busy while doing nothing."},
-{"title":"Nobel Prize in Awful TikTok Duets","citation":"For joining trends that should have remained forgotten."},
-{"title":"Nobel Prize in Awkward Family Dinners","citation":"For turning normal meals into emotional rollercoasters."},
-{"title":"Nobel Prize in Political Corruption","citation":"For making bribes, favors, and nepotism an Olympic sport."},
-{"title":"Nobel Prize in Awful PR Statements","citation":"For turning apologies into public disasters with grace and skill."},
-{"title":"Nobel Prize in Endless Meetings","citation":"For talking for hours without anyone remembering what was said."},
-{"title":"Nobel Prize in Overpriced Avocado Toast","citation":"For spending more on brunch than most pay rent."},
-{"title":"Nobel Prize in Keyboard Warrior Skills","citation":"For typing furious comments from the comfort of their couch."},
-{"title":"Nobel Prize in Awful Customer Service Calls","citation":"For screaming into a phone with zero resolution achieved."},
-{"title":"Nobel Prize in Dumpster Fire Solutions","citation":"For fixing problems by creating new, equally disastrous problems."},
-{"title":"Nobel Prize in Meme Warfare","citation":"For starting online arguments using only cats and sarcastic GIFs."},
-{"title":"Nobel Prize in Terrible Poetry","citation":"For rhyming things that should never rhyme and calling it art."},
-{"title":"Nobel Prize in Fake Apologies","citation":"For saying sorry while making sure nobody believes it."},
-{"title":"Nobel Prize in Unreadable Texts","citation":"For sending messages that require a decoder ring and several guesses."},
-{"title":"Nobel Prize in Reality TV Analysis","citation":"For analyzing television nonsense like it’s nuclear physics."},
-{"title":"Nobel Prize in Awful Roommates","citation":"For leaving dirty dishes as a form of abstract protest."},
-{"title":"Nobel Prize in Awful Party Planning","citation":"For making birthdays unforgettable for all the wrong reasons."},
-{"title":"Nobel Prize in Awful Driving","citation":"For turning every commute into a terrifying adventure."},
-{"title":"Nobel Prize in Awful TikTok Advice","citation":"For giving life tips that lead to hilariously poor decisions."}
-];
+    document.getElementById('saveAwards').addEventListener('click', ()=>{
+      try{
+        const parsed = JSON.parse(awardsJson.value);
+        if(!Array.isArray(parsed)) throw new Error('JSON must be an array');
+        awardsList = parsed;
+        alert('Saved awards list ('+awardsList.length+' items)');
+      }catch(e){
+        alert('Invalid JSON: '+e.message);
+      }
+    });
 
-document.getElementById('randomAward').addEventListener('click', ()=>{
-  const item = awardsList[Math.floor(Math.random()*awardsList.length)];
-  award.value = item.title;
-  if(item.citation) citation.value = item.citation;
-  renderSignatures(item.signatures || []);
-  updatePreview();
-});
+    // Pick random award and also update citation, coin and signatures
+    document.getElementById('randomAward').addEventListener('click', ()=>{
+      if(!awardsList || !awardsList.length){ alert('Awards list empty. Edit JSON and Save.'); return; }
+      const item = awardsList[Math.floor(Math.random()*awardsList.length)];
+      award.value = item.title || '';
+      // if citation exists in json, apply it
+      if(item.citation) citation.value = item.citation;
+      // coin image (local filename or URL)
+      if(item.coinImage){ coinImg1.src = item.coinImage; coinImg2.src = item.coinImage; coinImg1.style.display='block'; coinImg2.style.display='block'; }
+      // signatures: replace sigRow1 content with images
+      renderSignatures(item.signatures || []);
+      updatePreview();
+    });
 
-function renderSignatures(urls){
-  sigRow1.innerHTML = '';
-  urls.forEach(u=>{
-    const wrapper = document.createElement('div'); wrapper.className='sig';
-    const img = document.createElement('img'); img.src = u; img.alt='signature';
-    wrapper.appendChild(img);
-    const nm = document.createElement('div'); nm.className='name'; nm.textContent='';
-    const rl = document.createElement('div'); rl.className='role'; rl.textContent='';
-    wrapper.appendChild(nm); wrapper.appendChild(rl);
-    sigRow1.appendChild(wrapper);
-  });
-}
+    // Render signature images into sigRow1
+    function renderSignatures(urls){
+      sigRow1.innerHTML = '';
+      if(!urls || !urls.length) return;
+      urls.forEach(u=>{
+        const wrapper = document.createElement('div'); wrapper.className='sig';
+        const img = document.createElement('img'); img.src = u; img.alt='signature';
+        wrapper.appendChild(img);
+        const nm = document.createElement('div'); nm.className='name'; nm.textContent='';
+        const rl = document.createElement('div'); rl.className='role'; rl.textContent='';
+        wrapper.appendChild(nm); wrapper.appendChild(rl);
+        sigRow1.appendChild(wrapper);
+      });
+    }
 
-function setTodayDate(){
-  const today = new Date();
-  const yyyy = today.getFullYear();
-  const mm = String(today.getMonth()+1).padStart(2,'0');
-  const dd = String(today.getDate()).padStart(2,'0');
-  dateInput.value = `${yyyy}-${mm}-${dd}`;
-}
-setTodayDate();
+    // Default date: system today
+    function setTodayDate(){
+      const today = new Date();
+      const yyyy = today.getFullYear();
+      const mm = String(today.getMonth()+1).padStart(2,'0');
+      const dd = String(today.getDate()).padStart(2,'0');
+      dateInput.value = `${yyyy}-${mm}-${dd}`;
+    }
+    setTodayDate();
 
-function genId(){
-  const now = Date.now().toString(36).toUpperCase();
-  const rnd = Math.floor(Math.random()*9000)+1000;
-  return 'EDU-'+now+'-'+rnd;
-}
+    // Random ID generator
+    function genId(){
+      const now = Date.now().toString(36).toUpperCase();
+      const rnd = Math.floor(Math.random()*9000)+1000;
+      return 'EDU-'+now+'-'+rnd;
+    }
 
-function updatePreview(){
-  const loc = locationInput.value || '';
-  const formattedDate = (dateInput.value) ? new Date(dateInput.value).toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'}) : '—';
+    function updatePreview(){
+      const loc = locationInput.value || '';
+      const formattedDate = (dateInput.value) ? new Date(dateInput.value).toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'}) : '—';
 
-  title1.textContent = award.value || '— Award title —';
-  title2.textContent = award.value || '— Award title —';
-  recipient1.textContent = recipient.value || '— Recipient —';
-  recipient2.textContent = recipient.value || '— Recipient —';
-  citation1.textContent = citation.value || '—';
-  citation2.textContent = citation.value || '—';
-  date1.textContent = formattedDate + (loc? (' — '+loc): '');
-  date2.textContent = formattedDate;
-  issuer1.textContent = issuer.value || 'The Nobel Foundation';
-  issuer2.textContent = issuer.value || 'The Nobel Foundation';
-  issuerRole1.textContent = issuerRole.value || 'Nobel Committee';
-  issuerRole2.textContent = issuerRole.value || 'Nobel Committee';
-  location2.textContent = loc || 'Stockholm, Sweden';
-  wm1.textContent = (award.value || 'AWARD').toUpperCase();
-  wm2.textContent = (award.value || 'NOBEL').toUpperCase();
+      title1.textContent = award.value || '— Award title —';
+      title2.textContent = award.value || '— Award title —';
+      recipient1.textContent = recipient.value || '— Recipient —';
+      recipient2.textContent = recipient.value || '— Recipient —';
+      citation1.textContent = citation.value || '—';
+      citation2.textContent = citation.value || '—';
+      date1.textContent = formattedDate + (loc? (' — '+loc): '');
+      date2.textContent = formattedDate;
+      issuer1.textContent = issuer.value || 'The Nobel Foundation';
+      issuer2.textContent = issuer.value || 'The Nobel Foundation';
+      issuerRole1.textContent = issuerRole.value || 'Nobel Committee';
+      issuerRole2.textContent = issuerRole.value || 'Nobel Committee';
+      location2.textContent = loc || 'Stockholm, Sweden';
+      wm1.textContent = (award.value || 'AWARD').toUpperCase();
+      wm2.textContent = (award.value || 'NOBEL').toUpperCase();
 
-  const id = genId();
-  certId.textContent = id;
-  idbox1.textContent = 'ID: '+id;
-  idbox2.textContent = 'ID: '+id;
-}
+      const id = genId();
+      certId.textContent = id;
+      idbox1.textContent = 'ID: '+id;
+      idbox2.textContent = 'ID: '+id;
 
-[recipient,award,citation,dateInput,locationInput,issuer,issuerRole].forEach(el=>el.addEventListener('input', updatePreview));
-updatePreview();
+      // If coin images set, show them
+      if(coinImg1.src && coinImg1.src.indexOf('coin.png')>-1){ coinImg1.style.display='block'; coinImg2.style.display='block'; }
+    }
 
-document.getElementById('previewBtn').addEventListener('click', ()=>{
-  const p1 = document.getElementById('page1');
-  p1.style.transform = 'scale(0.997)';
-  setTimeout(()=>p1.style.transform='scale(1)',220);
-});
+    // Wire inputs
+    [recipient,award,citation,dateInput,locationInput,issuer,issuerRole].forEach(el=>el.addEventListener('input', updatePreview));
+    updatePreview();
 
-async function downloadElementAsJpg(el, filename){
-  await new Promise(r=>setTimeout(r,120));
-  const scale = 3;
-  const originalBg = el.style.backgroundColor;
-  el.style.backgroundColor = '#ffffff';
-  try{
-    const canvas = await html2canvas(el, {scale:scale, useCORS:true, backgroundColor:'#ffffff'});
-    const dataURL = canvas.toDataURL('image/jpeg', 0.95);
-    const link = document.createElement('a'); link.href = dataURL; link.download = filename; document.body.appendChild(link); link.click(); link.remove();
-  }finally{ el.style.backgroundColor = originalBg || ''; }
-}
+    // Flash preview
+    document.getElementById('previewBtn').addEventListener('click', ()=>{
+      const p1 = document.getElementById('page1');
+      p1.style.transform = 'scale(0.997)';
+      setTimeout(()=>p1.style.transform='scale(1)',220);
+    });
 
-document.getElementById('generateBtn').addEventListener('click', async ()=>{
-  updatePreview();
-  const p1 = document.getElementById('page1');
+    // Download helper
+    async function downloadElementAsJpg(el, filename){
+      await new Promise(r=>setTimeout(r,120));
+      const scale = 3;
+      const originalBg = el.style.backgroundColor;
+      el.style.backgroundColor = '#ffffff';
+      try{
+        const canvas = await html2canvas(el, {scale:scale, useCORS:true, backgroundColor:'#ffffff'});
+        const dataURL = canvas.toDataURL('image/jpeg', 0.95);
+        const link = document.createElement('a'); link.href = dataURL; link.download = filename; document.body.appendChild(link); link.click(); link.remove();
+      }finally{ el.style.backgroundColor = originalBg || ''; }
+    }
+
+    document.getElementById('generateBtn').addEventListener('click', async ()=>{
+      updatePreview();
+      const p1 = document.getElementById('page1');
       const p2 = document.getElementById('page2');
       const nameSafe = (recipient.value||'recipient').replace(/[^a-z0-9_\-]/gi,'_');
       const base = nameSafe + '_' + (new Date().toISOString().slice(0,10));
@@ -429,8 +499,7 @@ document.getElementById('generateBtn').addEventListener('click', async ()=>{
       }catch(err){ alert('Error generating images: '+err.message); }
     });
 
-
-   // When window focus, refresh date (in case system date changed)
+    // When window focus, refresh date (in case system date changed)
     window.addEventListener('focus', ()=>{ setTodayDate(); updatePreview(); });
 
     // On load: try to show local coin and signatures if exist
@@ -442,6 +511,7 @@ document.getElementById('generateBtn').addEventListener('click', async ()=>{
       // if files not found, images will just be broken — that's acceptable when running locally; user must place files in same folder.
       updatePreview();
     });
-</script>
+
+  </script>
 </body>
 </html>

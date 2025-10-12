@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Two-Page Nobel-Style Certificate Generator</title>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;700;1,300&family=Montserrat:wght@300;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#fbf9f4;--accent:#b78b2f;--text:#222;--muted:#666}
+*{box-sizing:border-box}
+body{font-family:Montserrat,system-ui,Arial,sans-serif;margin:0;background:#efefef;color:var(--text)}
+.app{max-width:1200px;margin:28px auto;padding:18px;display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media(max-width:1000px){.app{grid-template-columns:1fr}}
+.panel{background:#fff;border-radius:12px;padding:18px;box-shadow:0 6px 20px rgba(20,20,20,0.06)}
+.panel h2{margin:0 0 12px;font-size:18px}
+.field{display:flex;flex-direction:column;margin-bottom:10px}
+.field label{font-size:13px;color:var(--muted);margin-bottom:6px}
+.field input[type=text], .field textarea, .field input[type=date]{padding:10px;border:1px solid #e2e2e2;border-radius:8px;font-size:14px}
+textarea{min-height:90px;resize:vertical}
+.row{display:flex;gap:10px}
+.small{flex:1}
+.actions{display:flex;gap:10px;align-items:center;margin-top:8px}
+button{background:var(--accent);color:white;border:none;padding:10px 14px;border-radius:8px;cursor:pointer;font-weight:600}
+button.secondary{background:#eee;color:var(--text)}
+.preview{display:flex;flex-direction:column;gap:18px;align-items:center}
+.page{width:100%;max-width:820px;background:var(--paper);padding:36px;border:12px solid rgba(183,139,47,0.14);border-radius:6px;position:relative;box-shadow:0 10px 30px rgba(30,30,30,0.06)}
+.page-inner{background:linear-gradient(180deg, rgba(255,255,255,0.98), rgba(255,255,255,0.96));padding:24px;border:4px solid rgba(183,139,47,0.06)}
+.title{font-family:Merriweather,serif;font-size:26px;text-align:center;color:var(--text);letter-spacing:1px;margin-bottom:6px}
+.subtitle{font-size:13px;text-align:center;color:var(--muted);margin-bottom:12px}
+.recipient{font-family:Merriweather,serif;font-size:30px;text-align:center;margin:18px 0;color:var(--text)}
+.desc{text-align:center;font-size:15px;color:var(--muted);line-height:1.6;max-width:760px;margin:0 auto}
+.meta{display:flex;justify-content:space-between;align-items:center;margin-top:28px}
+.sig-row{display:flex;justify-content:space-between;margin-top:22px;gap:20px}
+.sig{display:flex;flex-direction:column;align-items:center;flex:1}
+.sig img{max-width:120px;height:auto;border-radius:2px}
+.sig .name{font-weight:700}
+.sig .role{font-size:12px;color:var(--muted)}
+.watermark{position:absolute;left:50%;top:46%;transform:translate(-50%,-50%);opacity:0.06;font-size:120px;font-family:Merriweather,serif;color:var(--text);pointer-events:none;user-select:none}
+
+/* Fixed coin position */
+.coin{
+  position:absolute;
+  top:36px;
+  right:36px;
+  width:100px;
+  height:auto;
+  z-index:2;
+}
+
+.idbox{font-size:12px;color:var(--muted);margin-top:10px;text-align:right}
+.disclaimer{font-size:12px;color:var(--muted);text-align:center;margin-top:10px}
+
+@media (max-width:900px){
+  .page{padding:20px;border-width:8px}
+  .page-inner{padding:18px}
+  .coin{width:80px;top:24px;right:24px}
+  .sig img{max-width:80px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="panel">
+    <h2>Certificate Data & Controls</h2>
+
+    <div class="field">
+      <label>Recipient full name</label>
+      <input id="recipient" type="text" placeholder="Enter recipient name">
+    </div>
+
+    <div class="field">
+      <label>Award title</label>
+      <input id="award" type="text" placeholder="Enter award title">
+      <button id="randomAward" class="secondary" style="margin-top:6px;width:100%">Random Award</button>
+    </div>
+
+    <div class="field">
+      <label>Reason / Citation</label>
+      <textarea id="citation" placeholder="Citation will update when you pick a random award"></textarea>
+    </div>
+
+    <div class="row">
+      <div class="field small">
+        <label>Date (auto uses system date)</label>
+        <input id="date" type="date">
+      </div>
+      <div class="field small">
+        <label>Location</label>
+        <input id="location" type="text" value="Stockholm, Sweden">
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="field small">
+        <label>Issuer name</label>
+        <input id="issuer" type="text" value="The Nobel Foundation">
+      </div>
+      <div class="field small">
+        <label>Issuer role</label>
+        <input id="issuerRole" type="text" value="Nobel Committee">
+      </div>
+    </div>
+
+    <div class="actions">
+      <button id="generateBtn">Generate JPGs (2 pages)</button>
+      <button id="previewBtn" class="secondary">Flash Preview</button>
+    </div>
+
+    <div class="disclaimer">For educational and non-commercial use only.</div>
+  </div>
+
+  <div class="preview">
+    <!-- Page 1 -->
+    <div class="page" id="page1">
+      <div class="watermark" id="wm1">AWARD</div>
+      <img id="coinImg1" class="coin" src="coin.png" alt="coin">
+      <div class="page-inner">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <div>
+            <div class="title" id="title1">— Award title —</div>
+            <div class="subtitle">Presented to</div>
+          </div>
+          <div style="text-align:right">
+            <div style="font-size:12px;color:var(--muted)">Certificate ID</div>
+            <div id="certId" style="font-weight:700;margin-top:6px">ID-000000</div>
+          </div>
+        </div>
+        <div class="recipient" id="recipient1">— Recipient —</div>
+        <div style="height:1px;background:linear-gradient(90deg,transparent,#e0cfa0,transparent);margin:18px 0"></div>
+        <div class="desc" id="citation1">— Citation —</div>
+        <div class="sig-row" id="sigRow1"></div>
+        <div class="meta">
+          <div>
+            <div style="font-size:13px;color:var(--muted)">Date & place</div>
+            <div style="font-weight:700" id="date1">—</div>
+          </div>
+          <div style="text-align:right">
+            <div style="font-size:13px;color:var(--muted)">Issued by</div>
+            <div style="font-weight:700" id="issuer1">The Nobel Foundation</div>
+            <div style="font-size:12px;color:var(--muted)" id="issuerRole1">Nobel Committee</div>
+          </div>
+        </div>
+        <div class="idbox" id="idbox1">ID: —</div>
+      </div>
+    </div>
+
+    <!-- Page 2 -->
+    <div class="page" id="page2">
+      <div class="watermark" id="wm2">NOBEL</div>
+      <img id="coinImg2" class="coin" src="coin.png" alt="coin">
+      <div class="page-inner">
+        <div style="text-align:center;margin-bottom:10px">
+          <div class="title" id="title2">— Award title —</div>
+          <div class="subtitle">Certificate Details</div>
+        </div>
+        <div style="display:flex;gap:18px">
+          <div style="flex:1">
+            <div style="font-weight:700;margin-bottom:6px">Recipient</div>
+            <div id="recipient2">— Recipient —</div>
+            <div style="font-weight:700;margin-top:14px;margin-bottom:6px">Citation</div>
+            <div id="citation2" style="color:var(--muted);line-height:1.6">— Citation —</div>
+          </div>
+          <div style="width:220px">
+            <div style="font-weight:700;margin-bottom:6px">Issuer</div>
+            <div id="issuer2">The Nobel Foundation</div>
+            <div style="font-size:13px;color:var(--muted);margin-top:10px">Issuer role</div>
+            <div id="issuerRole2">Nobel Committee</div>
+            <div style="font-weight:700;margin-top:16px;margin-bottom:6px">Location</div>
+            <div id="location2">Stockholm, Sweden</div>
+            <div style="font-weight:700;margin-top:16px;margin-bottom:6px">Date</div>
+            <div id="date2">—</div>
+          </div>
+        </div>
+        <div class="idbox" id="idbox2">ID: —</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script>
+// Elements
+const recipient = document.getElementById('recipient');
+const award = document.getElementById('award');
+const citation = document.getElementById('citation');
+const dateInput = document.getElementById('date');
+const locationInput = document.getElementById('location');
+const issuer = document.getElementById('issuer');
+const issuerRole = document.getElementById('issuerRole');
+
+const title1 = document.getElementById('title1');
+const recipient1 = document.getElementById('recipient1');
+const citation1 = document.getElementById('citation1');
+const date1 = document.getElementById('date1');
+const issuer1 = document.getElementById('issuer1');
+const issuerRole1 = document.getElementById('issuerRole1');
+const sigRow1 = document.getElementById('sigRow1');
+const certId = document.getElementById('certId');
+const idbox1 = document.getElementById('idbox1');
+
+const title2 = document.getElementById('title2');
+const recipient2 = document.getElementById('recipient2');
+const citation2 = document.getElementById('citation2');
+const issuer2 = document.getElementById('issuer2');
+const issuerRole2 = document.getElementById('issuerRole2');
+const location2 = document.getElementById('location2');
+const date2 = document.getElementById('date2');
+const idbox2 = document.getElementById('idbox2');
+
+// Awards list
+const awardsList = [
+  {title:"Nobel Prize in Humor",citation:"For bringing laughter into serious academic debates.",signatures:["signature1.png","signature2.png"]},
+  {title:"Nobel Prize in Procrastination",citation:"For delaying tasks while inspiring others to do the same.",signatures:["signature1.png","signature2.png"]},
+  {title:"Nobel Prize in Memeology",citation:"For advancing human understanding through memes.",signatures:["signature1.png","signature2.png"]}
+];
+
+// Set today
+function setTodayDate(){
+  const today = new Date();
+  const yyyy = today.getFullYear();
+  const mm = String(today.getMonth()+1).padStart(2,'0');
+  const dd = String(today.getDate()).padStart(2,'0');
+  dateInput.value = `${yyyy}-${mm}-${dd}`;
+}
+setTodayDate();
+
+// Generate ID
+function genId(){
+  const now = Date.now().toString(36).toUpperCase();
+  const rnd = Math.floor(Math.random()*9000)+1000;
+  return 'EDU-'+now+'-'+rnd;
+}
+
+// Render signatures
+function renderSignatures(urls){
+  sigRow1.innerHTML='';
+  urls.forEach(u=>{
+    const wrapper=document.createElement('div'); wrapper.className='sig';
+    const img=document.createElement('img'); img.src=u; img.alt='signature';
+    wrapper.appendChild(img);
+    sigRow1.appendChild(wrapper);
+  });
+}
+
+// Update preview
+function updatePreview(){
+  const loc = locationInput.value || '';
+  const formattedDate = (dateInput.value)?new Date(dateInput.value).toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'}) : '—';
+
+  title1.textContent = award.value || '— Award title —';
+  title2.textContent = award.value || '— Award title —';
+  recipient1.textContent = recipient.value || '— Recipient —';
+  recipient2.textContent = recipient.value || '— Recipient —';
+  citation1.textContent = citation.value || '— Citation —';
+  citation2.textContent = citation.value || '— Citation —';
+  date1.textContent = formattedDate + (loc?(' — '+loc):'');
+  date2.textContent = formattedDate;
+  issuer1.textContent = issuer.value || 'The Nobel Foundation';
+  issuer2.textContent = issuer.value || 'The Nobel Foundation';
+  issuerRole1.textContent = issuerRole.value || 'Nobel Committee';
+  issuerRole2.textContent = issuerRole.value || 'Nobel Committee';
+  location2.textContent = loc || 'Stockholm, Sweden';
+  wm1.textContent = (award.value || 'AWARD').toUpperCase();
+  wm2.textContent = (award.value || 'NOBEL').toUpperCase();
+
+  const id = genId();
+  certId.textContent = id;
+  idbox1.textContent = 'ID: '+id;
+  idbox2.textContent = 'ID: '+id;
+}
+
+// Input listeners
+[recipient,award,citation,dateInput,locationInput,issuer,issuerRole].forEach(el=>el.addEventListener('input', updatePreview));
+
+// Random award
+document.getElementById('randomAward').addEventListener('click',()=>{
+  const item = awardsList[Math.floor(Math.random()*awardsList.length)];
+  award.value=item.title;
+  citation.value=item.citation;
+  renderSignatures(item.signatures || []);
+  updatePreview();
+});
+
+// Preview animation
+document.getElementById('previewBtn').addEventListener('click',()=>{
+  const p1 = document.getElementById('page1');
+  p1.style.transform='scale(0.997)';
+  setTimeout(()=>p1.style.transform='scale(1)',220);
+});
+
+// Download function
+async function downloadElementAsJpg(el, filename){
+  await new Promise(r=>setTimeout(r,120));
+  const canvas = await html2canvas(el,{scale:3,useCORS:true,backgroundColor:'#ffffff'});
+  const dataURL = canvas.toDataURL('image/jpeg',0.95);
+  const link=document.createElement('a'); link.href=dataURL; link.download=filename; document.body.appendChild(link); link.click(); link.remove();
+}
+
+// Generate button
+document.getElementById('generateBtn').addEventListener('click', async ()=>{
+  updatePreview();
+  const p1=document.getElementById('page1');
+  const p2=document.getElementById('page2');
+  await downloadElementAsJpg(p1,'Certificate_Page1.jpg');
+  await downloadElementAsJpg(p2,'Certificate_Page2.jpg');
+});
+</script>
+</body>
+</html>

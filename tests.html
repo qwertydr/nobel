@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Two-Page Nobel-Style Certificate Generator</title>
+<title>Nobel Prize Certificate Generator</title>
 <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;700;1,300&family=Montserrat:wght@300;500;700&display=swap" rel="stylesheet">
 <style>
 :root{--paper:#fbf9f4;--accent:#b78b2f;--text:#222;--muted:#666}
@@ -103,10 +103,10 @@ button.secondary{background:#eee;color:var(--text)}
 
     <div class="actions">
       <button id="generateBtn">Generate JPGs (2 pages)</button>
-      <button id="previewBtn" class="secondary">Flash Preview</button>
+      <button id="previewBtn" class="secondary">Preview</button>
     </div>
 
-    <div class="disclaimer">For educational and non-commercial use only.</div>
+    <div class="disclaimer">For comedy only. Not an official or exact replica of any real award certificate. Generated from nobelprize.me</div>
   </div>
 
   <div class="preview">
@@ -171,6 +171,17 @@ button.secondary{background:#eee;color:var(--text)}
             <div id="date2">—</div>
           </div>
         </div>
+        <div style="margin-top:26px">
+          <div style="font-weight:700;margin-bottom:6px">Program notes</div>
+          <div style="color:var(--muted);line-height:1.5">This certificate recognizes the recipient's contribution to Mockary. It is issued for satire purposes only and does not imply any affiliation with or endorsement by the Nobel Foundation.</div>
+        </div>
+        <div style="margin-top:22px;display:flex;justify-content:flex-end">
+          <div style="text-align:right">
+            <div style="font-size:12px;color:var(--muted)">Signed electronically</div>
+            <div style="font-weight:700" id="issuerSign2">The Nobel Foundation</div>
+            <div style="font-size:12px;color:var(--muted)" id="issuerRoleSign2">Nobel Committee</div>
+          </div>
+        </div>
         <div class="idbox" id="idbox2">ID: —</div>
       </div>
     </div>
@@ -209,9 +220,115 @@ const idbox2 = document.getElementById('idbox2');
 
 // Awards list
 const awardsList = [
-  {title:"Nobel Prize in Humor",citation:"For bringing laughter into serious academic debates.",signatures:["signature1.png","signature2.png"]},
-  {title:"Nobel Prize in Procrastination",citation:"For delaying tasks while inspiring others to do the same.",signatures:["signature1.png","signature2.png"]},
-  {title:"Nobel Prize in Memeology",citation:"For advancing human understanding through memes.",signatures:["signature1.png","signature2.png"]}
+  {"title":"Nobel Prize in Twitter Diplomacy","citation":"For mastering the art of global politics through late-night tweets and caps lock."},
+{"title":"Nobel Prize in Alternative Facts","citation":"For creating reality in ways that defy physics, logic, and occasionally common sense."},
+{"title":"Nobel Prize in Wall Construction","citation":"For insisting walls are the solution to every complex international problem."},
+{"title":"Nobel Prize in Golf Diplomacy","citation":"For solving world issues one golf swing at a time, often on foreign soil."},
+{"title":"Nobel Prize in Name Calling","citation":"For elevating insults like 'Crooked' and 'Sleepy' into national political strategy."},
+{"title":"Nobel Prize in Reality TV Governance","citation":"For treating global leadership like a reality TV show, complete with dramatic exits."},
+{"title":"Nobel Prize in Meme Presidency","citation":"For turning politics into a 24/7 viral content stream of questionable quality."},
+{"title":"Nobel Prize in Fact Avoidance","citation":"For skillfully dodging inconvenient truths with confidence and flair."},
+{"title":"Nobel Prize in Executive Orders","citation":"For issuing executive decisions faster than most people check email, sometimes legally ambiguous."},
+{"title":"Nobel Prize in Trade Tweets","citation":"For managing international trade wars via 280-character wisdom."},
+{"title":"Nobel Prize in Cabinet Chaos","citation":"For replacing advisors faster than most replace light bulbs."},
+{"title":"Nobel Prize in Inflated Crowds","citation":"For ensuring that every event looks more crowded than physics allows."},
+{"title":"Nobel Prize in Presidential Nicknames","citation":"For branding opponents with unforgettable monikers, unforgettable and mostly unflattering."},
+{"title":"Nobel Prize in Border Wall Negotiation","citation":"For negotiating borders with slogans, tweets, and executive authority."},
+{"title":"Nobel Prize in Impeachment Resilience","citation":"For surviving political scandals with sheer bravado and golf breaks."},
+{"title":"Nobel Prize in Press Aversion","citation":"For managing media coverage with insults, avoidance, and constant tweeting."},
+{"title":"Nobel Prize in Handshake Technique","citation":"For creating legendary moments of awkward handshakes that dominate headlines."},
+{"title":"Nobel Prize in Celebrity Endorsements","citation":"For turning celebrity connections into political currency with theatrical flair."},
+{"title":"Nobel Prize in Question Dodging","citation":"For answering nothing with conviction while keeping cameras entertained."},
+{"title":"Nobel Prize in Rally Chants","citation":"For inventing slogans that repeat, resonate, and occasionally rhyme."},
+{"title":"Nobel Prize in Golf Diplomacy Part II","citation":"For scheduling peace talks only after a full round on the links."},
+{"title":"Nobel Prize in Twitter Investigations","citation":"For conducting national inquiries with the power of a single smartphone."},
+{"title":"Nobel Prize in Executive Ignorance","citation":"For issuing policies without reading the fine print, yet calling them 'perfect.'"},
+{"title":"Nobel Prize in Press Room Domination","citation":"For turning briefings into performance art that confounds journalists."},
+{"title":"Nobel Prize in Celebrity Golf","citation":"For combining world politics and celebrity networking on the golf course."},
+{"title":"Nobel Prize in Spontaneous Declarations","citation":"For declaring everything 'tremendous' while inventing new political realities."},
+{"title":"Nobel Prize in Fact Spin","citation":"For taking true statements and twisting them like circus acrobatics."},
+{"title":"Nobel Prize in Twitter Diplomacy Part II","citation":"For single-handedly negotiating international relations using memes, all caps, and punctuation errors."},
+{"title":"Nobel Prize in Marketing America","citation":"For branding the nation as 'YUGE' while redefining facts creatively."},
+{"title":"Nobel Prize in Political Branding","citation":"For ensuring every political move comes with a Trump brand flair."},
+{"title":"Nobel Prize in Apology Avoidance","citation":"For never apologizing while creating headlines that demand it."},
+{"title":"Nobel Prize in Cabinet Turnover","citation":"For making job security in the White House a thrilling spectator sport."},
+{"title":"Nobel Prize in Mocking Opponents","citation":"For transforming political debate into stand-up comedy with nicknames and theatrics."},
+{"title":"Nobel Prize in Wall Vision","citation":"For dreaming big walls, tweeting bigger walls, and planning the tallest wall in history."},
+{"title":"Nobel Prize in Golf & Governance Fusion","citation":"For blending leisure and policy in ways that only Trump could imagine."},
+{"title":"Nobel Prize in Presidential Hyperbole","citation":"For claiming every achievement is 'the best, ever, in history,' without exception."},
+{"title":"Nobel Prize in Reality TV Foreign Policy","citation":"For making global crises feel like live entertainment."},
+{"title":"Nobel Prize in Rally Showmanship","citation":"For transforming political rallies into theatrical spectacles of epic proportions."},
+{"title":"Nobel Prize in Negotiation via Tweets","citation":"For proving that diplomacy can happen in 280 characters or less."},
+{"title":"Nobel Prize in Cabinet Drama","citation":"For ensuring every new hire sparks headlines, intrigue, or both."},
+{"title":"Nobel Prize in Media Diversion","citation":"For keeping the press busy while substantive matters quietly evolve."},
+{"title":"Nobel Prize in Social Media Strategy","citation":"For using Twitter as a platform for policy announcements, insults, and morning wake-up calls."},
+{"title":"Nobel Prize in Historical Revision","citation":"For inventing alternate histories with confidence unmatched in modern times."},
+{"title":"Nobel Prize in Golf Diplomacy Part III","citation":"For conducting international negotiations with a golf club in one hand and a tweet in the other."},
+{"title":"Nobel Prize in Branding Everything","citation":"For making even political crises feel like personal brand opportunities."},
+{"title":"Nobel Prize in Unforgettable Quotes","citation":"For leaving the public with phrases that linger, confuse, and amuse for decades."},
+{"title":"Nobel Prize in Alternative Reality Management","citation":"For maintaining belief in improbable claims while managing a nation."},
+{"title":"Nobel Prize in Media Wrestling","citation":"For turning news cycles into dramatic wrestling matches of ego and rhetoric."},
+{"title":"Nobel Prize in Presidential Showmanship","citation":"For orchestrating events that blend policy, media, and spectacle into memorable moments."},
+{"title":"Nobel Prize in Surreal Diplomacy","citation":"For making world leaders adjust expectations in real time to accommodate unpredictability."},
+{"title":"Nobel Prize in Tweetstorms","citation":"For delivering policy, insult, and drama simultaneously in rapid succession."},
+{"title":"Nobel Prize in Branding Controversy","citation":"For ensuring that every scandal becomes a signature Trump moment."},
+{"title":"Nobel Prize in Alternative Facts II","citation":"For evolving the concept of truth into a flexible, entertaining art form."},  
+{"title":"Nobel Prize in Procrastination","citation":"For expertly delaying responsibilities while convincing everyone else they’re busy."},
+{"title":"Nobel Prize in Office Politics","citation":"For mastering the art of nodding and smiling while secretly plotting world domination in the break room."},
+{"title":"Nobel Prize in Overcomplicated Emails","citation":"For writing emails longer than the constitution that nobody reads but everyone forwards."},
+{"title":"Nobel Prize in Coffee Addiction","citation":"For maintaining human civilization solely on caffeine and sheer panic."},
+{"title":"Nobel Prize in Social Media Flexing","citation":"For posting inspirational quotes while living off instant noodles and regrets."},
+{"title":"Nobel Prize in Awkward Small Talk","citation":"For turning elevator rides into existential crises for strangers."},
+{"title":"Nobel Prize in Memeology","citation":"For advancing the science of memes and wasting hours of human potential."},
+{"title":"Nobel Prize in Political Nonsense","citation":"For making speeches sound important while meaning absolutely nothing."},
+{"title":"Nobel Prize in Netflix Bingeing","citation":"For consuming entire seasons in one night and calling it 'research.'"},
+{"title":"Nobel Prize in Bathroom Singing","citation":"For performing private concerts to a captive audience of soap and shampoo bottles."},
+{"title":"Nobel Prize in Fake Expertise","citation":"For confidently explaining things you clearly don’t understand to anyone who will listen."},
+{"title":"Nobel Prize in Unread Terms & Conditions","citation":"For blindly agreeing to everything, ensuring corporate profits flourish."},
+{"title":"Nobel Prize in Awful Karaoke","citation":"For bravely subjecting innocent ears to off-key renditions of pop classics."},
+{"title":"Nobel Prize in Last-Minute Genius","citation":"For solving problems 5 minutes before the deadline and calling it brilliance."},
+{"title":"Nobel Prize in Shady Internet Research","citation":"For consulting Wikipedia at 2 AM and claiming a PhD-level discovery."},
+{"title":"Nobel Prize in Office Snacks Hoarding","citation":"For keeping the communal cookie jar under strict personal control."},
+{"title":"Nobel Prize in Conspiracy Theories","citation":"For connecting unrelated events and blaming aliens, politicians, or both."},
+{"title":"Nobel Prize in Awful Jokes","citation":"For making terrible puns that somehow still make colleagues laugh."},
+{"title":"Nobel Prize in Late-Night Tweets","citation":"For posting reckless opinions at 2:37 AM with zero regret."},
+{"title":"Nobel Prize in Dodging Responsibilities","citation":"For avoiding tasks with creativity that rivals professional magicians."},
+{"title":"Nobel Prize in Fake Accents","citation":"For adopting accents in public spaces with zero historical accuracy."},
+{"title":"Nobel Prize in Politically Incorrect Comedy","citation":"For offending everyone equally and laughing at the chaos."},
+{"title":"Nobel Prize in Awful DIY","citation":"For turning a simple furniture project into a full-blown disaster zone."},
+{"title":"Nobel Prize in Internet Rage","citation":"For yelling at strangers online with passion and zero effect."},
+{"title":"Nobel Prize in Oversharing","citation":"For telling too much information about every bodily function publicly."},
+{"title":"Nobel Prize in Sleep Deprivation","citation":"For surviving on energy drinks and existential dread for years."},
+{"title":"Nobel Prize in Unsolicited Advice","citation":"For giving life guidance nobody asked for with unwavering confidence."},
+{"title":"Nobel Prize in TikTok Fame","citation":"For dancing awkwardly and becoming an overnight influencer."},
+{"title":"Nobel Prize in Pretentious Art Critique","citation":"For describing a stick figure as 'postmodern commentary on human despair.'"},
+{"title":"Nobel Prize in Awful Pickup Lines","citation":"For attempting romantic advances that should legally be banned."},
+{"title":"Nobel Prize in Breaking Zoom","citation":"For causing technical disasters while simply trying to unmute themselves."},
+{"title":"Nobel Prize in Overpriced Coffee Knowledge","citation":"For knowing the origin of obscure beans nobody asked about."},
+{"title":"Nobel Prize in Political Spin","citation":"For making terrible news sound like a victory for humanity."},
+{"title":"Nobel Prize in Awful Fashion Choices","citation":"For confidently wearing socks with sandals in public."},
+{"title":"Nobel Prize in Obvious Lies","citation":"For fabricating stories so bold they almost become believable."},
+{"title":"Nobel Prize in Social Awkwardness","citation":"For ensuring every party has at least one cringe-worthy moment."},
+{"title":"Nobel Prize in Never Responding to Texts","citation":"For achieving ghosting mastery that borders on performance art."},
+{"title":"Nobel Prize in Workplace Slacking","citation":"For perfecting the art of looking busy while doing nothing."},
+{"title":"Nobel Prize in Awful TikTok Duets","citation":"For joining trends that should have remained forgotten."},
+{"title":"Nobel Prize in Awkward Family Dinners","citation":"For turning normal meals into emotional rollercoasters."},
+{"title":"Nobel Prize in Political Corruption","citation":"For making bribes, favors, and nepotism an Olympic sport."},
+{"title":"Nobel Prize in Awful PR Statements","citation":"For turning apologies into public disasters with grace and skill."},
+{"title":"Nobel Prize in Endless Meetings","citation":"For talking for hours without anyone remembering what was said."},
+{"title":"Nobel Prize in Overpriced Avocado Toast","citation":"For spending more on brunch than most pay rent."},
+{"title":"Nobel Prize in Keyboard Warrior Skills","citation":"For typing furious comments from the comfort of their couch."},
+{"title":"Nobel Prize in Awful Customer Service Calls","citation":"For screaming into a phone with zero resolution achieved."},
+{"title":"Nobel Prize in Dumpster Fire Solutions","citation":"For fixing problems by creating new, equally disastrous problems."},
+{"title":"Nobel Prize in Meme Warfare","citation":"For starting online arguments using only cats and sarcastic GIFs."},
+{"title":"Nobel Prize in Terrible Poetry","citation":"For rhyming things that should never rhyme and calling it art."},
+{"title":"Nobel Prize in Fake Apologies","citation":"For saying sorry while making sure nobody believes it."},
+{"title":"Nobel Prize in Unreadable Texts","citation":"For sending messages that require a decoder ring and several guesses."},
+{"title":"Nobel Prize in Reality TV Analysis","citation":"For analyzing television nonsense like it’s nuclear physics."},
+{"title":"Nobel Prize in Awful Roommates","citation":"For leaving dirty dishes as a form of abstract protest."},
+{"title":"Nobel Prize in Awful Party Planning","citation":"For making birthdays unforgettable for all the wrong reasons."},
+{"title":"Nobel Prize in Awful Driving","citation":"For turning every commute into a terrifying adventure."},
+{"title":"Nobel Prize in Awful TikTok Advice","citation":"For giving life tips that lead to hilariously poor decisions."}
 ];
 
 // Set today

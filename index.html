@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Two‑Page Nobel‑Style Certificate Generator</title>
+  <title>Two‑Page Nobel‑Style Certificate Generator (Editable JSON)</title>
   <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;700;1,300&family=Montserrat:wght@300;500;700&display=swap" rel="stylesheet">
   <style>
     :root{--paper:#fbf9f4;--accent:#b78b2f;--text:#222;--muted:#666}
@@ -35,9 +35,11 @@
     .meta{display:flex;justify-content:space-between;align-items:center;margin-top:28px}
     .sig-row{display:flex;justify-content:space-between;margin-top:22px;gap:20px}
     .sig{display:flex;flex-direction:column;align-items:center;flex:1}
+    .sig img{max-width:160px;height:auto;border-radius:2px}
     .sig .name{font-weight:700}
     .sig .role{font-size:12px;color:var(--muted)}
     .watermark{position:absolute;left:50%;top:46%;transform:translate(-50%,-50%);opacity:0.06;font-size:120px;font-family:Merriweather,serif;color:var(--text);pointer-events:none;user-select:none}
+    .coin{position:absolute;right:34px;top:34px;width:84px;height:84px}
     .idbox{font-size:12px;color:var(--muted);margin-top:10px;text-align:right}
     .disclaimer{font-size:12px;color:var(--muted);text-align:center;margin-top:10px}
 
@@ -52,13 +54,13 @@
 
       <div class="field">
         <label>Recipient full name</label>
-        <input id="recipient" type="text" value="Arya Nargis Ahmed">
+        <input id="recipient" type="text" placeholder="Enter recipient name">
       </div>
 
       <div class="row">
         <div class="field small">
           <label>Award title</label>
-          <input id="award" type="text" value="Award of Scientific Excellence">
+          <input id="award" type="text" placeholder="Select or type an award title">
         </div>
         <div style="width:140px;display:flex;align-items:flex-end">
           <button id="randomAward" class="secondary" style="width:100%">Random</button>
@@ -67,7 +69,7 @@
 
       <div class="field">
         <label>Reason / Citation</label>
-        <textarea id="citation">For outstanding contributions to the field of experimental plant photobiology and exemplary scholarly dedication.</textarea>
+        <textarea id="citation" placeholder="Citation will update when you pick a random award"></textarea>
       </div>
 
       <div class="row">
@@ -77,68 +79,49 @@
         </div>
         <div class="field small">
           <label>Location</label>
-          <input id="location" type="text" value="Dhaka, Bangladesh">
+          <input id="location" type="text" value="Stockholm, Sweden">
         </div>
       </div>
 
       <div class="row">
         <div class="field small">
           <label>Issuer name</label>
-          <input id="issuer" type="text" value="Youth Research Journal">
+          <input id="issuer" type="text" value="The Nobel Foundation">
         </div>
         <div class="field small">
           <label>Issuer role</label>
-          <input id="issuerRole" type="text" value="Program Director">
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="field small">
-          <label>Second signer name</label>
-          <input id="signer2" type="text" value="N. A. Supervisor">
-        </div>
-        <div class="field small">
-          <label>Second signer role</label>
-          <input id="signer2Role" type="text" value="Chair, Selection Committee">
+          <input id="issuerRole" type="text" value="Nobel Committee">
         </div>
       </div>
 
       <div class="field">
-        <label>Custom awards list (JSON array of strings). Click Save to apply.</label>
-        <textarea id="awardsJson">["Nobel Prize in Physics","Nobel Prize in Chemistry","Nobel Prize in Physiology or Medicine","Nobel Peace Prize","Nobel Prize in Literature","Award of Scientific Excellence"]</textarea>
+        <label>Editable JSON: awards array — each item may include title, citation, coinImage, signatures (array of image URLs).</label>
+        <textarea id="awardsJson">[ {"title":"Nobel Prize in Physics","citation":"For distinguished contributions to theoretical and experimental physics.","coinImage":"https://upload.wikimedia.org/wikipedia/commons/6/6b/NobelPrize.png","signatures":["https://i.postimg.cc/0yKqD9vX/sign1.png","https://i.postimg.cc/7h5x6P6K/sign2.png"]}, {"title":"Nobel Prize in Chemistry","citation":"For outstanding achievements in chemical research with lasting impact.","coinImage":"https://upload.wikimedia.org/wikipedia/commons/6/6b/NobelPrize.png","signatures":["https://i.postimg.cc/0yKqD9vX/sign1.png","https://i.postimg.cc/7h5x6P6K/sign2.png"]}, {"title":"Nobel Peace Prize","citation":"For exceptional efforts to promote peace and resolve conflict at national or international levels.","coinImage":"https://upload.wikimedia.org/wikipedia/commons/6/6b/NobelPrize.png","signatures":["https://i.postimg.cc/0yKqD9vX/sign1.png","https://i.postimg.cc/7h5x6P6K/sign2.png"]} ]</textarea>
         <div style="display:flex;gap:8px;margin-top:8px">
           <button id="saveAwards" class="secondary">Save list</button>
-          <div class="note">You can edit the JSON to add/remove titles.</div>
+          <div class="note">Edit this JSON to change coin image URLs or signature images. Use PNG/transparent images for best results.</div>
         </div>
       </div>
 
       <div class="actions">
         <button id="generateBtn">Generate JPGs (2 pages)</button>
         <button id="previewBtn" class="secondary">Flash Preview</button>
-        <div style="flex:1" class="note">Tip: You may edit any field before generating. Files will download automatically for both pages (page1 then page2).</div>
+        <div style="flex:1" class="note">Tip: Edit JSON to point to your own coin or signature images. This template is for educational use.</div>
       </div>
 
-      <div class="disclaimer">For educational and non-commercial use only. Not an official or exact replica of any real award certificate.</div>
+      <div class="disclaimer">For educational and non-commercial use only. Not an official or exact replica of any real award certificate. Use responsibly.</div>
     </div>
 
     <div class="preview">
       <!-- Page 1 -->
       <div class="page" id="page1">
         <div class="watermark" id="wm1">AWARD</div>
+        <img id="coinImg1" class="coin" src="" alt="coin" style="display:none">
         <div class="page-inner">
           <div style="display:flex;align-items:center;justify-content:space-between">
-            <div style="display:flex;gap:12px;align-items:center">
-              <svg width="72" height="72" viewBox="0 0 100 100" aria-hidden>
-                <defs>
-                  <linearGradient id="gA" x1="0" x2="1"><stop offset="0" stop-color="#d6b66a" /><stop offset="1" stop-color="#9b7a38" /></linearGradient>
-                </defs>
-                <circle cx="50" cy="50" r="45" fill="url(#gA)" stroke="#b38a2f" stroke-width="2"></circle>
-                <g transform="translate(50 50) scale(0.7)" fill="#fff"><path d="M0-30 L8-8 L28-2 L12 8 L16 28 L0 18 L-16 28 L-12 8 L-28-2 L-8-8 Z"></path></g>
-              </svg>
-              <div>
-                <div class="title" id="title1">Award of Scientific Excellence</div>
-                <div class="subtitle">Presented to</div>
-              </div>
+            <div>
+              <div class="title" id="title1">— Award title —</div>
+              <div class="subtitle">Presented to</div>
             </div>
             <div style="text-align:right">
               <div style="font-size:12px;color:var(--muted)">Certificate ID</div>
@@ -146,39 +129,24 @@
             </div>
           </div>
 
-          <div class="recipient" id="recipient1">Arya Nargis Ahmed</div>
+          <div class="recipient" id="recipient1">— Recipient —</div>
           <div style="height:1px;background:linear-gradient(90deg,transparent,#e0cfa0,transparent);margin:18px 0"></div>
-          <div class="desc" id="citation1">For outstanding contributions to the field of experimental plant photobiology and exemplary scholarly dedication.</div>
+          <div class="desc" id="citation1">— Citation —</div>
 
           <div class="meta" style="margin-top:28px">
             <div>
               <div style="font-size:13px;color:var(--muted)">Date & place</div>
-              <div style="font-weight:700" id="date1">October 12, 2025 — Dhaka, Bangladesh</div>
+              <div style="font-weight:700" id="date1">—</div>
             </div>
             <div style="text-align:right">
               <div style="font-size:13px;color:var(--muted)">Issued by</div>
-              <div style="font-weight:700" id="issuer1">Youth Research Journal</div>
-              <div style="font-size:12px;color:var(--muted)" id="issuerRole1">Program Director</div>
+              <div style="font-weight:700" id="issuer1">The Nobel Foundation</div>
+              <div style="font-size:12px;color:var(--muted)" id="issuerRole1">Nobel Committee</div>
             </div>
           </div>
 
-          <div class="sig-row">
-            <div class="sig">
-              <!-- signature SVG placeholder -->
-              <svg width="160" height="60" viewBox="0 0 200 60" aria-hidden>
-                <path d="M6 38 C40 10, 70 10, 120 30 C150 42, 180 20, 198 28" fill="none" stroke="#222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0.9"></path>
-              </svg>
-              <div class="name" id="issuerNameDisplay">Youth Research Journal</div>
-              <div class="role" id="issuerRoleDisplay">Program Director</div>
-            </div>
-
-            <div class="sig">
-              <svg width="160" height="60" viewBox="0 0 200 60" aria-hidden>
-                <path d="M6 40 C48 20, 80 25, 140 30 C170 32, 188 24, 198 30" fill="none" stroke="#222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0.9"></path>
-              </svg>
-              <div class="name" id="signer2Display">N. A. Supervisor</div>
-              <div class="role" id="signer2RoleDisplay">Chair, Selection Committee</div>
-            </div>
+          <div class="sig-row" id="sigRow1">
+            <!-- signature placeholders inserted here -->
           </div>
 
           <div class="idbox" id="idbox1">ID: —</div>
@@ -189,44 +157,45 @@
       <!-- Page 2: details, citation full, program info -->
       <div class="page" id="page2">
         <div class="watermark" id="wm2">NOBEL</div>
+        <img id="coinImg2" class="coin" src="" alt="coin" style="display:none">
         <div class="page-inner">
           <div style="text-align:center;margin-bottom:10px">
-            <div class="title" id="title2">Award of Scientific Excellence</div>
+            <div class="title" id="title2">— Award title —</div>
             <div class="subtitle">Certificate of Merit and Details</div>
           </div>
 
           <div style="display:flex;gap:18px">
             <div style="flex:1">
               <div style="font-weight:700;margin-bottom:6px">Recipient</div>
-              <div id="recipient2">Arya Nargis Ahmed</div>
+              <div id="recipient2">— Recipient —</div>
 
               <div style="font-weight:700;margin-top:14px;margin-bottom:6px">Citation</div>
-              <div id="citation2" style="color:var(--muted);line-height:1.6">For outstanding contributions to the field of experimental plant photobiology and exemplary scholarly dedication.</div>
+              <div id="citation2" style="color:var(--muted);line-height:1.6">— Citation —</div>
             </div>
             <div style="width:220px">
               <div style="font-weight:700;margin-bottom:6px">Issuer</div>
-              <div id="issuer2">Youth Research Journal</div>
+              <div id="issuer2">The Nobel Foundation</div>
               <div style="font-size:13px;color:var(--muted);margin-top:10px">Issuer role</div>
-              <div id="issuerRole2">Program Director</div>
+              <div id="issuerRole2">Nobel Committee</div>
 
               <div style="font-weight:700;margin-top:16px;margin-bottom:6px">Location</div>
-              <div id="location2">Dhaka, Bangladesh</div>
+              <div id="location2">Stockholm, Sweden</div>
 
               <div style="font-weight:700;margin-top:16px;margin-bottom:6px">Date</div>
-              <div id="date2">October 12, 2025</div>
+              <div id="date2">—</div>
             </div>
           </div>
 
           <div style="margin-top:26px">
             <div style="font-weight:700;margin-bottom:6px">Program notes</div>
-            <div style="color:var(--muted);line-height:1.5">This certificate recognizes the recipient's contribution to research and scholarship during the program. It is issued for educational purposes only and does not imply any affiliation with or endorsement by the Nobel Foundation.</div>
+            <div style="color:var(--muted);line-height:1.5">This certificate recognizes the recipient's contribution to research and scholarship. It is issued for educational purposes only and does not imply any affiliation with or endorsement by the Nobel Foundation.</div>
           </div>
 
           <div style="margin-top:22px;display:flex;justify-content:flex-end">
             <div style="text-align:right">
               <div style="font-size:12px;color:var(--muted)">Signed electronically</div>
-              <div style="font-weight:700" id="issuerSign2">Youth Research Journal</div>
-              <div style="font-size:12px;color:var(--muted)" id="issuerRoleSign2">Program Director</div>
+              <div style="font-weight:700" id="issuerSign2">The Nobel Foundation</div>
+              <div style="font-size:12px;color:var(--muted)" id="issuerRoleSign2">Nobel Committee</div>
             </div>
           </div>
 
@@ -247,8 +216,6 @@
     const locationInput = document.getElementById('location');
     const issuer = document.getElementById('issuer');
     const issuerRole = document.getElementById('issuerRole');
-    const signer2 = document.getElementById('signer2');
-    const signer2Role = document.getElementById('signer2Role');
 
     const title1 = document.getElementById('title1');
     const recipient1 = document.getElementById('recipient1');
@@ -256,10 +223,7 @@
     const date1 = document.getElementById('date1');
     const issuer1 = document.getElementById('issuer1');
     const issuerRole1 = document.getElementById('issuerRole1');
-    const issuerNameDisplay = document.getElementById('issuerNameDisplay');
-    const issuerRoleDisplay = document.getElementById('issuerRoleDisplay');
-    const signer2Display = document.getElementById('signer2Display');
-    const signer2RoleDisplay = document.getElementById('signer2RoleDisplay');
+    const sigRow1 = document.getElementById('sigRow1');
     const certId = document.getElementById('certId');
     const idbox1 = document.getElementById('idbox1');
 
@@ -272,16 +236,19 @@
     const date2 = document.getElementById('date2');
     const idbox2 = document.getElementById('idbox2');
 
-    const wm1 = document.getElementById('wm1');
-    const wm2 = document.getElementById('wm2');
+    const coinImg1 = document.getElementById('coinImg1');
+    const coinImg2 = document.getElementById('coinImg2');
 
-    // Awards JSON handling
     const awardsJson = document.getElementById('awardsJson');
-    let awardsList = JSON.parse(awardsJson.value);
+
+    // Default awards list (editable JSON). Uses public Wikimedia or example image URLs — replace with your own PNGs as needed.
+    let awardsList = [];
+    try{ awardsList = JSON.parse(awardsJson.value); }catch(e){ awardsList = []; }
+
     document.getElementById('saveAwards').addEventListener('click', ()=>{
       try{
         const parsed = JSON.parse(awardsJson.value);
-        if(!Array.isArray(parsed)) throw new Error('JSON must be an array of strings');
+        if(!Array.isArray(parsed)) throw new Error('JSON must be an array');
         awardsList = parsed;
         alert('Saved awards list ('+awardsList.length+' items)');
       }catch(e){
@@ -289,14 +256,34 @@
       }
     });
 
-    // Random award button
+    // Pick random award and also update citation, coin and signatures
     document.getElementById('randomAward').addEventListener('click', ()=>{
-      if(awardsList && awardsList.length){
-        const pick = awardsList[Math.floor(Math.random()*awardsList.length)];
-        award.value = pick;
-        updatePreview();
-      }else alert('Awards list is empty. Add items and Save.');
+      if(!awardsList || !awardsList.length){ alert('Awards list empty. Edit JSON and Save.'); return; }
+      const item = awardsList[Math.floor(Math.random()*awardsList.length)];
+      award.value = item.title || '';
+      // if citation exists in json, apply it
+      if(item.citation) citation.value = item.citation;
+      // coin image
+      if(item.coinImage){ coinImg1.src = item.coinImage; coinImg2.src = item.coinImage; coinImg1.style.display='block'; coinImg2.style.display='block'; }
+      // signatures: replace sigRow1 content with images
+      renderSignatures(item.signatures || []);
+      updatePreview();
     });
+
+    // Render signature images into sigRow1
+    function renderSignatures(urls){
+      sigRow1.innerHTML = '';
+      if(!urls || !urls.length) return;
+      urls.forEach(u=>{
+        const wrapper = document.createElement('div'); wrapper.className='sig';
+        const img = document.createElement('img'); img.src = u; img.alt='signature';
+        wrapper.appendChild(img);
+        const nm = document.createElement('div'); nm.className='name'; nm.textContent='';
+        const rl = document.createElement('div'); rl.className='role'; rl.textContent='';
+        wrapper.appendChild(nm); wrapper.appendChild(rl);
+        sigRow1.appendChild(wrapper);
+      });
+    }
 
     // Default date: system today
     function setTodayDate(){
@@ -315,7 +302,6 @@
       return 'EDU-'+now+'-'+rnd;
     }
 
-    // Update preview
     function updatePreview(){
       const loc = locationInput.value || '';
       const formattedDate = (dateInput.value) ? new Date(dateInput.value).toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'}) : '—';
@@ -324,19 +310,15 @@
       title2.textContent = award.value || '— Award title —';
       recipient1.textContent = recipient.value || '— Recipient —';
       recipient2.textContent = recipient.value || '— Recipient —';
-      citation1.textContent = citation.value || '';
-      citation2.textContent = citation.value || '';
+      citation1.textContent = citation.value || '—';
+      citation2.textContent = citation.value || '—';
       date1.textContent = formattedDate + (loc? (' — '+loc): '');
       date2.textContent = formattedDate;
-      issuer1.textContent = issuer.value || '';
-      issuer2.textContent = issuer.value || '';
-      issuerRole1.textContent = issuerRole.value || '';
-      issuerRole2.textContent = issuerRole.value || '';
-      issuerNameDisplay.textContent = issuer.value || '';
-      issuerRoleDisplay.textContent = issuerRole.value || '';
-      signer2Display.textContent = signer2.value || '';
-      signer2RoleDisplay.textContent = signer2Role.value || '';
-      location2.textContent = loc || '';
+      issuer1.textContent = issuer.value || 'The Nobel Foundation';
+      issuer2.textContent = issuer.value || 'The Nobel Foundation';
+      issuerRole1.textContent = issuerRole.value || 'Nobel Committee';
+      issuerRole2.textContent = issuerRole.value || 'Nobel Committee';
+      location2.textContent = loc || 'Stockholm, Sweden';
       wm1.textContent = (award.value || 'AWARD').toUpperCase();
       wm2.textContent = (award.value || 'NOBEL').toUpperCase();
 
@@ -344,10 +326,13 @@
       certId.textContent = id;
       idbox1.textContent = 'ID: '+id;
       idbox2.textContent = 'ID: '+id;
+
+      // If coin images set, show them
+      if(coinImg1.src){ coinImg1.style.display='block'; coinImg2.style.display='block'; }
     }
 
     // Wire inputs
-    [recipient,award,citation,dateInput,locationInput,issuer,issuerRole,signer2,signer2Role].forEach(el=>el.addEventListener('input', updatePreview));
+    [recipient,award,citation,dateInput,locationInput,issuer,issuerRole].forEach(el=>el.addEventListener('input', updatePreview));
     updatePreview();
 
     // Flash preview
@@ -357,27 +342,17 @@
       setTimeout(()=>p1.style.transform='scale(1)',220);
     });
 
-    // Ensure downloads start sequentially
+    // Download helper
     async function downloadElementAsJpg(el, filename){
-      // give time to render styles
       await new Promise(r=>setTimeout(r,120));
-      const scale = 3; // high res
-      // ensure white background
+      const scale = 3;
       const originalBg = el.style.backgroundColor;
       el.style.backgroundColor = '#ffffff';
       try{
         const canvas = await html2canvas(el, {scale:scale, useCORS:true, backgroundColor:'#ffffff'});
         const dataURL = canvas.toDataURL('image/jpeg', 0.95);
-        const link = document.createElement('a');
-        link.href = dataURL;
-        link.download = filename;
-        document.body.appendChild(link);
-        link.click();
-        link.remove();
-        // free canvas blob url if created (not needed here)
-      }finally{
-        el.style.backgroundColor = originalBg || '';
-      }
+        const link = document.createElement('a'); link.href = dataURL; link.download = filename; document.body.appendChild(link); link.click(); link.remove();
+      }finally{ el.style.backgroundColor = originalBg || ''; }
     }
 
     document.getElementById('generateBtn').addEventListener('click', async ()=>{
@@ -387,26 +362,15 @@
       const nameSafe = (recipient.value||'recipient').replace(/[^a-z0-9_\-]/gi,'_');
       const base = nameSafe + '_' + (new Date().toISOString().slice(0,10));
       try{
-        // download page1 then page2
         await downloadElementAsJpg(p1, base + '_page1.jpg');
-        // small delay to ensure browser processes previous download
         await new Promise(r=>setTimeout(r,350));
         await downloadElementAsJpg(p2, base + '_page2.jpg');
         alert('Both pages generated. Check your downloads folder.');
-      }catch(err){
-        alert('Error generating images: '+err.message);
-      }
+      }catch(err){ alert('Error generating images: '+err.message); }
     });
 
-    // Accessibility: Enter key on awards json save
-    awardsJson.addEventListener('keydown', (e)=>{ if(e.key==='Enter' && (e.ctrlKey||e.metaKey)) document.getElementById('saveAwards').click(); });
-
-    // Ensure preview updates when page becomes visible (date may change)
-    window.addEventListener('focus', ()=>{
-      // refresh date to system date in case changed
-      setTodayDate();
-      updatePreview();
-    });
+    // When window focus, refresh date (in case system date changed)
+    window.addEventListener('focus', ()=>{ setTodayDate(); updatePreview(); });
 
   </script>
 </body>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Two‑Page Nobel‑Style Certificate Generator (Editable JSON)</title>
+  <title>Two‑Page Nobel‑Style Certificate Generator (Local Images)</title>
   <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;700;1,300&family=Montserrat:wght@300;500;700&display=swap" rel="stylesheet">
   <style>
     :root{--paper:#fbf9f4;--accent:#b78b2f;--text:#222;--muted:#666}
@@ -95,18 +95,18 @@
       </div>
 
       <div class="field">
-        <label>Editable JSON: awards array — each item may include title, citation, coinImage, signatures (array of image URLs).</label>
-        <textarea id="awardsJson">[ {"title":"Nobel Prize in Physics","citation":"For distinguished contributions to theoretical and experimental physics.","coinImage":"https://upload.wikimedia.org/wikipedia/commons/6/6b/NobelPrize.png","signatures":["https://i.postimg.cc/0yKqD9vX/sign1.png","https://i.postimg.cc/7h5x6P6K/sign2.png"]}, {"title":"Nobel Prize in Chemistry","citation":"For outstanding achievements in chemical research with lasting impact.","coinImage":"https://upload.wikimedia.org/wikipedia/commons/6/6b/NobelPrize.png","signatures":["https://i.postimg.cc/0yKqD9vX/sign1.png","https://i.postimg.cc/7h5x6P6K/sign2.png"]}, {"title":"Nobel Peace Prize","citation":"For exceptional efforts to promote peace and resolve conflict at national or international levels.","coinImage":"https://upload.wikimedia.org/wikipedia/commons/6/6b/NobelPrize.png","signatures":["https://i.postimg.cc/0yKqD9vX/sign1.png","https://i.postimg.cc/7h5x6P6K/sign2.png"]} ]</textarea>
+        <label>Editable JSON: awards array — each item may include title, citation, coinImage, signatures (array of local filenames or URLs).</label>
+        <textarea id="awardsJson">[ {"title":"Nobel Prize in Physics","citation":"For distinguished contributions to theoretical and experimental physics.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]}, {"title":"Nobel Prize in Chemistry","citation":"For outstanding achievements in chemical research with lasting impact.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]}, {"title":"Nobel Peace Prize","citation":"For exceptional efforts to promote peace and resolve conflict at national or international levels.","coinImage":"coin.png","signatures":["signature1.png","signature2.png"]} ]</textarea>
         <div style="display:flex;gap:8px;margin-top:8px">
           <button id="saveAwards" class="secondary">Save list</button>
-          <div class="note">Edit this JSON to change coin image URLs or signature images. Use PNG/transparent images for best results.</div>
+          <div class="note">Edit this JSON to change coin image filenames or signature filenames. Keep the files in the same folder as this HTML file.</div>
         </div>
       </div>
 
       <div class="actions">
         <button id="generateBtn">Generate JPGs (2 pages)</button>
         <button id="previewBtn" class="secondary">Flash Preview</button>
-        <div style="flex:1" class="note">Tip: Edit JSON to point to your own coin or signature images. This template is for educational use.</div>
+        <div style="flex:1" class="note">Tip: Place <strong>coin.png</strong>, <strong>signature1.png</strong>, and <strong>signature2.png</strong> in the same folder as this HTML file.</div>
       </div>
 
       <div class="disclaimer">For educational and non-commercial use only. Not an official or exact replica of any real award certificate. Use responsibly.</div>
@@ -116,7 +116,7 @@
       <!-- Page 1 -->
       <div class="page" id="page1">
         <div class="watermark" id="wm1">AWARD</div>
-        <img id="coinImg1" class="coin" src="" alt="coin" style="display:none">
+        <img id="coinImg1" class="coin" src="coin.png" alt="coin" style="display:none">
         <div class="page-inner">
           <div style="display:flex;align-items:center;justify-content:space-between">
             <div>
@@ -157,7 +157,7 @@
       <!-- Page 2: details, citation full, program info -->
       <div class="page" id="page2">
         <div class="watermark" id="wm2">NOBEL</div>
-        <img id="coinImg2" class="coin" src="" alt="coin" style="display:none">
+        <img id="coinImg2" class="coin" src="coin.png" alt="coin" style="display:none">
         <div class="page-inner">
           <div style="text-align:center;margin-bottom:10px">
             <div class="title" id="title2">— Award title —</div>
@@ -241,7 +241,7 @@
 
     const awardsJson = document.getElementById('awardsJson');
 
-    // Default awards list (editable JSON). Uses public Wikimedia or example image URLs — replace with your own PNGs as needed.
+    // Default awards list (editable JSON). Uses local filenames coin.png and signature1.png, signature2.png by default.
     let awardsList = [];
     try{ awardsList = JSON.parse(awardsJson.value); }catch(e){ awardsList = []; }
 
@@ -263,7 +263,7 @@
       award.value = item.title || '';
       // if citation exists in json, apply it
       if(item.citation) citation.value = item.citation;
-      // coin image
+      // coin image (local filename or URL)
       if(item.coinImage){ coinImg1.src = item.coinImage; coinImg2.src = item.coinImage; coinImg1.style.display='block'; coinImg2.style.display='block'; }
       // signatures: replace sigRow1 content with images
       renderSignatures(item.signatures || []);
@@ -328,7 +328,7 @@
       idbox2.textContent = 'ID: '+id;
 
       // If coin images set, show them
-      if(coinImg1.src){ coinImg1.style.display='block'; coinImg2.style.display='block'; }
+      if(coinImg1.src && coinImg1.src.indexOf('coin.png')>-1){ coinImg1.style.display='block'; coinImg2.style.display='block'; }
     }
 
     // Wire inputs
@@ -371,6 +371,16 @@
 
     // When window focus, refresh date (in case system date changed)
     window.addEventListener('focus', ()=>{ setTodayDate(); updatePreview(); });
+
+    // On load: try to show local coin and signatures if exist
+    window.addEventListener('load', ()=>{
+      // default coin
+      coinImg1.src = 'coin.png'; coinImg2.src = 'coin.png';
+      // try default signatures
+      renderSignatures(['signature1.png','signature2.png']);
+      // if files not found, images will just be broken — that's acceptable when running locally; user must place files in same folder.
+      updatePreview();
+    });
 
   </script>
 </body>

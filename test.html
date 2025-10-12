@@ -428,6 +428,20 @@ document.getElementById('generateBtn').addEventListener('click', async ()=>{
         alert('Both pages generated. Check your downloads folder.');
       }catch(err){ alert('Error generating images: '+err.message); }
     });
+
+
+   // When window focus, refresh date (in case system date changed)
+    window.addEventListener('focus', ()=>{ setTodayDate(); updatePreview(); });
+
+    // On load: try to show local coin and signatures if exist
+    window.addEventListener('load', ()=>{
+      // default coin
+      coinImg1.src = 'coin.png'; coinImg2.src = 'coin.png';
+      // try default signatures
+      renderSignatures(['signature1.png','signature2.png']);
+      // if files not found, images will just be broken — that's acceptable when running locally; user must place files in same folder.
+      updatePreview();
+    });
 </script>
 </body>
 </html>

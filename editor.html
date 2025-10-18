@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ultimate Editors - Master Video Editing</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles for the dark theme and smooth scrolling */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0d0d0d; /* Very dark background */
+            color: #e5e5e5; /* Light grey text */
+            scroll-behavior: smooth;
+        }
+
+        /* Custom CTA Button Styling */
+        .cta-button {
+            transition: all 0.2s ease-in-out;
+            box-shadow: 0 4px 15px rgba(250, 204, 21, 0.4);
+        }
+        .cta-button:hover {
+            box-shadow: 0 6px 20px rgba(250, 204, 21, 0.6);
+            transform: translateY(-2px);
+        }
+
+        /* Star SVG (5 points) */
+        .star-icon {
+            width: 1rem;
+            height: 1rem;
+            fill: currentColor;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Navbar -->
+    <header class="sticky top-0 z-50 bg-[#0d0d0d]/90 backdrop-blur-sm shadow-xl">
+        <nav class="container mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <!-- Logo -->
+            <div class="text-2xl font-black text-yellow-400">
+                ULTIMATE EDITORS
+            </div>
+            
+            <!-- Desktop Navigation -->
+            <div class="hidden lg:flex space-x-8 items-center text-sm font-medium">
+                <a href="#courses" class="hover:text-yellow-400 transition">Courses</a>
+                <a href="#roadmap" class="hover:text-yellow-400 transition">Roadmap</a>
+                <a href="#testimonials" class="hover:text-yellow-400 transition">Testimonials</a>
+                <a href="#pricing" class="hover:text-yellow-400 transition">Pricing</a>
+                <a href="#" class="hover:text-yellow-400 transition">Why Us</a>
+            </div>
+
+            <!-- CTA Button -->
+            <a href="#access" class="hidden sm:inline-block cta-button bg-yellow-400 text-gray-900 font-extrabold py-2 px-6 rounded-full text-sm">
+                Get Access - $497
+            </a>
+
+            <!-- Mobile Menu Icon (Placeholder for functionality) -->
+            <button class="lg:hidden text-yellow-400">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                </svg>
+            </button>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="py-20 md:py-32 text-center overflow-hidden">
+            <div class="container mx-auto px-4">
+                <h1 class="text-4xl sm:text-6xl md:text-7xl font-extrabold leading-tight text-white mb-6">
+                    Master Video Editing <br class="hidden sm:block"> & Make <span class="text-yellow-400">$1,000/Month</span>
+                </h1>
+                <p class="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-10">
+                    Learn how beginner editors are becoming Viral Editors and making $1,000 working part-time in 90 days.
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center gap-4">
+                    <a href="#access" class="cta-button bg-yellow-400 text-gray-900 font-extrabold py-3 px-10 rounded-full text-lg w-full sm:w-auto">
+                        Get Access - $497
+                    </a>
+                    <a href="#courses" class="bg-gray-800 text-white font-bold py-3 px-10 rounded-full text-lg border border-gray-700 hover:bg-gray-700 transition w-full sm:w-auto">
+                        View Courses
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Courses/Masterclasses Section -->
+        <section id="courses" class="py-16 md:py-24 bg-[#141414]">
+            <div class="container mx-auto px-4">
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-white text-center mb-4">
+                    What's Inside Ultimate Editors?
+                </h2>
+                <p class="text-center text-gray-400 mb-12 max-w-xl mx-auto">
+                    The Masterclasses that create Viral Editors. Everything you need from foundational programs to viral styles and client acquisition.
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Course Card 1: Premiere Pro -->
+                    <div class="bg-gray-900 p-6 rounded-xl shadow-2xl hover:shadow-yellow-500/10 transition duration-300">
+                        <div class="h-40 bg-gray-800 rounded-lg mb-4 flex items-center justify-center text-xl font-bold text-yellow-400">
+                            Premiere Pro
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-2">Premiere Pro Masterclass</h3>
+                        <p class="text-gray-400 text-sm">Go from zero to hero in the industry standard Adobe Premiere Pro, mastering timelines, cuts, and effects.</p>
+                    </div>
+
+                    <!-- Course Card 2: After Effects -->
+                    <div class="bg-gray-900 p-6 rounded-xl shadow-2xl hover:shadow-yellow-500/10 transition duration-300">
+                        <div class="h-40 bg-gray-800 rounded-lg mb-4 flex items-center justify-center text-xl font-bold text-yellow-400">
+                            After Effects
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-2">After Effects Masterclass</h3>
+                        <p class="text-gray-400 text-sm">Become an expert at the animating program Adobe After Effects, creating stunning motion graphics and visual effects.</p>
+                    </div>
+
+                    <!-- Course Card 3: Viral Style - Josh Lyon -->
+                    <div class="bg-gray-900 p-6 rounded-xl shadow-2xl hover:shadow-yellow-500/10 transition duration-300">
+                        <div class="h-40 bg-gray-800 rounded-lg mb-4 flex items-center justify-center text-xl font-bold text-yellow-400">
+                            Josh Lyon Style
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-2">Josh Lyon Masterclass</h3>
+                        <p class="text-gray-400 text-sm">Learn the viral, attention-grabbing editing style popularized by Josh Lyon for social media dominance.</p>
+                    </div>
+
+                    <!-- Course Card 4: Viral Style - Devin Jatho -->
+                    <div class="bg-gray-900 p-6 rounded-xl shadow-2xl hover:shadow-yellow-500/10 transition duration-300">
+                        <div class="h-40 bg-gray-800 rounded-lg mb-4 flex items-center justify-center text-xl font-bold text-yellow-400">
+                            Devin Jatho Style
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-2">Devin Jatho Masterclass</h3>
+                        <p class="text-gray-400 text-sm">Master the dynamic and fast-paced editing style of Devin Jatho, perfect for YouTube and long-form content.</p>
+                    </div>
+                    
+                    <!-- Course Card 5: Viral Style - Iman Gadzhi -->
+                    <div class="bg-gray-900 p-6 rounded-xl shadow-2xl hover:shadow-yellow-500/10 transition duration-300">
+                        <div class="h-40 bg-gray-800 rounded-lg mb-4 flex items-center justify-center text-xl font-bold text-yellow-400">
+                            Iman Gadzhi Style
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-2">Iman Gadzhi Masterclass</h3>
+                        <p class="text-gray-400 text-sm">Learn the minimal, high-end, and clean editing approach used by Iman Gadzhi for high-ticket clients.</p>
+                    </div>
+
+                    <!-- Course Card 6: Client Acquisition -->
+                    <div class="bg-gray-900 p-6 rounded-xl shadow-2xl hover:shadow-yellow-500/10 transition duration-300">
+                        <div class="h-40 bg-gray-800 rounded-lg mb-4 flex items-center justify-center text-xl font-bold text-yellow-400">
+                            Client Plan
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-2">The 30 Day Land A Client</h3>
+                        <p class="text-gray-400 text-sm">Master outreach, pitching, and negotiation to make your first $1,000 as an editor in 30 days or less.</p>
+                    </div>
+                </div>
+
+                <div class="text-center mt-10">
+                    <a href="#access" class="text-yellow-400 font-semibold hover:text-yellow-300 transition text-lg">
+                        View All Courses &rarr;
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Roadmap Section -->
+        <section id="roadmap" class="py-16 md:py-24">
+            <div class="container mx-auto px-4">
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-white text-center mb-4">
+                    The 90 Day Ultimate Editors Plan
+                </h2>
+                <p class="text-center text-gray-400 mb-16 max-w-xl mx-auto">
+                    How to master video editing, master viral editing styles, and make $1,000/mo in just 90 days.
+                </p>
+
+                <div class="relative max-w-4xl mx-auto">
+                    <!-- Vertical Line for Desktop -->
+                    <div class="hidden md:block absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-gray-800"></div>
+
+                    <!-- Step 1 -->
+                    <div class="mb-12 md:flex md:justify-start md:odd:flex-row-reverse relative">
+                        <!-- Circle Indicator -->
+                        <div class="absolute left-0 md:left-1/2 transform md:-translate-x-1/2 -translate-y-1/2 md:translate-y-0 w-8 h-8 bg-yellow-400 rounded-full flex items-center justify-center font-bold text-gray-900 border-4 border-gray-900 md:top-4 z-10">
+                            1
+                        </div>
+                        <!-- Content Card -->
+                        <div class="bg-gray-900 p-8 rounded-xl w-full md:w-5/12 shadow-2xl md:odd:text-right">
+                            <h3 class="text-2xl font-bold text-white mb-3">Learn the Editing Programs</h3>
+                            <p class="text-gray-400">Master Premiere Pro and After Effects at an expert level. We cover every tool, technique, and workflow needed for professional projects.</p>
+                        </div>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="mb-12 md:flex md:justify-end md:odd:flex-row-reverse relative">
+                        <!-- Circle Indicator -->
+                        <div class="absolute left-0 md:left-1/2 transform md:-translate-x-1/2 -translate-y-1/2 md:translate-y-0 w-8 h-8 bg-yellow-400 rounded-full flex items-center justify-center font-bold text-gray-900 border-4 border-gray-900 md:top-4 z-10">
+                            2
+                        </div>
+                        <!-- Content Card -->
+                        <div class="bg-gray-900 p-8 rounded-xl w-full md:w-5/12 shadow-2xl md:odd:text-right">
+                            <h3 class="text-2xl font-bold text-white mb-3">Learn the Viral Editing Styles</h3>
+                            <p class="text-gray-400">Become an editor who knows the Viral Editing Styles of 2025. We provide step-by-step breakdowns of the most profitable video formats.</p>
+                        </div>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="mb-12 md:flex md:justify-start md:odd:flex-row-reverse relative">
+                        <!-- Circle Indicator -->
+                        <div class="absolute left-0 md:left-1/2 transform md:-translate-x-1/2 -translate-y-1/2 md:translate-y-0 w-8 h-8 bg-yellow-400 rounded-full flex items-center justify-center font-bold text-gray-900 border-4 border-gray-900 md:top-4 z-10">
+                            3
+                        </div>
+                        <!-- Content Card -->
+                        <div class="bg-gray-900 p-8 rounded-xl w-full md:w-5/12 shadow-2xl md:odd:text-right">
+                            <h3 class="text-2xl font-bold text-white mb-3">Land Your First $1,000 Client</h3>
+                            <p class="text-gray-400">Use our 30-day client acquisition plan to make your first $1,000 with video editing, focusing on proven outreach strategies and negotiation.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center mt-10">
+                    <a href="#access" class="cta-button bg-yellow-400 text-gray-900 font-extrabold py-3 px-10 rounded-full text-lg w-full sm:w-auto">
+                        Start Your 90-Day Plan
+                    </a>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Testimonials Section -->
+        <section id="testimonials" class="py-16 md:py-24 bg-[#141414]">
+            <div class="container mx-auto px-4">
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-white text-center mb-4">
+                    Does Ultimate Editors actually work?
+                </h2>
+                <p class="text-center text-gray-400 mb-12 max-w-xl mx-auto">
+                    Here's what the Editors in our community are achieving and making.
+                </p>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    
+                    <!-- Testimonial Card 1 -->
+                    <div class="bg-gray-900 p-6 rounded-xl shadow-2xl border-t-4 border-yellow-400">
+                        <!-- Rating Stars -->
+                        <div class="flex mb-4">
+                            <!-- 5 Stars -->
+                            <svg class="star-icon text-yellow-400 mr-1" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26l6.91.99l-5 4.88l1.18 6.88L12 17.27l-6.18 3.26l1.18-6.88l-5-4.88l6.91-.99L12 2z"/></svg>
+                            <svg class="star-icon text-yellow-400 mr-1" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26l6.91.99l-5 4.88l1.18 6.88L12 17.27l-6.18 3.26l1.18-6.88l-5-4.88l6.91-.99L12 2z"/></svg>
+                            <svg class="star-icon text-yellow-400 mr-1" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26l6.91.99l-5 4.88l1.18 6.88L12 17.27l-6.18 3.26l1.18-6.88l-5-4.88l6.91-.99L12 2z"/></svg>
+                            <svg class="star-icon text-yellow-400 mr-1" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26l6.91.99l-5 4.88l1.18 6.88L12 17.27l-6.18 3.26l1.18-6.88l-5-4.88l6.91-.99L12 2z"/></svg>
+                            <svg class="star-icon text-gray-700 mr-1" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26l6.91.99l-5 4.88l1.18 6.88L12 17.27l-6.18 3.26l1.18-6.88l-5-4.88l6.91-.99L12 2z"/></svg>
+                        </div>
+                        <p class="text-white text-lg italic mb-4">"🔥 After 4 Months of Struggling – I Finally Landed My First $1.2K/Month Client 🔥"</p>
+                        <p class="text-sm text-gray-400 leading-relaxed">
+                            "I've been grinding for the last 4 months... But I didn't stop. And now, it finally paid off. I just signed my first long-term client and I'm officially earning $1,200/month as a video editor. It's proof that all those sleepless nights meant something."
+                        </p>
+                        <div class="mt-4 flex items-center">
+                            <div class="h-10 w-10 bg-gray-700 rounded-full mr-3"></div>
+                            <div>
+                                <p class="font-bold text-white">Philipp K</p>
+                                <p class="text-xs text-gray-500">Editor, Germany</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Testimonial Card 2 -->
+                    <div class="bg-gray-900 p-6 rounded-xl shadow-2xl border-t-4 border-yellow-400">
+                        <!-- Rating Stars -->
+                        <div class="flex mb-4">
+                            <!-- 5 Stars -->
+                            <svg class="star-icon text-yellow-400 mr-1" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26l6.91.99l-5 4.88l1.18 6.88L12 17.27l-6.18 3.26l1.18-6.88l-5-4.88l6.91-.99L12 2z"/></svg>
+                            <svg class="star-icon text-yellow-400 mr-1" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26l6.91.99l-5 4.88l1.18 6.88L12 17.27l-6.18 3.26l1.18-6.88l-5-4.88l6.91-.99L12 2z"/></svg>
+                            <svg class="star-icon text-yellow-400 mr-1" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26l6.91.99l-5 4.88l1.18 6.88L12 17.27l-6.18 3.26l1.18-6.88l-5-4.88l6.91-.99L12 2z"/></svg>
+                            <svg class="star-icon text-yellow-400 mr-1" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26l6.91.99l-5 4.88l1.18 6.88L12 17.27l-6.18 3.26l1.18-6.88l-5-4.88l6.91-.99L12 2z"/></svg>
+                            <svg class="star-icon text-gray-700 mr-1" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26l6.91.99l-5 4.88l1.18 6.88L12 17.27l-6.18 3.26l1.18-6.88l-5-4.88l6.91-.99L12 2z"/></svg>
+                        </div>
+                        <p class="text-white text-lg italic mb-4">"Just closed a 2k/month deal!! No more low paying clients."</p>
+                        <p class="text-sm text-gray-400 leading-relaxed">
+                            "The client acquisition module was a game-changer. I stopped chasing low-ball offers and was able to negotiate a high-ticket retainer thanks to the strategies taught inside the community."
+                        </p>
+                        <div class="mt-4 flex items-center">
+                            <div class="h-10 w-10 bg-gray-700 rounded-full mr-3"></div>
+                            <div>
+                                <p class="font-bold text-white">Lucas Coburn</p>
+                                <p class="text-xs text-gray-500">Editor, USA</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Testimonial Card 3 -->
+                    <div class="bg-gray-900 p-6 rounded-xl shadow-2xl border-t-4 border-yellow-400">
+                        <!-- Rating Stars -->
+                        <div class="flex mb-4">
+                            <!-- 5 Stars -->
+                            <svg class="star-icon text-yellow-400 mr-1" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26l6.91.99l-5 4.88l1.18 6.88L12 17.27l-6.18 3.26l1.18-6.88l-5-4.88l6.91-.99L12 2z"/></svg>
+                            <svg class="star-icon text-yellow-400 mr-1" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26l6.91.99l-5 4.88l1.18 6.88L12 17.27l-6.18 3.26l1.18-6.88l-5-4.88l6.91-.99L12 2z"/></svg>
+                            <svg class="star-icon text-yellow-400 mr-1" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26l6.91.99l-5 4.88l1.18 6.88L12 17.27l-6.18 3.26l1.18-6.88l-5-4.88l6.91-.99L12 2z"/></svg>
+                            <svg class="star-icon text-yellow-400 mr-1" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26l6.91.99l-5 4.88l1.18 6.88L12 17.27l-6.18 3.26l1.18-6.88l-5-4.88l6.91-.99L12 2z"/></svg>
+                            <svg class="star-icon text-gray-700 mr-1" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26l6.91.99l-5 4.88l1.18 6.88L12 17.27l-6.18 3.26l1.18-6.88l-5-4.88l6.91-.99L12 2z"/></svg>
+                        </div>
+                        <p class="text-white text-lg italic mb-4">"First client booked today (i started 23 days ago ahah) around $1K per month."</p>
+                        <p class="text-sm text-gray-400 leading-relaxed">
+                            "I joined Ultimate Editor the 4th of August and I booked my first client today. She's a nurse asking for a long-term work... that's crazy ahah!! Thanks a lot Joseph and all of you for the help."
+                        </p>
+                        <div class="mt-4 flex items-center">
+                            <div class="h-10 w-10 bg-gray-700 rounded-full mr-3"></div>
+                            <div>
+                                <p class="font-bold text-white">Bruce Trade</p>
+                                <p class="text-xs text-gray-500">Editor, France</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA / Still Not Sure Section -->
+        <section id="pricing" class="py-16 md:py-24">
+            <div class="container mx-auto px-4">
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-white text-center mb-12">
+                    Still Not Sure? Discover if Ultimate Editors is for you.
+                </h2>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    
+                    <!-- Beginner Card -->
+                    <div class="bg-gray-900 p-8 rounded-xl shadow-2xl border-l-4 border-teal-400">
+                        <h3 class="text-2xl font-bold text-teal-400 mb-2">Beginner Editor</h3>
+                        <p class="text-gray-400 mb-6">Just started editing? Want to learn Premiere Pro and After Effects?</p>
+                        <ul class="space-y-3 text-sm">
+                            <li class="flex items-start text-white"><svg class="w-5 h-5 text-yellow-400 mr-3 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Premiere Pro & After Effects Masterclasses</li>
+                            <li class="flex items-start text-white"><svg class="w-5 h-5 text-yellow-400 mr-3 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Step-By-Step friendly courses</li>
+                            <li class="flex items-start text-white"><svg class="w-5 h-5 text-yellow-400 mr-3 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Weekly Q&A calls for questions</li>
+                        </ul>
+                    </div>
+
+                    <!-- Intermediate Card (Featured) -->
+                    <div class="bg-gray-900 p-8 rounded-xl shadow-2xl ring-4 ring-yellow-400 transform scale-105 transition duration-300">
+                        <h3 class="text-2xl font-bold text-yellow-400 mb-2">Intermediate Editor</h3>
+                        <p class="text-gray-400 mb-6">Finding it hard to learn advanced styles and become a viral editor?</p>
+                        <ul class="space-y-3 text-sm">
+                            <li class="flex items-start text-white"><svg class="w-5 h-5 text-yellow-400 mr-3 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Viral Editing Style Masterclasses</li>
+                            <li class="flex items-start text-white"><svg class="w-5 h-5 text-yellow-400 mr-3 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Master advanced editing techniques</li>
+                            <li class="flex items-start text-white"><svg class="w-5 h-5 text-yellow-400 mr-3 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> New Masterclasses Every Month</li>
+                        </ul>
+                    </div>
+
+                    <!-- Professional Card -->
+                    <div class="bg-gray-900 p-8 rounded-xl shadow-2xl border-l-4 border-purple-400">
+                        <h3 class="text-2xl font-bold text-purple-400 mb-2">Professional Editor</h3>
+                        <p class="text-gray-400 mb-6">Already a good editor but struggling to land high-ticket clients?</p>
+                        <ul class="space-y-3 text-sm">
+                            <li class="flex items-start text-white"><svg class="w-5 h-5 text-yellow-400 mr-3 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Master the 30-day client plan</li>
+                            <li class="flex items-start text-white"><svg class="w-5 h-5 text-yellow-400 mr-3 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Build strong personal brands</li>
+                            <li class="flex items-start text-white"><svg class="w-5 h-5 text-yellow-400 mr-3 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Weekly coaching with Joseph</li>
+                        </ul>
+                    </div>
+
+                </div>
+
+                <!-- Final CTA -->
+                <div id="access" class="mt-16 text-center bg-gray-900 p-10 rounded-xl max-w-2xl mx-auto shadow-2xl">
+                    <h3 class="text-3xl font-extrabold text-white mb-4">Ready to Master Editing?</h3>
+                    <p class="text-gray-400 mb-6 text-lg">Secure lifetime access to all masterclasses, coaching calls, and the exclusive community.</p>
+                    <a href="#" class="cta-button bg-yellow-400 text-gray-900 font-extrabold py-4 px-12 rounded-full text-xl w-full sm:w-auto">
+                        Get Access Today - $497
+                    </a>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-black py-10">
+        <div class="container mx-auto px-4 text-center">
+            <p class="text-sm text-gray-500 mb-4">&copy; 2025 Ultimate Editors Clone. All rights reserved.</p>
+            <div class="space-x-4 text-xs">
+                <a href="#" class="text-gray-400 hover:text-yellow-400 transition">Terms of Service</a>
+                <span class="text-gray-500">|</span>
+                <a href="#" class="text-gray-400 hover:text-yellow-400 transition">Privacy Policy</a>
+                <span class="text-gray-500">|</span>
+                <a href="#" class="text-gray-400 hover:text-yellow-400 transition">Support</a>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

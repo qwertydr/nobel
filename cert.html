@@ -1,0 +1,643 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>IARCO 2025 — Certificate Generator</title>
+
+  <!-- External libraries (CDN) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.9.179/pdf.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+  <style>
+    :root{
+      --gold:#d6b24b;
+      --deep-blue:#0b3b66;
+      --muted:#f3f1ea;
+      --card-bg:#fffdf6;
+      --accent:#5aa0e6;
+    }
+    html,body{height:100%;margin:0;font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial;}
+    body{background: linear-gradient(180deg,#f6f7fb, #eef3f8); display:flex; align-items:flex-start; justify-content:center; padding:28px 18px;}
+    .container{width:100%; max-width:1100px; background:var(--card-bg); border-radius:12px; box-shadow:0 12px 30px rgba(11,59,102,0.12); padding:20px; border:4px solid rgba(214,178,75,0.08);}
+    header{display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap}
+    .brand{display:flex;align-items:center;gap:14px}
+    .brand .logo{width:56px;height:56px;border-radius:10px;background:linear-gradient(135deg,var(--gold),#f5e7a8); display:flex;align-items:center;justify-content:center;box-shadow:0 6px 14px rgba(11,59,102,0.08)}
+    .brand h1{margin:0;font-size:18px;color:var(--deep-blue)}
+    .controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+    .search-wrap{display:flex; gap:8px; align-items:center; background:white; padding:8px; border-radius:10px; box-shadow:0 6px 14px rgba(11,59,102,0.04)}
+    input[type="search"]{border:0;outline:0;padding:10px 12px;border-radius:6px;min-width:260px}
+    button{background:var(--deep-blue); color:#fff;border:0;padding:10px 14px;border-radius:8px;cursor:pointer;font-weight:600}
+    button.secondary{background:transparent;color:var(--deep-blue);border:2px solid rgba(11,59,102,0.08)}
+    .list{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap}
+    .student-card{background:white;padding:10px 12px;border-radius:10px; min-width:240px;box-shadow:0 8px 18px rgba(11,59,102,0.04); display:flex;align-items:center;gap:10px; justify-content:space-between}
+    .student-info{display:flex;gap:10px;align-items:center}
+    .student-name{font-weight:700;color:var(--deep-blue)}
+    .small{font-size:13px;color:#566;opacity:0.9}
+    .generate-btn{background:linear-gradient(90deg,var(--gold),#f0c85b); color:var(--deep-blue); border:0; padding:9px 12px;border-radius:8px; font-weight:700; box-shadow:0 6px 12px rgba(214,178,75,0.24)}
+    /* certificate canvas preview area */
+    .preview-area{margin-top:16px; display:flex; gap:18px; align-items:flex-start; flex-wrap:wrap}
+    .preview{flex:1; min-width:300px; border-radius:8px; overflow:hidden; background:#fff; padding:14px; box-shadow:0 8px 20px rgba(11,59,102,0.06)}
+    .preview h2{margin:0 0 8px 0; font-size:16px; color:var(--deep-blue)}
+    #certificateFrame{width:100%; height:640px; background: #ededed; display:flex;align-items:center; justify-content:center; border:1px dashed rgba(11,59,102,0.06); border-radius:6px}
+    /* right column */
+    .meta{width:300px; min-width:260px; background:linear-gradient(180deg,#fff, #fbfbf9); padding:14px; border-radius:8px}
+    .meta h3{margin-top:0;color:var(--deep-blue)}
+    .meta p{font-size:14px;color:#444;margin:8px 0}
+    /* generating overlay */
+    .overlay{
+      position:fixed; left:0; top:0; right:0; bottom:0; display:flex; align-items:center; justify-content:center;
+      background:rgba(2,18,33,0.36); z-index:9999; visibility:hidden; opacity:0; transition:all .24s;
+    }
+    .overlay.show{visibility:visible; opacity:1}
+    .spinner{background:linear-gradient(180deg,#fff,#f7f7f7); padding:30px 38px; border-radius:12px; text-align:center; box-shadow:0 18px 40px rgba(2,18,33,0.24); width:320px}
+    .spinner .dots{font-size:22px; color:var(--deep-blue); margin:10px 0 0 0}
+    .progress{height:8px; background:rgba(11,59,102,0.06); border-radius:999px; overflow:hidden; margin-top:16px}
+    .bar{height:100%; width:0%; background:linear-gradient(90deg,var(--gold),#f0c85b); transition:width 1s ease}
+    /* responsive */
+    @media (max-width:920px){
+      .preview-area{flex-direction:column}
+      .meta{width:auto; min-width:unset}
+    }
+  </style>
+</head>
+<body>
+  <div class="container" role="main">
+    <header>
+      <div class="brand">
+        <div class="logo"><svg width="30" height="30" viewBox="0 0 24 24" fill="none"><path d="M6 12c0-3.314 2.686-6 6-6s6 2.686 6 6" stroke="#0b3b66" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div>
+          <h1>IARCO — Certificate Generator 2025</h1>
+          <div style="font-size:13px;color:#617; margin-top:4px">Gold & Blue themed | Template-backed PDF overlay</div>
+        </div>
+      </div>
+
+      <div class="controls">
+        <div class="search-wrap" title="Search student by name">
+          <input id="search" type="search" placeholder="Search student name..." aria-label="search student" />
+          <button id="clearSearch" class="secondary">Clear</button>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <button id="loadAll">Load all demo students</button>
+        </div>
+      </div>
+    </header>
+
+    <div class="list" id="results"></div>
+
+    <div class="preview-area">
+      <div class="preview" aria-live="polite">
+        <h2>Certificate Preview (canvas)</h2>
+        <div id="certificateFrame">Preview will render here after selecting a student</div>
+      </div>
+
+      <div class="meta">
+        <h3>Selected student</h3>
+        <p id="metaName">No student selected</p>
+        <p id="metaDetails" class="small">Search for a name to generate the certificate. The system calculates rank from the dataset and applies medals automatically.</p>
+        <hr/>
+        <p class="small">Template file (from certificate.json): <strong id="templateName">certificate/2025.pdf</strong></p>
+        <p class="small">Output: A4 PDF (downloaded automatically)</p>
+        <div style="margin-top:12px">
+          <small class="small">Tip: Serve this page over HTTP when loading local PDF templates (e.g., run <code>python -m http.server</code>).</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- overlay -->
+  <div id="overlay" class="overlay" role="status" aria-hidden="true">
+    <div class="spinner" role="dialog" aria-modal="true" aria-label="Generating certificate">
+      <div style="font-weight:800; color:var(--deep-blue); font-size:18px">Generating certificate...</div>
+      <div class="dots">Please wait ···</div>
+      <div class="progress"><div id="bar" class="bar"></div></div>
+    </div>
+  </div>
+
+  <script>
+  (function(){
+    // ---------- DEMO Data (use your JSON files or fetch them) ----------
+    // student.json (you provided a sample; expanded slightly)
+    const students = [
+      {
+        "student_id":"v1MrV4dT",
+        "name":"Afia Anjum Aboni",
+        "school":"Rajuk Uttara Model College",
+        "class":"A Level",
+        "category":"Junior",
+        "year":2024,
+        "country":"Bangladesh",
+        "research_proposal_title":"The Relevance of Class Disparity in the Implementation of Climate-Related Policies; an Investigation into the Different Socioeconomic Classes of Dhaka",
+        "researchPaperScore":78,
+        "presentationScore":68,
+        "submissionScore":146,
+        "scaledFinalScore":131,
+        "viewProposal":"https://drive.google.com/open?id=1aBuuRXyiIBx-908Tujbzt2vXRqBq_rzX",
+        "videoPitch":"",
+        "proposal_comment":"No Comment.",
+        "presentation_comment":"No Comment."
+      },
+      {
+        "student_id":"LXd6a9ey",
+        "name":"Adira Safwan",
+        "school":"Maple Leaf International School",
+        "class":"Grade 12",
+        "category":"Senior",
+        "year":2024,
+        "country":"Bangladesh",
+        "research_proposal_title":"Exploring Differences in Social Media Literacy Between Digital Natives and Digital Immigrants: A Comparative Analysis of Critical Skills and Digital Adaptability",
+        "researchPaperScore":69,
+        "presentationScore":85,
+        "submissionScore":154,
+        "scaledFinalScore":154,
+        "viewProposal":"https://iarco.org/storage/2024/junior/research_proposal/02_Adira_RP_Junior_IARCO_2024.pdf",
+        "videoPitch":"https://youtu.be/Fh9clCxc2RU",
+        "proposal_comment":"No Comment.",
+        "presentation_comment":"No Comment."
+      },
+      // add extra dummy participants for rank calculation demo:
+      {"student_id":"s3","name":"Sample One","school":"X","class":"10","category":"Junior","year":2024,"country":"Japan","researchPaperScore":80,"presentationScore":90,"submissionScore":170,"scaledFinalScore":170},
+      {"student_id":"s4","name":"Sample Two","school":"Y","class":"11","category":"Junior","year":2024,"country":"Canada","researchPaperScore":50,"presentationScore":60,"submissionScore":110,"scaledFinalScore":110},
+      {"student_id":"s5","name":"Sarhan Alam Khan","school":"Scholastica","class":"A Level","category":"Junior","year":2024,"country":"Bangladesh","research_proposal_title":"Enhancing IoT Security with Machine Learning for Real-Time Threat Detection","researchPaperScore":70,"presentationScore":64,"submissionScore":134,"scaledFinalScore":134}
+    ];
+
+    // flags.json (demo embedded)
+    const flags = {
+      "Japan": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 12' width='36' height='22'><rect width='20' height='12' fill='#ffffff'/><circle cx='10' cy='6' r='3.6' fill='#bc002d'/></svg>",
+      "Canada":"<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 12' width='36' height='22'><rect width='20' height='12' fill='#ff0000'/><rect x='6' width='8' height='12' fill='#ffffff'/><path fill='#ff0000' d='M10 2.2 8.8 3.5h0.7v1.8h0.9V3.5h0.7L10 2.2zm0 6.6-1.4-2.1h0.9v-1h0.9v1h0.9L10 8.8z'/></svg>",
+      "Bangladesh":"<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 12' width='36' height='22'><rect width='20' height='12' fill='#006a4e'/><circle cx='8.6' cy='6' r='3.2' fill='#f42b20'/></svg>"
+    };
+
+    // certificate.json (maps years to template path)
+    const certificateTemplates = {
+      "2024":"certificate/2024.pdf",
+      "2025":"certificate/2025.pdf"
+    };
+
+    // medal.json (demo: embedded SVG strings; in production you may reference files)
+    const medals = {
+      "gold": `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80' width='80' height='80'><defs><linearGradient id='g1' x1='0' x2='1'><stop offset='0' stop-color='#ffd54a'/><stop offset='1' stop-color='#d4a017'/></linearGradient></defs><circle cx='40' cy='30' r='24' fill='url(#g1)' stroke='#b58300' stroke-width='2'/><path d='M32 44 L28 72 L40 60 L52 72 L48 44' fill='#d4a017' stroke='#b58300'/></svg>`,
+      "silver": `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80' width='80' height='80'><circle cx='40' cy='30' r='24' fill='#cfcfcf' stroke='#9b9b9b' stroke-width='2'/><path d='M32 44 L28 72 L40 60 L52 72 L48 44' fill='#bdbdbd' stroke='#9b9b9b'/></svg>`,
+      "bronze": `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80' width='80' height='80'><circle cx='40' cy='30' r='24' fill='#d2a679' stroke='#a06a3c' stroke-width='2'/><path d='M32 44 L28 72 L40 60 L52 72 L48 44' fill='#b68149' stroke='#a06a3c'/></svg>`,
+      "honorable": `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80' width='80' height='80'><circle cx='40' cy='30' r='24' fill='#e6f4ff' stroke='#6fa8dd' stroke-width='2'/><text x='40' y='36' font-size='10' text-anchor='middle' fill='#0b3b66'>HM</text></svg>`,
+      "finalist": `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80' width='80' height='80'><circle cx='40' cy='30' r='24' fill='#eef7ea' stroke='#6fbf73' stroke-width='2'/><text x='40' y='36' font-size='10' text-anchor='middle' fill='#2d6b2d'>F</text></svg>`
+    };
+
+    // ---------- Utility functions ----------
+    function q(sel, root=document){return root.querySelector(sel)}
+    function qa(sel, root=document){return [...root.querySelectorAll(sel)]}
+
+    // simple normalize
+    function normalizeName(n){return (n||'').trim().toLowerCase()}
+
+    // compute ranks for a category and year
+    function computeRanks(list, category, year){
+      const filtered = list.filter(s => (s.category||'').toLowerCase() === (category||'').toLowerCase() && s.year===year);
+      // sort by scaledFinalScore descending; fallback to submissionScore
+      const sorted = filtered.sort((a,b)=>((b.scaledFinalScore||b.submissionScore||0) - (a.scaledFinalScore||a.submissionScore||0)));
+      // assign rank
+      return sorted.map((s,i)=>{
+        return { student: s, rank: i+1 };
+      });
+    }
+
+    // certification id format: YYYY-CAT-RANK-TIMESTAMPSHORT
+    function makeCertificationId(year, category, rank){
+      const ts = Date.now().toString().slice(-6); // last 6 digits
+      const cat = (category||'GEN').toString().slice(0,3).toUpperCase();
+      return `${year}-${cat}-${rank}-${ts}`;
+    }
+
+    // determine medal type
+    function medalForRank(rank){
+      if(rank===1) return 'gold';
+      if(rank===2) return 'silver';
+      if(rank===3) return 'bronze';
+      if(rank>=4 && rank<=10) return 'honorable';
+      return 'finalist';
+    }
+
+    // create rank link
+    function rankLink(year, category, rank){
+      const cat = encodeURIComponent(category||'All');
+      return `https://iarco.org/${year}-winners?category=${cat}&rank=${rank}`;
+    }
+
+    // create top text for preview overlay
+    function createOverlayCanvas(backgroundImage, overlayData, callback){
+      // backgroundImage: HTMLImageElement (rendered from PDF canvas)
+      // overlayData: object with text, flags, medalSvg (string)
+      const w = backgroundImage.width;
+      const h = backgroundImage.height;
+      // create canvas
+      const cvs = document.createElement('canvas');
+      cvs.width = w;
+      cvs.height = h;
+      const ctx = cvs.getContext('2d');
+      // draw base
+      ctx.drawImage(backgroundImage, 0, 0, w, h);
+
+      // stylistic settings — scale fonts according to w
+      const base = Math.round(w/60);
+      ctx.fillStyle = "#0b3b66";
+      ctx.textAlign = "center";
+
+      // medal at top center (use an image from SVG)
+      if(overlayData.medalSvg){
+        const blob = new Blob([overlayData.medalSvg], {type: "image/svg+xml;charset=utf-8"});
+        const url = URL.createObjectURL(blob);
+        const medalImg = new Image();
+        medalImg.onload = ()=>{
+          const mw = Math.round(w * 0.18);
+          const mh = Math.round(mw * (medalImg.height/medalImg.width));
+          ctx.drawImage(medalImg, (w-mw)/2, Math.round(h*0.06), mw, mh);
+          URL.revokeObjectURL(url);
+          proceedTextAndRest();
+        }
+        medalImg.onerror = ()=>{
+          URL.revokeObjectURL(url);
+          proceedTextAndRest();
+        }
+        medalImg.src = url;
+      } else {
+        proceedTextAndRest();
+      }
+
+      function proceedTextAndRest(){
+        // name large
+        ctx.font = `bold ${base*2.6}px "Georgia", serif`;
+        ctx.fillStyle = "#072b4a";
+        ctx.fillText(overlayData.name, w/2, h*0.35);
+
+        // small line under name
+        ctx.strokeStyle = "rgba(11,59,102,0.12)";
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(w*0.18, h*0.36);
+        ctx.lineTo(w*0.82, h*0.36);
+        ctx.stroke();
+
+        // School & class
+        ctx.font = `${base*0.95}px "Segoe UI", sans-serif`;
+        ctx.fillStyle = "#333";
+        ctx.fillText(`${overlayData.class || ''} at ${overlayData.school || ''}`, w/2, h*0.40);
+
+        // Title
+        ctx.font = `600 ${base*1.05}px "Segoe UI", sans-serif`;
+        ctx.fillStyle = "#072b4a";
+        ctx.fillText("For delivering an impressive research project and presentation", w/2, h*0.46);
+
+        // scores row
+        ctx.font = `${base*0.88}px "Segoe UI", sans-serif`;
+        ctx.fillStyle = "#0b3b66";
+        ctx.textAlign = "left";
+        const left = w*0.18;
+        let y = h*0.52;
+        ctx.fillText(`Research Proposal: ${overlayData.researchPaperScore || 0}/100`, left, y);
+        ctx.fillText(`Presentation: ${overlayData.presentationScore || 0}/100`, left, y + base*1.2);
+        ctx.fillText(`Total Score: ${overlayData.total || (overlayData.presentationScore+overlayData.researchPaperScore)}`, left, y + base*2.4);
+
+        // rank box
+        const rankBoxW = Math.round(w*0.22);
+        const rankBoxH = Math.round(base*6);
+        const rx = w*0.68;
+        const ry = y - base*0.4;
+        // box
+        ctx.fillStyle = "#fbf7e6";
+        ctx.strokeStyle = "rgba(11,59,102,0.06)";
+        roundRect(ctx, rx, ry, rankBoxW, rankBoxH, 8, true, true);
+        ctx.fillStyle = "#0b3b66";
+        ctx.textAlign = "center";
+        ctx.font = `700 ${base*1.05}px "Segoe UI", sans-serif`;
+        ctx.fillText(`Top ${overlayData.rank} out of ${overlayData.totalParticipants}`, rx + rankBoxW/2, ry + rankBoxH/2 + base*0.25);
+
+        // research title centered lower
+        ctx.textAlign = "center";
+        ctx.font = `600 ${base*0.9}px "Segoe UI", sans-serif`;
+        ctx.fillStyle = "#07436e";
+        ctx.fillText("Research Title:", w/2, h*0.68);
+        ctx.font = `${base*0.84}px "Segoe UI", sans-serif`;
+        wrapText(ctx, overlayData.researchTitle || '', w*0.5, h*0.685 + base*0.7, w*0.72, base*1.05);
+
+        // rank link small near bottom
+        ctx.textAlign = "center";
+        ctx.font = `${base*0.64}px "Segoe UI", sans-serif`;
+        ctx.fillStyle = "#2b4b67";
+        ctx.fillText(overlayData.rankLink, w/2, h*0.86);
+
+        // Certification id and date bottom left
+        ctx.textAlign = "left";
+        ctx.font = `${base*0.64}px "Segoe UI", sans-serif`;
+        ctx.fillStyle = "#444";
+        ctx.fillText(`Certification ID: ${overlayData.certId}`, left, h*0.92);
+        ctx.fillText(`Date: ${overlayData.dateStr}`, left, h*0.96);
+
+        // flag on bottom right
+        if(overlayData.flagSvg){
+          const blob2 = new Blob([overlayData.flagSvg], {type: "image/svg+xml;charset=utf-8"});
+          const url2 = URL.createObjectURL(blob2);
+          const flagImg = new Image();
+          flagImg.onload = ()=>{
+            const fw = Math.round(w*0.09);
+            const fh = Math.round(fw * (flagImg.height/flagImg.width));
+            ctx.drawImage(flagImg, w - fw - 60, h*0.9 - fh/2, fw, fh);
+            URL.revokeObjectURL(url2);
+            wrapUp();
+          }
+          flagImg.onerror = ()=>{
+            URL.revokeObjectURL(url2);
+            wrapUp();
+          }
+          flagImg.src = url2;
+        } else {
+          wrapUp();
+        }
+
+        function wrapUp(){
+          const img = new Image();
+          img.onload = ()=> callback(cvs);
+          img.onerror = ()=> callback(cvs);
+          img.src = cvs.toDataURL('image/png');
+        }
+      } // proceedTextAndRest end
+    }
+
+    // helper rounded rectangle
+    function roundRect(ctx, x, y, w, h, r, fill, stroke){
+      if (typeof r === 'undefined') r = 5;
+      ctx.beginPath();
+      ctx.moveTo(x+r, y);
+      ctx.arcTo(x+w, y, x+w, y+h, r);
+      ctx.arcTo(x+w, y+h, x, y+h, r);
+      ctx.arcTo(x, y+h, x, y, r);
+      ctx.arcTo(x, y, x+w, y, r);
+      ctx.closePath();
+      if(fill){ ctx.fill(); }
+      if(stroke){ ctx.stroke(); }
+    }
+
+    // wrapText: simple multi-line drawing
+    function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
+      const words = text.split(' ');
+      let line = '';
+      let testY = y;
+      for(let n = 0; n < words.length; n++) {
+        const testLine = line + words[n] + ' ';
+        const metrics = ctx.measureText(testLine);
+        const testWidth = metrics.width;
+        if (testWidth > maxWidth && n > 0) {
+          ctx.fillText(line, x, testY);
+          line = words[n] + ' ';
+          testY += lineHeight;
+        } else {
+          line = testLine;
+        }
+      }
+      ctx.fillText(line, x, testY);
+    }
+
+    // ---------- UI wiring & PDF rendering ----------
+    const elResults = q('#results');
+    const elCertFrame = q('#certificateFrame');
+    const elSearch = q('#search');
+    const elClear = q('#clearSearch');
+    const elLoadAll = q('#loadAll');
+    const overlay = q('#overlay');
+    const bar = q('#bar');
+    const metaName = q('#metaName');
+    const metaDetails = q('#metaDetails');
+    const templateNameLabel = q('#templateName');
+
+    // set template name display (choose 2025)
+    const selectedYear = 2025;
+    const templatePath = certificateTemplates[selectedYear] || Object.values(certificateTemplates)[0];
+    templateNameLabel.textContent = templatePath;
+
+    // render search results (initially none)
+    function renderResults(list){
+      elResults.innerHTML = '';
+      if(!list.length){
+        elResults.innerHTML = `<div style="padding:12px;color:#667">No results</div>`;
+        return;
+      }
+      list.forEach(s=>{
+        const div = document.createElement('div');
+        div.className = 'student-card';
+        const left = document.createElement('div');
+        left.className = 'student-info';
+        // small avatar circle
+        const av = document.createElement('div');
+        av.style.width = '44px';
+        av.style.height = '44px';
+        av.style.borderRadius = '8px';
+        av.style.background = 'linear-gradient(180deg,#fff,#f7f6f0)';
+        av.style.display = 'flex';
+        av.style.alignItems = 'center';
+        av.style.justifyContent = 'center';
+        av.style.fontWeight=700;
+        av.style.color='#072b4a';
+        av.textContent = s.name.split(' ').slice(0,2).map(n=>n[0]).join('');
+        left.appendChild(av);
+        const info = document.createElement('div');
+        info.innerHTML = `<div class="student-name">${s.name}</div><div class="small">${s.school} · ${s.category || ''}</div>`;
+        left.appendChild(info);
+
+        const right = document.createElement('div');
+        const btn = document.createElement('button');
+        btn.className = 'generate-btn';
+        btn.textContent = 'Generate';
+        btn.addEventListener('click', ()=> generateForStudent(s));
+        right.appendChild(btn);
+
+        div.appendChild(left);
+        div.appendChild(right);
+        elResults.appendChild(div);
+      });
+    }
+
+    // live search
+    elSearch.addEventListener('input', ()=>{
+      const qv = normalizeName(elSearch.value);
+      if(!qv){ elResults.innerHTML = ''; return; }
+      const filtered = students.filter(s=>normalizeName(s.name).includes(qv));
+      renderResults(filtered);
+    });
+    elClear.addEventListener('click', ()=>{ elSearch.value=''; elResults.innerHTML=''; });
+
+    // load all demo
+    elLoadAll.addEventListener('click', ()=>{
+      renderResults(students);
+      elSearch.focus();
+    });
+
+    // selected student data holder
+    let lastRendered = null;
+
+    // Generate process
+    async function generateForStudent(student){
+      lastRendered = student;
+      metaName.textContent = `${student.name} — ${student.school}`;
+      metaDetails.textContent = `Category: ${student.category || 'N/A'} · Year: ${student.year || selectedYear}`;
+
+      // compute rank and participants
+      const ranks = computeRanks(students, student.category, student.year || selectedYear);
+      const found = ranks.find(r=>r.student.student_id===student.student_id || r.student.name===student.name);
+      const rank = found ? found.rank : (ranks.length? ranks.findIndex(r=>r.student.name===student.name)+1 : 1);
+      const totalParticipants = ranks.length || students.length;
+
+      // determine medal
+      const medalKey = medalForRank(rank);
+
+      // prepare overlay data
+      const overlayData = {
+        name: student.name,
+        class: student.class || '',
+        school: student.school,
+        researchPaperScore: student.researchPaperScore || student.researchPaperScore || 0,
+        presentationScore: student.presentationScore || 0,
+        total: student.scaledFinalScore || student.submissionScore || (student.researchPaperScore + student.presentationScore),
+        researchTitle: student.research_proposal_title || student.research_proposal_title || '—',
+        rank,
+        totalParticipants,
+        rankLink: rankLink(selectedYear, student.category || 'All', rank),
+        medalSvg: medals[medalKey], // SVG string
+        flagSvg: flags[student.country] || null,
+        certId: makeCertificationId(selectedYear, student.category || 'GEN', rank),
+        dateStr: (new Date()).toLocaleDateString()
+      };
+
+      // show overlay
+      showOverlay();
+
+      try {
+        // 1. Render template PDF first page into an image (via PDF.js)
+        const bgImage = await renderPdfPageToImage(templatePath);
+
+        // 2. Create overlay canvas with text and images on top
+        createOverlayCanvas(bgImage, overlayData, async (finalCanvas) => {
+          // show preview
+          elCertFrame.innerHTML = '';
+          const previewImg = document.createElement('img');
+          previewImg.src = finalCanvas.toDataURL('image/png');
+          previewImg.style.maxWidth = '100%';
+          previewImg.style.display = 'block';
+          previewImg.style.margin = '0 auto';
+          elCertFrame.appendChild(previewImg);
+
+          // convert to A4 PDF and download using jsPDF
+          await downloadCanvasAsPdf(finalCanvas, `${student.name.replace(/\s+/g,'_')}_IARCO_${selectedYear}.pdf`);
+          hideOverlay();
+        });
+      } catch(err){
+        console.error(err);
+        alert('Error generating certificate. See console for details.');
+        hideOverlay();
+      }
+    } // end generateForStudent
+
+    // show overlay animation and progress
+    function showOverlay(){
+      overlay.classList.add('show');
+      overlay.setAttribute('aria-hidden','false');
+      bar.style.width = '6%';
+      // animate progress
+      setTimeout(()=> bar.style.width = '36%', 180);
+      setTimeout(()=> bar.style.width = '62%', 900);
+      setTimeout(()=> bar.style.width = '86%', 1800);
+    }
+    function hideOverlay(){
+      bar.style.width = '100%';
+      setTimeout(()=>{ overlay.classList.remove('show'); overlay.setAttribute('aria-hidden','true'); bar.style.width='0%'; }, 700);
+    }
+
+    // Render PDF page (first page) to an Image element using PDF.js
+    async function renderPdfPageToImage(pdfUrl){
+      // pdfjsLib comes from included script
+      const loadingTask = pdfjsLib.getDocument(pdfUrl);
+      const pdf = await loadingTask.promise;
+      const page = await pdf.getPage(1);
+      const scale = 1.8; // scale for better resolution
+      const viewport = page.getViewport({scale});
+      const canvas = document.createElement('canvas');
+      canvas.width = Math.round(viewport.width);
+      canvas.height = Math.round(viewport.height);
+      const ctx = canvas.getContext('2d');
+      await page.render({canvasContext: ctx, viewport}).promise;
+      // create image
+      const img = new Image();
+      img.src = canvas.toDataURL('image/png');
+      await new Promise((res,rej)=>{ img.onload = ()=>res(); img.onerror=rej; });
+      return img;
+    }
+
+    // convert canvas to PDF (A4) and trigger download via jsPDF
+    async function downloadCanvasAsPdf(canvas, filename){
+      const { jsPDF } = window.jspdf;
+      // A4 dimensions in px for 96dpi — but we'll use image to fit into A4 in mm
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF({
+        orientation: 'portrait',
+        unit: 'mm',
+        format: 'a4',
+        compress: true
+      });
+      // calculate dimensions to cover full A4 while keeping ratio
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
+
+      // create a temporary image to get natural size
+      const tmp = new Image();
+      tmp.src = imgData;
+      await new Promise((res)=> tmp.onload = res);
+      const imgW = tmp.width;
+      const imgH = tmp.height;
+      const imgRatio = imgW / imgH;
+      const pageRatio = pageWidth / pageHeight;
+      let drawW = pageWidth, drawH = pageHeight;
+      if(imgRatio > pageRatio){
+        // image wider
+        drawW = pageWidth;
+        drawH = pageWidth / imgRatio;
+      } else {
+        drawH = pageHeight;
+        drawW = pageHeight * imgRatio;
+      }
+      const x = (pageWidth - drawW)/2;
+      const y = (pageHeight - drawH)/2;
+      pdf.addImage(imgData, 'PNG', x, y, drawW, drawH, undefined, 'FAST');
+      pdf.save(filename);
+    }
+
+    // initial little demo: show nothing until user interacts
+    // But provide list if user loads all
+
+    // Small helper: allow search by pressing enter to load results
+    elSearch.addEventListener('keydown', (e)=>{
+      if(e.key === 'Enter'){
+        const qv = normalizeName(elSearch.value);
+        const filtered = students.filter(s=>normalizeName(s.name).includes(qv));
+        renderResults(filtered);
+      }
+    });
+
+    // optional: auto load sample if query present in URL (e.g., ?name=Sarhan)
+    function autoLoadFromQuery(){
+      const params = new URLSearchParams(location.search);
+      const qname = params.get('name');
+      if(qname){
+        elSearch.value = qname;
+        const filtered = students.filter(s=>normalizeName(s.name).includes(normalizeName(qname)));
+        renderResults(filtered);
+        if(filtered.length===1){
+          // small delay then generate automatically
+          setTimeout(()=> generateForStudent(filtered[0]), 700);
+        }
+      }
+    }
+    autoLoadFromQuery();
+
+  })();
+  </script>
+</body>
+</html>

@@ -1,426 +1,715 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nobel Prize Certificate Generator</title>
-<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;700;1,300&family=Montserrat:wght@300;500;700&display=swap" rel="stylesheet">
-<style>
-:root{--paper:#fbf9f4;--accent:#b78b2f;--text:#222;--muted:#666}
-*{box-sizing:border-box}
-body{font-family:Montserrat,system-ui,Arial,sans-serif;margin:0;background:#efefef;color:var(--text)}
-.app{max-width:1200px;margin:28px auto;padding:18px;display:grid;grid-template-columns:1fr 1fr;gap:20px}
-@media(max-width:1000px){.app{grid-template-columns:1fr}}
-.panel{background:#fff;border-radius:12px;padding:18px;box-shadow:0 6px 20px rgba(20,20,20,0.06)}
-.panel h2{margin:0 0 12px;font-size:18px}
-.field{display:flex;flex-direction:column;margin-bottom:10px}
-.field label{font-size:13px;color:var(--muted);margin-bottom:6px}
-.field input[type=text], .field textarea, .field input[type=date]{padding:10px;border:1px solid #e2e2e2;border-radius:8px;font-size:14px}
-textarea{min-height:90px;resize:vertical}
-.row{display:flex;gap:10px}
-.small{flex:1}
-.actions{display:flex;gap:10px;align-items:center;margin-top:8px}
-button{background:var(--accent);color:white;border:none;padding:10px 14px;border-radius:8px;cursor:pointer;font-weight:600}
-button.secondary{background:#eee;color:var(--text)}
-.preview{display:flex;flex-direction:column;gap:18px;align-items:center}
-.page{width:100%;max-width:820px;background:var(--paper);padding:36px;border:12px solid rgba(183,139,47,0.14);border-radius:6px;position:relative;box-shadow:0 10px 30px rgba(30,30,30,0.06)}
-.page-inner{background:linear-gradient(180deg, rgba(255,255,255,0.98), rgba(255,255,255,0.96));padding:24px;border:4px solid rgba(183,139,47,0.06)}
-.title{font-family:Merriweather,serif;font-size:26px;text-align:center;color:var(--text);letter-spacing:1px;margin-bottom:6px}
-.subtitle{font-size:13px;text-align:center;color:var(--muted);margin-bottom:12px}
-.recipient{font-family:Merriweather,serif;font-size:30px;text-align:center;margin:18px 0;color:var(--text)}
-.desc{text-align:center;font-size:15px;color:var(--muted);line-height:1.6;max-width:760px;margin:0 auto}
-.meta{display:flex;justify-content:space-between;align-items:center;margin-top:28px}
-.sig-row{display:flex;justify-content:space-between;margin-top:22px;gap:20px}
-.sig{display:flex;flex-direction:column;align-items:center;flex:1}
-.sig img{max-width:120px;height:auto;border-radius:2px}
-.sig .name{font-weight:700}
-.sig .role{font-size:12px;color:var(--muted)}
-.watermark{position:absolute;left:50%;top:46%;transform:translate(-50%,-50%);opacity:0.06;font-size:120px;font-family:Merriweather,serif;color:var(--text);pointer-events:none;user-select:none}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IARCO 2025 Certificate Generator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        :root {
+            --gold: #D4AF37;
+            --blue: #1E3A8A;
+            --light-blue: #3B82F6;
+            --white: #FFFFFF;
+            --light-gray: #F3F4F6;
+        }
 
-/* Responsive Coin */
-.coin{
-  position:absolute;
-  top:36px;
-  left:36px;
-  width:12%;   /* scales with page width */
-  max-width:120px; /* never bigger than 120px */
-  height:auto;
-  z-index:2;
-}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
 
-.idbox{font-size:12px;color:var(--muted);margin-top:10px;text-align:right}
-.disclaimer{font-size:12px;color:var(--muted);text-align:center;margin-top:10px}
+        body {
+            background: linear-gradient(135deg, var(--blue), #0F1B4D);
+            color: var(--white);
+            min-height: 100vh;
+            padding: 20px;
+        }
 
-@media (max-width:900px){
-  .page{padding:20px;border-width:8px}
-  .page-inner{padding:18px}
-  .coin{width:80px;top:24px;left:24px}
-}
-</style>
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            border-bottom: 2px solid var(--gold);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: var(--gold);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--light-gray);
+        }
+
+        .main-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+
+        .search-section {
+            flex: 1;
+            min-width: 300px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        .certificate-section {
+            flex: 2;
+            min-width: 500px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .certificate-preview {
+            background: var(--white);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .certificate-container {
+            position: relative;
+            width: 100%;
+            height: 0;
+            padding-bottom: 70%; /* Aspect ratio for certificate */
+        }
+
+        .certificate-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1;
+        }
+
+        .certificate-content {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            padding: 10% 15%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: #000;
+        }
+
+        .medal-icon {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 20px;
+        }
+
+        .certificate-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--blue);
+            margin-bottom: 10px;
+        }
+
+        .certificate-subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        .student-name {
+            font-size: 2.8rem;
+            font-weight: bold;
+            color: var(--blue);
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+
+        .student-details {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .performance-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        .performance-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+            border-bottom: 1px dotted #ccc;
+        }
+
+        .performance-label {
+            font-weight: bold;
+            color: #555;
+        }
+
+        .performance-value {
+            color: var(--blue);
+            font-weight: bold;
+        }
+
+        .certificate-id {
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-generate {
+            background: var(--gold);
+            color: var(--blue);
+        }
+
+        .btn-preview {
+            background: var(--light-blue);
+            color: white;
+        }
+
+        .btn-download {
+            background: var(--blue);
+            color: white;
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .search-box {
+            margin-bottom: 20px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+        }
+
+        .search-results {
+            max-height: 400px;
+            overflow-y: auto;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .student-item {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            transition: background 0.2s;
+            color: #333;
+        }
+
+        .student-item:hover {
+            background: rgba(30, 58, 138, 0.1);
+        }
+
+        .student-item.selected {
+            background: rgba(212, 175, 55, 0.2);
+            border-left: 4px solid var(--gold);
+        }
+
+        .student-name-result {
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+
+        .student-school {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .spinner {
+            border: 5px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 5px solid var(--gold);
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .flag-icon {
+            width: 24px;
+            height: 16px;
+            display: inline-block;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .certificate-section, .search-section {
+                min-width: 100%;
+            }
+            
+            .certificate-container {
+                padding-bottom: 120%;
+            }
+        }
+    </style>
 </head>
 <body>
-<div class="app">
-  <div class="panel">
-    <h2>Certificate Data & Controls</h2>
+    <div class="container">
+        <header>
+            <h1>IARCO 2025 Certificate Generator</h1>
+            <p class="subtitle">Generate achievement certificates for participants</p>
+        </header>
 
-    <div class="field">
-      <label>Recipient full name</label>
-      <input id="recipient" type="text" placeholder="Enter recipient name">
-    </div>
+        <div class="main-content">
+            <div class="search-section">
+                <div class="search-box">
+                    <input type="text" class="search-input" placeholder="Search student by name..." id="searchInput">
+                </div>
+                <div class="search-results" id="searchResults">
+                    <!-- Search results will appear here -->
+                </div>
+            </div>
 
-    <div class="field">
-      <label>Award title</label>
-      <input id="award" type="text" placeholder="Enter award title">
-      <button id="randomAward" class="secondary" style="margin-top:6px;width:100%">Random Award</button>
-    </div>
+            <div class="certificate-section">
+                <div class="certificate-preview">
+                    <div class="certificate-container" id="certificateContainer">
+                        <img src="" alt="Certificate Background" class="certificate-bg" id="certificateBg">
+                        <div class="certificate-content" id="certificateContent">
+                            <!-- Certificate content will be dynamically generated here -->
+                        </div>
+                    </div>
+                </div>
 
-    <div class="field">
-      <label>Reason / Citation</label>
-      <textarea id="citation" placeholder="Citation will update when you pick a random award"></textarea>
-    </div>
-
-    <div class="row">
-      <div class="field small">
-        <label>Date (auto uses system date)</label>
-        <input id="date" type="date">
-      </div>
-      <div class="field small">
-        <label>Location</label>
-        <input id="location" type="text" value="Stockholm, Sweden">
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="field small">
-        <label>Issuer name</label>
-        <input id="issuer" type="text" value="The Nobel Foundation">
-      </div>
-      <div class="field small">
-        <label>Issuer role</label>
-        <input id="issuerRole" type="text" value="Nobel Committee">
-      </div>
-    </div>
-
-    <div class="actions">
-      <button id="generateBtn">Generate JPGs (2 pages)</button>
-      <button id="previewBtn" class="secondary">Preview</button>
-    </div>
-
-    <div class="disclaimer">For comedy only. Not an official or exact replica of any real award certificate. Generated from nobelprize.me</div>
-  </div>
-
-  <div class="preview">
-    <!-- Page 1 -->
-    <div class="page" id="page1">
-      <div class="watermark" id="wm1">AWARD</div>
-      <img id="coinImg1" class="coin" src="coin.png" alt="coin">
-      <div class="page-inner">
-        <div style="display:flex;align-items:center;justify-content:space-between">
-          <div>
-            <div class="title" id="title1">— Award title —</div>
-            <div class="subtitle">Presented to</div>
-          </div>
-          <div style="text-align:right">
-            <div style="font-size:12px;color:var(--muted)">Certificate ID</div>
-            <div id="certId" style="font-weight:700;margin-top:6px">ID-000000</div>
-          </div>
+                <div class="controls">
+                    <button class="btn-preview" id="previewBtn">
+                        <i class="fas fa-eye"></i> Preview
+                    </button>
+                    <button class="btn-generate" id="generateBtn">
+                        <i class="fas fa-certificate"></i> Generate Certificate
+                    </button>
+                    <button class="btn-download" id="downloadBtn" disabled>
+                        <i class="fas fa-download"></i> Download PDF
+                    </button>
+                </div>
+            </div>
         </div>
-        <div class="recipient" id="recipient1">— Recipient —</div>
-        <div style="height:1px;background:linear-gradient(90deg,transparent,#e0cfa0,transparent);margin:18px 0"></div>
-        <div class="desc" id="citation1">— Citation —</div>
-        <div class="sig-row" id="sigRow1"></div>
-        <div class="meta">
-          <div>
-            <div style="font-size:13px;color:var(--muted)">Date & place</div>
-            <div style="font-weight:700" id="date1">—</div>
-          </div>
-          <div style="text-align:right">
-            <div style="font-size:13px;color:var(--muted)">Issued by</div>
-            <div style="font-weight:700" id="issuer1">The Nobel Foundation</div>
-            <div style="font-size:12px;color:var(--muted)" id="issuerRole1">Nobel Committee</div>
-          </div>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Generating your certificate...</p>
         </div>
-        <div class="idbox" id="idbox1">ID: —</div>
-      </div>
     </div>
 
-    <!-- Page 2 -->
-    <div class="page" id="page2">
-      <div class="watermark" id="wm2">NOBEL</div>
-      <img id="coinImg2" class="coin" src="coin.png" alt="coin">
-      <div class="page-inner">
-        <div style="text-align:center;margin-bottom:10px">
-          <div class="title" id="title2">— Award title —</div>
-          <div class="subtitle">Certificate Details</div>
-        </div>
-        <div style="display:flex;gap:18px">
-          <div style="flex:1">
-            <div style="font-weight:700;margin-bottom:6px">Recipient</div>
-            <div id="recipient2">— Recipient —</div>
-            <div style="font-weight:700;margin-top:14px;margin-bottom:6px">Citation</div>
-            <div id="citation2" style="color:var(--muted);line-height:1.6">— Citation —</div>
-          </div>
-          <div style="width:220px">
-            <div style="font-weight:700;margin-bottom:6px">Issuer</div>
-            <div id="issuer2">The Nobel Foundation</div>
-            <div style="font-size:13px;color:var(--muted);margin-top:10px">Issuer role</div>
-            <div id="issuerRole2">Nobel Committee</div>
-            <div style="font-weight:700;margin-top:16px;margin-bottom:6px">Location</div>
-            <div id="location2">Stockholm, Sweden</div>
-            <div style="font-weight:700;margin-top:16px;margin-bottom:6px">Date</div>
-            <div id="date2">—</div>
-          </div>
-        </div>
-        <div style="margin-top:26px">
-          <div style="font-weight:700;margin-bottom:6px">Program notes</div>
-          <div style="color:var(--muted);line-height:1.5">This certificate recognizes the recipient's contribution to Mockary. It is issued for satire purposes only and does not imply any affiliation with or endorsement by the Nobel Foundation.</div>
-        </div>
-        <div style="margin-top:22px;display:flex;justify-content:flex-end">
-          <div style="text-align:right">
-            <div style="font-size:12px;color:var(--muted)">Signed electronically</div>
-            <div style="font-weight:700" id="issuerSign2">The Nobel Foundation</div>
-            <div style="font-size:12px;color:var(--muted)" id="issuerRoleSign2">Nobel Committee</div>
-          </div>
-        </div>
-        <div class="idbox" id="idbox2">ID: —</div>
-      </div>
-    </div>
-  </div>
-</div>
+    <script>
+        // Sample data (in a real implementation, this would be loaded from JSON files)
+        const students = [
+            {
+                "student_id": "v1MrV4dT",
+                "name": "Afia Anjum Aboni",
+                "school": "Rajuk Uttara Model College",
+                "class": "Grade 10",
+                "category": "Junior",
+                "year": 2024,
+                "country": "Bangladesh",
+                "research_proposal_title": "The Relevance of Class Disparity in the Implementation of Climate-Related Policies; an Investigation into the Different Socioeconomic Classes of Dhaka",
+                "research_paper": {
+                    "research_problem": 17,
+                    "existing_literature": 7,
+                    "research_question": 20,
+                    "methodology": 18,
+                    "research_topic": 12,
+                    "quality_of_writing": 4,
+                    "plagiarism_check_percentile": 3,
+                    "presentation": {
+                        "persuasiveness": 15,
+                        "video_quality": 15,
+                        "research_problem": 15,
+                        "research_question": 13,
+                        "methodology": 10
+                    }
+                },
+                "plagiarismPenalty": 15,
+                "researchPaperScore": 78,
+                "presentationScore": 68,
+                "submissionScore": 146,
+                "scaledFinalScore": 131,
+                "viewProposal": "https://drive.google.com/open?id=1aBuuRXyiIBx-908Tujbzt2vXRqBq_rzX",
+                "videoPitch": "https://drive.google.com/drive/folders/17Xg1wH9C8eD0wmfxn1Z3FnDZmHy3OTIV",
+                "proposal_comment": "No Comment.",
+                "presentation_comment": "No Comment."
+            },
+            {
+                "student_id": "LXd6a9ey",
+                "name": "Adira Safwan",
+                "school": "Maple Leaf International School",
+                "class": "Grade 11",
+                "category": "Senior", 
+                "year": 2024,
+                "country": "Bangladesh",
+                "research_proposal_title": "Exploring Differences in Social Media Literacy Between Digital Natives and Digital Immigrants: A Comparative Analysis of Critical Skills and Digital Adaptability",
+                "research_paper": {
+                    "research_problem": 16,
+                    "existing_literature": 5,
+                    "research_question": 15,
+                    "methodology": 17,
+                    "research_topic": 13,
+                    "quality_of_writing": 3,
+                    "plagiarism_check_percentile": 17,
+                    "presentation": {
+                        "persuasiveness": 18,
+                        "video_quality": 18,
+                        "research_problem": 16,
+                        "research_question": 16,
+                        "methodology": 17
+                    }
+                },
+                "plagiarismPenalty": 0,
+                "researchPaperScore": 69,
+                "presentationScore": 85,
+                "submissionScore": 154,
+                "scaledFinalScore": 154,
+                "viewProposal": "https://iarco.org/storage/2024/junior/research_proposal/02_Adira_RP_Junior_IARCO_2024.pdf",
+                "videoPitch": "https://youtu.be/Fh9clCxc2RU",
+                "proposal_comment": "No Comment.",
+                "presentation_comment": "No Comment."
+            },
+            {
+                "student_id": "AB123XYZ",
+                "name": "John Smith",
+                "school": "International School of Science",
+                "class": "Grade 12",
+                "category": "Senior",
+                "year": 2025,
+                "country": "Canada",
+                "research_proposal_title": "Advancements in Renewable Energy Storage Systems",
+                "research_paper": {
+                    "research_problem": 18,
+                    "existing_literature": 8,
+                    "research_question": 19,
+                    "methodology": 17,
+                    "research_topic": 15,
+                    "quality_of_writing": 5,
+                    "plagiarism_check_percentile": 2,
+                    "presentation": {
+                        "persuasiveness": 17,
+                        "video_quality": 16,
+                        "research_problem": 18,
+                        "research_question": 17,
+                        "methodology": 16
+                    }
+                },
+                "plagiarismPenalty": 0,
+                "researchPaperScore": 85,
+                "presentationScore": 84,
+                "submissionScore": 169,
+                "scaledFinalScore": 169,
+                "viewProposal": "https://example.com/proposal.pdf",
+                "videoPitch": "https://youtube.com/example",
+                "proposal_comment": "Excellent work.",
+                "presentation_comment": "Well presented."
+            }
+        ];
 
-<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
-<script>
-// Elements
-const recipient = document.getElementById('recipient');
-const award = document.getElementById('award');
-const citation = document.getElementById('citation');
-const dateInput = document.getElementById('date');
-const locationInput = document.getElementById('location');
-const issuer = document.getElementById('issuer');
-const issuerRole = document.getElementById('issuerRole');
+        const flags = {
+            "Bangladesh": `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 12'><rect width='20' height='12' fill='#006a4e'/><circle cx='8' cy='6' r='3.6' fill='#f42a41'/></svg>`,
+            "Canada": `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 12'><rect width='20' height='12' fill='#ff0000'/><rect x='6' width='8' height='12' fill='#ffffff'/><path fill='#ff0000' d='M10 2.2 8.8 3.5h0.7v1.8h0.9V3.5h0.7L10 2.2zm0 6.6-1.4-2.1h0.9v-1h0.9v1h0.9L10 8.8z'/></svg>`,
+            "Japan": `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 12'><rect width='20' height='12' fill='#ffffff'/><circle cx='10' cy='6' r='3.6' fill='#bc002d'/></svg>`
+        };
 
-const title1 = document.getElementById('title1');
-const recipient1 = document.getElementById('recipient1');
-const citation1 = document.getElementById('citation1');
-const date1 = document.getElementById('date1');
-const issuer1 = document.getElementById('issuer1');
-const issuerRole1 = document.getElementById('issuerRole1');
-const sigRow1 = document.getElementById('sigRow1');
-const certId = document.getElementById('certId');
-const idbox1 = document.getElementById('idbox1');
+        const certificates = {
+            "2024": "certificate/2024.pdf",
+            "2025": "certificate/2025.pdf"
+        };
 
-const title2 = document.getElementById('title2');
-const recipient2 = document.getElementById('recipient2');
-const citation2 = document.getElementById('citation2');
-const issuer2 = document.getElementById('issuer2');
-const issuerRole2 = document.getElementById('issuerRole2');
-const location2 = document.getElementById('location2');
-const date2 = document.getElementById('date2');
-const idbox2 = document.getElementById('idbox2');
+        const medals = {
+            "gold": `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="#FFD700" stroke="#D4AF37" stroke-width="3"/><circle cx="50" cy="50" r="35" fill="#FFF9C4"/><text x="50" y="55" text-anchor="middle" font-size="24" font-weight="bold" fill="#B8860B">1st</text></svg>`,
+            "silver": `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="#C0C0C0" stroke="#A9A9A9" stroke-width="3"/><circle cx="50" cy="50" r="35" fill="#F5F5F5"/><text x="50" y="55" text-anchor="middle" font-size="24" font-weight="bold" fill="#696969">2nd</text></svg>`,
+            "bronze": `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="#CD7F32" stroke="#8B4513" stroke-width="3"/><circle cx="50" cy="50" r="35" fill="#F0E68C"/><text x="50" y="55" text-anchor="middle" font-size="24" font-weight="bold" fill="#8B4513">3rd</text></svg>`,
+            "honorable": `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect x="10" y="10" width="80" height="80" rx="15" fill="#3B82F6" stroke="#1E3A8A" stroke-width="3"/><text x="50" y="60" text-anchor="middle" font-size="18" font-weight="bold" fill="white">Honor</text></svg>`,
+            "finalist": `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><polygon points="50,10 90,90 10,90" fill="#3B82F6" stroke="#1E3A8A" stroke-width="3"/><text x="50" y="65" text-anchor="middle" font-size="14" font-weight="bold" fill="white">Finalist</text></svg>`
+        };
 
-// Awards list
-const awardsList = [
-  {"title":"Nobel Prize in Twitter Diplomacy","citation":"For mastering the art of global politics through late-night tweets and caps lock."},
-{"title":"Nobel Prize in Alternative Facts","citation":"For creating reality in ways that defy physics, logic, and occasionally common sense."},
-{"title":"Nobel Prize in Wall Construction","citation":"For insisting walls are the solution to every complex international problem."},
-{"title":"Nobel Prize in Golf Diplomacy","citation":"For solving world issues one golf swing at a time, often on foreign soil."},
-{"title":"Nobel Prize in Name Calling","citation":"For elevating insults like 'Crooked' and 'Sleepy' into national political strategy."},
-{"title":"Nobel Prize in Reality TV Governance","citation":"For treating global leadership like a reality TV show, complete with dramatic exits."},
-{"title":"Nobel Prize in Meme Presidency","citation":"For turning politics into a 24/7 viral content stream of questionable quality."},
-{"title":"Nobel Prize in Fact Avoidance","citation":"For skillfully dodging inconvenient truths with confidence and flair."},
-{"title":"Nobel Prize in Executive Orders","citation":"For issuing executive decisions faster than most people check email, sometimes legally ambiguous."},
-{"title":"Nobel Prize in Trade Tweets","citation":"For managing international trade wars via 280-character wisdom."},
-{"title":"Nobel Prize in Cabinet Chaos","citation":"For replacing advisors faster than most replace light bulbs."},
-{"title":"Nobel Prize in Inflated Crowds","citation":"For ensuring that every event looks more crowded than physics allows."},
-{"title":"Nobel Prize in Presidential Nicknames","citation":"For branding opponents with unforgettable monikers, unforgettable and mostly unflattering."},
-{"title":"Nobel Prize in Border Wall Negotiation","citation":"For negotiating borders with slogans, tweets, and executive authority."},
-{"title":"Nobel Prize in Impeachment Resilience","citation":"For surviving political scandals with sheer bravado and golf breaks."},
-{"title":"Nobel Prize in Press Aversion","citation":"For managing media coverage with insults, avoidance, and constant tweeting."},
-{"title":"Nobel Prize in Handshake Technique","citation":"For creating legendary moments of awkward handshakes that dominate headlines."},
-{"title":"Nobel Prize in Celebrity Endorsements","citation":"For turning celebrity connections into political currency with theatrical flair."},
-{"title":"Nobel Prize in Question Dodging","citation":"For answering nothing with conviction while keeping cameras entertained."},
-{"title":"Nobel Prize in Rally Chants","citation":"For inventing slogans that repeat, resonate, and occasionally rhyme."},
-{"title":"Nobel Prize in Golf Diplomacy Part II","citation":"For scheduling peace talks only after a full round on the links."},
-{"title":"Nobel Prize in Twitter Investigations","citation":"For conducting national inquiries with the power of a single smartphone."},
-{"title":"Nobel Prize in Executive Ignorance","citation":"For issuing policies without reading the fine print, yet calling them 'perfect.'"},
-{"title":"Nobel Prize in Press Room Domination","citation":"For turning briefings into performance art that confounds journalists."},
-{"title":"Nobel Prize in Celebrity Golf","citation":"For combining world politics and celebrity networking on the golf course."},
-{"title":"Nobel Prize in Spontaneous Declarations","citation":"For declaring everything 'tremendous' while inventing new political realities."},
-{"title":"Nobel Prize in Fact Spin","citation":"For taking true statements and twisting them like circus acrobatics."},
-{"title":"Nobel Prize in Twitter Diplomacy Part II","citation":"For single-handedly negotiating international relations using memes, all caps, and punctuation errors."},
-{"title":"Nobel Prize in Marketing America","citation":"For branding the nation as 'YUGE' while redefining facts creatively."},
-{"title":"Nobel Prize in Political Branding","citation":"For ensuring every political move comes with a Trump brand flair."},
-{"title":"Nobel Prize in Apology Avoidance","citation":"For never apologizing while creating headlines that demand it."},
-{"title":"Nobel Prize in Cabinet Turnover","citation":"For making job security in the White House a thrilling spectator sport."},
-{"title":"Nobel Prize in Mocking Opponents","citation":"For transforming political debate into stand-up comedy with nicknames and theatrics."},
-{"title":"Nobel Prize in Wall Vision","citation":"For dreaming big walls, tweeting bigger walls, and planning the tallest wall in history."},
-{"title":"Nobel Prize in Golf & Governance Fusion","citation":"For blending leisure and policy in ways that only Trump could imagine."},
-{"title":"Nobel Prize in Presidential Hyperbole","citation":"For claiming every achievement is 'the best, ever, in history,' without exception."},
-{"title":"Nobel Prize in Reality TV Foreign Policy","citation":"For making global crises feel like live entertainment."},
-{"title":"Nobel Prize in Rally Showmanship","citation":"For transforming political rallies into theatrical spectacles of epic proportions."},
-{"title":"Nobel Prize in Negotiation via Tweets","citation":"For proving that diplomacy can happen in 280 characters or less."},
-{"title":"Nobel Prize in Cabinet Drama","citation":"For ensuring every new hire sparks headlines, intrigue, or both."},
-{"title":"Nobel Prize in Media Diversion","citation":"For keeping the press busy while substantive matters quietly evolve."},
-{"title":"Nobel Prize in Social Media Strategy","citation":"For using Twitter as a platform for policy announcements, insults, and morning wake-up calls."},
-{"title":"Nobel Prize in Historical Revision","citation":"For inventing alternate histories with confidence unmatched in modern times."},
-{"title":"Nobel Prize in Golf Diplomacy Part III","citation":"For conducting international negotiations with a golf club in one hand and a tweet in the other."},
-{"title":"Nobel Prize in Branding Everything","citation":"For making even political crises feel like personal brand opportunities."},
-{"title":"Nobel Prize in Unforgettable Quotes","citation":"For leaving the public with phrases that linger, confuse, and amuse for decades."},
-{"title":"Nobel Prize in Alternative Reality Management","citation":"For maintaining belief in improbable claims while managing a nation."},
-{"title":"Nobel Prize in Media Wrestling","citation":"For turning news cycles into dramatic wrestling matches of ego and rhetoric."},
-{"title":"Nobel Prize in Presidential Showmanship","citation":"For orchestrating events that blend policy, media, and spectacle into memorable moments."},
-{"title":"Nobel Prize in Surreal Diplomacy","citation":"For making world leaders adjust expectations in real time to accommodate unpredictability."},
-{"title":"Nobel Prize in Tweetstorms","citation":"For delivering policy, insult, and drama simultaneously in rapid succession."},
-{"title":"Nobel Prize in Branding Controversy","citation":"For ensuring that every scandal becomes a signature Trump moment."},
-{"title":"Nobel Prize in Alternative Facts II","citation":"For evolving the concept of truth into a flexible, entertaining art form."},  
-{"title":"Nobel Prize in Procrastination","citation":"For expertly delaying responsibilities while convincing everyone else they’re busy."},
-{"title":"Nobel Prize in Office Politics","citation":"For mastering the art of nodding and smiling while secretly plotting world domination in the break room."},
-{"title":"Nobel Prize in Overcomplicated Emails","citation":"For writing emails longer than the constitution that nobody reads but everyone forwards."},
-{"title":"Nobel Prize in Coffee Addiction","citation":"For maintaining human civilization solely on caffeine and sheer panic."},
-{"title":"Nobel Prize in Social Media Flexing","citation":"For posting inspirational quotes while living off instant noodles and regrets."},
-{"title":"Nobel Prize in Awkward Small Talk","citation":"For turning elevator rides into existential crises for strangers."},
-{"title":"Nobel Prize in Memeology","citation":"For advancing the science of memes and wasting hours of human potential."},
-{"title":"Nobel Prize in Political Nonsense","citation":"For making speeches sound important while meaning absolutely nothing."},
-{"title":"Nobel Prize in Netflix Bingeing","citation":"For consuming entire seasons in one night and calling it 'research.'"},
-{"title":"Nobel Prize in Bathroom Singing","citation":"For performing private concerts to a captive audience of soap and shampoo bottles."},
-{"title":"Nobel Prize in Fake Expertise","citation":"For confidently explaining things you clearly don’t understand to anyone who will listen."},
-{"title":"Nobel Prize in Unread Terms & Conditions","citation":"For blindly agreeing to everything, ensuring corporate profits flourish."},
-{"title":"Nobel Prize in Awful Karaoke","citation":"For bravely subjecting innocent ears to off-key renditions of pop classics."},
-{"title":"Nobel Prize in Last-Minute Genius","citation":"For solving problems 5 minutes before the deadline and calling it brilliance."},
-{"title":"Nobel Prize in Shady Internet Research","citation":"For consulting Wikipedia at 2 AM and claiming a PhD-level discovery."},
-{"title":"Nobel Prize in Office Snacks Hoarding","citation":"For keeping the communal cookie jar under strict personal control."},
-{"title":"Nobel Prize in Conspiracy Theories","citation":"For connecting unrelated events and blaming aliens, politicians, or both."},
-{"title":"Nobel Prize in Awful Jokes","citation":"For making terrible puns that somehow still make colleagues laugh."},
-{"title":"Nobel Prize in Late-Night Tweets","citation":"For posting reckless opinions at 2:37 AM with zero regret."},
-{"title":"Nobel Prize in Dodging Responsibilities","citation":"For avoiding tasks with creativity that rivals professional magicians."},
-{"title":"Nobel Prize in Fake Accents","citation":"For adopting accents in public spaces with zero historical accuracy."},
-{"title":"Nobel Prize in Politically Incorrect Comedy","citation":"For offending everyone equally and laughing at the chaos."},
-{"title":"Nobel Prize in Awful DIY","citation":"For turning a simple furniture project into a full-blown disaster zone."},
-{"title":"Nobel Prize in Internet Rage","citation":"For yelling at strangers online with passion and zero effect."},
-{"title":"Nobel Prize in Oversharing","citation":"For telling too much information about every bodily function publicly."},
-{"title":"Nobel Prize in Sleep Deprivation","citation":"For surviving on energy drinks and existential dread for years."},
-{"title":"Nobel Prize in Unsolicited Advice","citation":"For giving life guidance nobody asked for with unwavering confidence."},
-{"title":"Nobel Prize in TikTok Fame","citation":"For dancing awkwardly and becoming an overnight influencer."},
-{"title":"Nobel Prize in Pretentious Art Critique","citation":"For describing a stick figure as 'postmodern commentary on human despair.'"},
-{"title":"Nobel Prize in Awful Pickup Lines","citation":"For attempting romantic advances that should legally be banned."},
-{"title":"Nobel Prize in Breaking Zoom","citation":"For causing technical disasters while simply trying to unmute themselves."},
-{"title":"Nobel Prize in Overpriced Coffee Knowledge","citation":"For knowing the origin of obscure beans nobody asked about."},
-{"title":"Nobel Prize in Political Spin","citation":"For making terrible news sound like a victory for humanity."},
-{"title":"Nobel Prize in Awful Fashion Choices","citation":"For confidently wearing socks with sandals in public."},
-{"title":"Nobel Prize in Obvious Lies","citation":"For fabricating stories so bold they almost become believable."},
-{"title":"Nobel Prize in Social Awkwardness","citation":"For ensuring every party has at least one cringe-worthy moment."},
-{"title":"Nobel Prize in Never Responding to Texts","citation":"For achieving ghosting mastery that borders on performance art."},
-{"title":"Nobel Prize in Workplace Slacking","citation":"For perfecting the art of looking busy while doing nothing."},
-{"title":"Nobel Prize in Awful TikTok Duets","citation":"For joining trends that should have remained forgotten."},
-{"title":"Nobel Prize in Awkward Family Dinners","citation":"For turning normal meals into emotional rollercoasters."},
-{"title":"Nobel Prize in Political Corruption","citation":"For making bribes, favors, and nepotism an Olympic sport."},
-{"title":"Nobel Prize in Awful PR Statements","citation":"For turning apologies into public disasters with grace and skill."},
-{"title":"Nobel Prize in Endless Meetings","citation":"For talking for hours without anyone remembering what was said."},
-{"title":"Nobel Prize in Overpriced Avocado Toast","citation":"For spending more on brunch than most pay rent."},
-{"title":"Nobel Prize in Keyboard Warrior Skills","citation":"For typing furious comments from the comfort of their couch."},
-{"title":"Nobel Prize in Awful Customer Service Calls","citation":"For screaming into a phone with zero resolution achieved."},
-{"title":"Nobel Prize in Dumpster Fire Solutions","citation":"For fixing problems by creating new, equally disastrous problems."},
-{"title":"Nobel Prize in Meme Warfare","citation":"For starting online arguments using only cats and sarcastic GIFs."},
-{"title":"Nobel Prize in Terrible Poetry","citation":"For rhyming things that should never rhyme and calling it art."},
-{"title":"Nobel Prize in Fake Apologies","citation":"For saying sorry while making sure nobody believes it."},
-{"title":"Nobel Prize in Unreadable Texts","citation":"For sending messages that require a decoder ring and several guesses."},
-{"title":"Nobel Prize in Reality TV Analysis","citation":"For analyzing television nonsense like it’s nuclear physics."},
-{"title":"Nobel Prize in Awful Roommates","citation":"For leaving dirty dishes as a form of abstract protest."},
-{"title":"Nobel Prize in Awful Party Planning","citation":"For making birthdays unforgettable for all the wrong reasons."},
-{"title":"Nobel Prize in Awful Driving","citation":"For turning every commute into a terrifying adventure."},
-{"title":"Nobel Prize in Awful TikTok Advice","citation":"For giving life tips that lead to hilariously poor decisions."}
-];
+        // DOM elements
+        const searchInput = document.getElementById('searchInput');
+        const searchResults = document.getElementById('searchResults');
+        const certificateBg = document.getElementById('certificateBg');
+        const certificateContent = document.getElementById('certificateContent');
+        const previewBtn = document.getElementById('previewBtn');
+        const generateBtn = document.getElementById('generateBtn');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const loading = document.getElementById('loading');
 
-// Set today
-function setTodayDate(){
-  const today = new Date();
-  const yyyy = today.getFullYear();
-  const mm = String(today.getMonth()+1).padStart(2,'0');
-  const dd = String(today.getDate()).padStart(2,'0');
-  dateInput.value = `${yyyy}-${mm}-${dd}`;
-}
-setTodayDate();
+        // Current selected student
+        let selectedStudent = null;
 
-// Generate ID
-function genId(){
-  const now = Date.now().toString(36).toUpperCase();
-  const rnd = Math.floor(Math.random()*9000)+1000;
-  return 'EDU-'+now+'-'+rnd;
-}
+        // Calculate ranks per category and year
+        function calculateRanks(students) {
+            // Group students by category and year
+            const groups = {};
+            
+            students.forEach(student => {
+                const key = `${student.category}-${student.year}`;
+                if (!groups[key]) {
+                    groups[key] = [];
+                }
+                groups[key].push(student);
+            });
+            
+            // Sort each group by scaledFinalScore and assign ranks
+            Object.keys(groups).forEach(key => {
+                groups[key].sort((a, b) => b.scaledFinalScore - a.scaledFinalScore);
+                groups[key].forEach((student, index) => {
+                    student.rank = index + 1;
+                });
+            });
+            
+            return students;
+        }
 
-// Render signatures
-function renderSignatures(urls){
-  sigRow1.innerHTML='';
-  urls.forEach(u=>{
-    const wrapper=document.createElement('div'); wrapper.className='sig';
-    const img=document.createElement('img'); img.src=u; img.alt='signature';
-    wrapper.appendChild(img);
-    sigRow1.appendChild(wrapper);
-  });
-}
+        // Initialize with calculated ranks
+        calculateRanks(students);
 
-// Update preview
-function updatePreview(){
-  const loc = locationInput.value || '';
-  const formattedDate = (dateInput.value)?new Date(dateInput.value).toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'}) : '—';
+        // Search functionality
+        searchInput.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            const filteredStudents = students.filter(student => 
+                student.name.toLowerCase().includes(searchTerm)
+            );
+            
+            displaySearchResults(filteredStudents);
+        });
 
-  title1.textContent = award.value || '— Award title —';
-  title2.textContent = award.value || '— Award title —';
-  recipient1.textContent = recipient.value || '— Recipient —';
-  recipient2.textContent = recipient.value || '— Recipient —';
-  citation1.textContent = citation.value || '— Citation —';
-  citation2.textContent = citation.value || '— Citation —';
-  date1.textContent = formattedDate + (loc?(' — '+loc):'');
-  date2.textContent = formattedDate;
-  issuer1.textContent = issuer.value || 'The Nobel Foundation';
-  issuer2.textContent = issuer.value || 'The Nobel Foundation';
-  issuerRole1.textContent = issuerRole.value || 'Nobel Committee';
-  issuerRole2.textContent = issuerRole.value || 'Nobel Committee';
-  location2.textContent = loc || 'Stockholm, Sweden';
-  wm1.textContent = (award.value || 'AWARD').toUpperCase();
-  wm2.textContent = (award.value || 'NOBEL').toUpperCase();
+        function displaySearchResults(results) {
+            searchResults.innerHTML = '';
+            
+            if (results.length === 0) {
+                searchResults.innerHTML = '<div class="student-item">No students found</div>';
+                return;
+            }
+            
+            results.forEach(student => {
+                const studentItem = document.createElement('div');
+                studentItem.className = 'student-item';
+                if (selectedStudent && selectedStudent.student_id === student.student_id) {
+                    studentItem.classList.add('selected');
+                }
+                
+                studentItem.innerHTML = `
+                    <div class="student-name-result">${student.name}</div>
+                    <div class="student-school">${student.school} • ${student.category} • ${student.year}</div>
+                `;
+                
+                studentItem.addEventListener('click', () => {
+                    selectStudent(student);
+                });
+                
+                searchResults.appendChild(studentItem);
+            });
+        }
 
-  const id = genId();
-  certId.textContent = id;
-  idbox1.textContent = 'ID: '+id;
-  idbox2.textContent = 'ID: '+id;
-}
+        function selectStudent(student) {
+            selectedStudent = student;
+            
+            // Update UI to show selected student
+            const allItems = document.querySelectorAll('.student-item');
+            allItems.forEach(item => item.classList.remove('selected'));
+            
+            const selectedItem = Array.from(allItems).find(item => 
+                item.querySelector('.student-name-result').textContent === student.name
+            );
+            
+            if (selectedItem) {
+                selectedItem.classList.add('selected');
+            }
+            
+            // Enable buttons
+            previewBtn.disabled = false;
+            generateBtn.disabled = false;
+            
+            // Update certificate preview
+            updateCertificatePreview();
+        }
 
-// Input listeners
-[recipient,award,citation,dateInput,locationInput,issuer,issuerRole].forEach(el=>el.addEventListener('input', updatePreview));
+        function updateCertificatePreview() {
+            if (!selectedStudent) return;
+            
+            // Set certificate background based on year
+            const year = selectedStudent.year;
+            certificateBg.src = certificates[year] || certificates["2025"];
+            
+            // Determine medal based on rank
+            let medalSvg = medals.finalist;
+            if (selectedStudent.rank === 1) {
+                medalSvg = medals.gold;
+            } else if (selectedStudent.rank === 2) {
+                medalSvg = medals.silver;
+            } else if (selectedStudent.rank === 3) {
+                medalSvg = medals.bronze;
+            } else if (selectedStudent.rank <= 10) {
+                medalSvg = medals.honorable;
+            }
+            
+            // Get flag SVG
+            const flagSvg = flags[selectedStudent.country] || '';
+            
+            // Generate certificate ID
+            const certId = generateCertificateId(selectedStudent);
+            
+            // Update certificate content
+            certificateContent.innerHTML = `
+                <div class="medal-icon">${medalSvg}</div>
+                <div class="certificate-title">CERTIFICATE OF ACHIEVEMENT</div>
+                <div class="certificate-subtitle">International Academic Research Conference Olympiad ${selectedStudent.year}</div>
+                <div class="student-name">${selectedStudent.name}</div>
+                <div class="student-details">${selectedStudent.school}</div>
+                <div class="student-details">${selectedStudent.class} • ${selectedStudent.category} Category</div>
+                <div class="student-details">
+                    <span class="flag-icon">${flagSvg}</span>
+                    ${selectedStudent.country}
+                </div>
+                <div class="performance-details">
+                    <div class="performance-item">
+                        <span class="performance-label">Overall Rank:</span>
+                        <span class="performance-value">${selectedStudent.rank}</span>
+                    </div>
+                    <div class="performance-item">
+                        <span class="performance-label">Research Proposal Score:</span>
+                        <span class="performance-value">${selectedStudent.researchPaperScore}</span>
+                    </div>
+                    <div class="performance-item">
+                        <span class="performance-label">Presentation Score:</span>
+                        <span class="performance-value">${selectedStudent.presentationScore}</span>
+                    </div>
+                    <div class="performance-item">
+                        <span class="performance-label">Total Score:</span>
+                        <span class="performance-value">${selectedStudent.scaledFinalScore}</span>
+                    </div>
+                </div>
+                <div class="certificate-id">Certificate ID: ${certId}</div>
+            `;
+        }
 
-// Random award
-document.getElementById('randomAward').addEventListener('click',()=>{
-  const item = awardsList[Math.floor(Math.random()*awardsList.length)];
-  award.value=item.title;
-  citation.value=item.citation;
-  renderSignatures(item.signatures || []);
-  updatePreview();
-});
+        function generateCertificateId(student) {
+            const year = student.year;
+            const category = student.category.substring(0, 3).toUpperCase();
+            const rank = student.rank;
+            const timestamp = Date.now().toString(36).toUpperCase();
+            
+            return `${year}-${category}-${rank}-${timestamp}`;
+        }
 
-// Preview animation
-document.getElementById('previewBtn').addEventListener('click',()=>{
-  const p1 = document.getElementById('page1');
-  p1.style.transform='scale(0.997)';
-  setTimeout(()=>p1.style.transform='scale(1)',220);
-});
+        // Button event listeners
+        previewBtn.addEventListener('click', () => {
+            if (!selectedStudent) return;
+            updateCertificatePreview();
+            alert('Certificate preview updated!');
+        });
 
-// Download function
-async function downloadElementAsJpg(el, filename){
-  await new Promise(r=>setTimeout(r,120));
-  const canvas = await html2canvas(el,{scale:3,useCORS:true,backgroundColor:'#ffffff'});
-  const dataURL = canvas.toDataURL('image/jpeg',0.95);
-  const link=document.createElement('a'); link.href=dataURL; link.download=filename; document.body.appendChild(link); link.click(); link.remove();
-}
+        generateBtn.addEventListener('click', () => {
+            if (!selectedStudent) return;
+            
+            loading.style.display = 'block';
+            
+            // Simulate generation process
+            setTimeout(() => {
+                loading.style.display = 'none';
+                downloadBtn.disabled = false;
+                alert('Certificate generated successfully! Click "Download PDF" to save.');
+            }, 2000);
+        });
 
-// Generate button
-document.getElementById('generateBtn').addEventListener('click', async ()=>{
-  updatePreview();
-  const p1=document.getElementById('page1');
-  const p2=document.getElementById('page2');
-  await downloadElementAsJpg(p1,'Certificate_Page1.jpg');
-  await downloadElementAsJpg(p2,'Certificate_Page2.jpg');
-});
-</script>
+        downloadBtn.addEventListener('click', () => {
+            if (!selectedStudent) return;
+            
+            const element = document.getElementById('certificateContainer');
+            const opt = {
+                margin: 0,
+                filename: `IARCO_${selectedStudent.year}_Certificate_${selectedStudent.name.replace(/\s+/g, '_')}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, useCORS: true },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
+            };
+            
+            // Show loading
+            loading.style.display = 'block';
+            
+            // Generate PDF
+            html2pdf().set(opt).from(element).save().then(() => {
+                loading.style.display = 'none';
+                alert('PDF downloaded successfully!');
+            });
+        });
+
+        // Initialize with all students
+        displaySearchResults(students);
+    </script>
 </body>
 </html>

@@ -198,182 +198,27 @@
             aspect-ratio: 1.414 / 1; /* A4 ratio */
         }
 
-        .certificate-bg {
+        .certificate-template {
+            position: relative;
             width: 100%;
             height: 100%;
-            object-fit: cover;
-            display: block;
+            background-color: #fff;
+            color: #000;
+            padding: 50px;
+            box-sizing: border-box;
+            font-family: 'Times New Roman', Times, serif;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect x="0" y="0" width="100" height="100" fill="none" stroke="%23D4AF37" stroke-width="1" stroke-dasharray="5,5"/></svg>');
+            background-size: 100px 100px;
         }
 
-        .certificate-content {
+        .certificate-border {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            padding: 50px 60px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .certificate-header {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .certificate-title {
-            font-size: 2.8rem;
-            font-weight: bold;
-            color: #000;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        .certificate-subtitle {
-            font-size: 1.4rem;
-            color: #000;
-            font-weight: 600;
-            margin-bottom: 5px;
-        }
-
-        .certificate-year {
-            font-size: 1.2rem;
-            color: #000;
-            font-weight: 500;
-        }
-
-        .certificate-body {
-            text-align: center;
-            margin: 20px 0;
-        }
-
-        .awarded-to {
-            font-size: 1.2rem;
-            color: #000;
-            margin-bottom: 5px;
-        }
-
-        .student-name {
-            font-size: 2.2rem;
-            font-weight: bold;
-            color: #000;
-            margin-bottom: 15px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .student-details-cert {
-            font-size: 1.2rem;
-            color: #000;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        .performance-text {
-            font-size: 1.1rem;
-            color: #000;
-            margin-bottom: 25px;
-            line-height: 1.6;
-        }
-
-        .research-title {
-            font-size: 1.3rem;
-            font-weight: bold;
-            color: #000;
-            margin-bottom: 25px;
-            font-style: italic;
-        }
-
-        .performance-details {
-            display: flex;
-            justify-content: space-around;
-            margin-bottom: 25px;
-        }
-
-        .score-box {
-            text-align: center;
-        }
-
-        .score-label {
-            font-size: 1rem;
-            color: #000;
-            margin-bottom: 5px;
-        }
-
-        .score-value {
-            font-size: 1.4rem;
-            font-weight: bold;
-            color: #000;
-        }
-
-        .rank-link {
-            font-size: 1rem;
-            color: #000;
-            margin-bottom: 25px;
-        }
-
-        .rank-badge {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 25px;
-        }
-
-        .rank-text {
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: #000;
-        }
-
-        .medal-icon {
-            width: 60px;
-            height: 60px;
-        }
-
-        .certificate-footer {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 20px;
-        }
-
-        .signature {
-            text-align: center;
-        }
-
-        .signature-name {
-            font-size: 1.1rem;
-            font-weight: bold;
-            color: #000;
-            margin-top: 10px;
-        }
-
-        .signature-title {
-            font-size: 0.9rem;
-            color: #000;
-        }
-
-        .certificate-id {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 0.9rem;
-            color: #000;
-        }
-
-        .actions {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-top: 30px;
-        }
-
-        .secondary-btn {
-            background: var(--light-blue);
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            bottom: 20px;
+            border: 3px solid var(--gold);
+            pointer-events: none;
         }
 
         .loading {
@@ -406,15 +251,11 @@
             display: none;
         }
 
-        .certificate-template {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            background-color: #fff;
-            color: #000;
-            padding: 50px;
-            box-sizing: border-box;
-            font-family: 'Times New Roman', Times, serif;
+        .actions {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
         }
 
         @media (max-width: 768px) {
@@ -422,27 +263,168 @@
                 flex-direction: column;
             }
             
-            .certificate-content {
+            .certificate-template {
                 padding: 30px;
             }
-            
-            .certificate-title {
-                font-size: 2rem;
-            }
-            
-            .student-name {
-                font-size: 1.8rem;
-            }
-            
-            .performance-details {
-                flex-direction: column;
-                gap: 15px;
-            }
-            
-            .certificate-footer {
-                flex-direction: column;
-                gap: 20px;
-            }
+        }
+
+        /* Certificate specific styles */
+        .cert-title {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .cert-title h1 {
+            font-size: 42px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #000;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .cert-subtitle {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #000;
+        }
+
+        .cert-year {
+            font-size: 16px;
+            color: #000;
+            font-weight: 500;
+        }
+
+        .cert-body {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .awarded-to {
+            font-size: 18px;
+            color: #000;
+            margin-bottom: 10px;
+        }
+
+        .student-name-cert {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #000;
+        }
+
+        .divider {
+            width: 80%;
+            height: 1px;
+            background-color: #000;
+            margin: 0 auto 20px;
+        }
+
+        .location-info {
+            font-size: 18px;
+            color: #000;
+            margin-bottom: 20px;
+        }
+
+        .performance-text {
+            font-size: 16px;
+            line-height: 1.5;
+            margin-bottom: 20px;
+            color: #000;
+        }
+
+        .research-title {
+            font-size: 16px;
+            font-weight: bold;
+            font-style: italic;
+            margin-bottom: 20px;
+            color: #000;
+        }
+
+        .rank-link {
+            font-size: 14px;
+            margin-bottom: 20px;
+            color: #000;
+        }
+
+        .rank-badge {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .rank-text {
+            font-size: 20px;
+            font-weight: bold;
+            color: #000;
+        }
+
+        .medal-icon {
+            width: 50px;
+            height: 50px;
+        }
+
+        .total-participants {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #000;
+        }
+
+        .cert-date {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #000;
+            text-align: center;
+        }
+
+        .signatures {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .signature {
+            text-align: center;
+        }
+
+        .signature-line {
+            width: 150px;
+            height: 1px;
+            background-color: #000;
+            margin: 0 auto 5px;
+        }
+
+        .signature-name {
+            font-size: 14px;
+            font-weight: bold;
+            color: #000;
+        }
+
+        .signature-title {
+            font-size: 12px;
+            color: #000;
+        }
+
+        .footer {
+            text-align: center;
+        }
+
+        .powered-by {
+            font-size: 12px;
+            color: #000;
+        }
+
+        .certificate-id {
+            font-size: 10px;
+            margin-top: 5px;
+            color: #000;
         }
     </style>
 </head>
@@ -496,25 +478,30 @@
                     <p>Generating your certificate...</p>
                 </div>
 
-                <div class="certificate-container" id="certificateContainer">
+                <div class="certificate-container" id="certificateContainer" style="display: none;">
                     <div class="certificate-wrapper">
-                        <div class="certificate-template" id="certificateTemplate">
-                            <div style="text-align: center; margin-bottom: 30px;">
-                                <h1 style="font-size: 42px; font-weight: bold; margin-bottom: 10px;">CERTIFICATE</h1>
-                                <p style="font-size: 18px; font-weight: bold; margin-bottom: 5px;">OF International Academic Research Competition <span id="certYear">2025</span></p>
+                        <div class="certificate-template">
+                            <div class="certificate-border"></div>
+                            
+                            <div class="cert-title">
+                                <h1>CERTIFICATE</h1>
+                                <p class="cert-subtitle">OF International Academic Research Competition</p>
+                                <p class="cert-year" id="certYear">2025</p>
                             </div>
 
-                            <div style="text-align: center; margin-bottom: 30px;">
-                                <p style="font-size: 18px; margin-bottom: 10px;">Awarded to</p>
-                                <h2 style="font-size: 32px; font-weight: bold; margin-bottom: 20px; text-transform: uppercase;" id="displayName">Student Name</h2>
-                                <hr style="width: 80%; margin: 0 auto 20px;">
-                                <p style="font-size: 18px; margin-bottom: 5px;">Of</p>
-                                <p style="font-size: 18px; margin-bottom: 5px;" id="displayClassSchool">Class at School</p>
-                                <p style="font-size: 18px; margin-bottom: 20px;" id="displayLocation">Location, Country</p>
-                            </div>
+                            <div class="cert-body">
+                                <p class="awarded-to">Awarded to</p>
+                                <h2 class="student-name-cert" id="displayName">Student Name</h2>
+                                
+                                <div class="divider"></div>
+                                
+                                <div class="location-info">
+                                    <p>Of</p>
+                                    <p id="displayClassSchool">Class at School</p>
+                                    <p id="displayLocation">Location, Country</p>
+                                </div>
 
-                            <div style="text-align: center; margin-bottom: 30px;">
-                                <p style="font-size: 16px; line-height: 1.5; margin-bottom: 20px;">
+                                <p class="performance-text">
                                     delivering an impressive research project and presentation, and achieved
                                     <span style="font-weight: bold;" id="displayRank">Xth</span> place in the 
                                     <span style="font-weight: bold;" id="displayCategory">Category</span> Category with a score of 
@@ -523,45 +510,43 @@
                                     Presentation: <span style="font-weight: bold;" id="displayPresentationScore">XX</span>/100).
                                 </p>
 
-                                <p style="font-size: 16px; font-weight: bold; font-style: italic; margin-bottom: 20px;">
+                                <p class="research-title">
                                     Research Title: <span id="researchTitle">Research Title Here</span>
                                 </p>
 
-                                <p style="font-size: 14px; margin-bottom: 20px;" id="rankLink">
+                                <p class="rank-link" id="rankLink">
                                     https://iarco.org/2025-winners?category=Junior&rank=X
                                 </p>
-                            </div>
 
-                            <div style="text-align: center; margin-bottom: 30px;">
-                                <div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 10px;">
-                                    <span style="font-size: 20px; font-weight: bold;">Top <span id="badgeRank">X</span></span>
-                                    <img src="" alt="Medal" style="width: 50px; height: 50px;" id="medalIcon">
+                                <div class="rank-badge">
+                                    <span class="rank-text">Top <span id="badgeRank">X</span></span>
+                                    <img src="" alt="Medal" class="medal-icon" id="medalIcon">
                                 </div>
-                                <p style="font-size: 18px; font-weight: bold;">out of <span id="totalParticipants">XX</span></p>
+                                <p class="total-participants">out of <span id="totalParticipants">XX</span></p>
                             </div>
 
-                            <div style="text-align: center; margin-bottom: 20px;">
-                                <p style="font-size: 16px; font-weight: bold;">December 30, <span id="certYearFooter">2025</span></p>
+                            <div class="cert-date">
+                                <p>December 30, <span id="certYearFooter">2025</span></p>
                             </div>
 
-                            <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
-                                <div style="text-align: center;">
-                                    <p style="font-size: 14px; margin-bottom: 5px;">_________________________</p>
-                                    <p style="font-size: 14px; font-weight: bold;">Md. Azmann Yakin Srizon</p>
-                                    <p style="font-size: 12px;">Assistant Professor CSE, RUET</p>
-                                    <p style="font-size: 12px;">Reviewer, IEEE Access</p>
+                            <div class="signatures">
+                                <div class="signature">
+                                    <div class="signature-line"></div>
+                                    <p class="signature-name">Md. Azmann Yakin Srizon</p>
+                                    <p class="signature-title">Assistant Professor CSE, RUET</p>
+                                    <p class="signature-title">Reviewer, IEEE Access</p>
                                 </div>
-                                <div style="text-align: center;">
-                                    <p style="font-size: 14px; margin-bottom: 5px;">_________________________</p>
-                                    <p style="font-size: 14px; font-weight: bold;">Md Sanaul Haque Shanto</p>
-                                    <p style="font-size: 12px;">President & Lead</p>
-                                    <p style="font-size: 12px;">Researcher, YRJ</p>
+                                <div class="signature">
+                                    <div class="signature-line"></div>
+                                    <p class="signature-name">Md Sanaul Haque Shanto</p>
+                                    <p class="signature-title">President & Lead</p>
+                                    <p class="signature-title">Researcher, YRJ</p>
                                 </div>
                             </div>
 
-                            <div style="text-align: center;">
-                                <p style="font-size: 12px;">Powered by: yjbumal.org</p>
-                                <p style="font-size: 10px; margin-top: 5px;">Certificate ID: <span id="certificateId">XXXX-XXXX-XXXX</span></p>
+                            <div class="footer">
+                                <p class="powered-by">Powered by: yjbumal.org</p>
+                                <p class="certificate-id">Certificate ID: <span id="certificateId">XXXX-XXXX-XXXX</span></p>
                             </div>
                         </div>
                     </div>
@@ -641,11 +626,6 @@
             "Bangladesh": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 12'><rect width='20' height='12' fill='#006a4e'/><circle cx='8' cy='6' r='3.6' fill='#f42a41'/></svg>",
             "Japan": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 12'><rect width='20' height='12' fill='#ffffff'/><circle cx='10' cy='6' r='3.6' fill='#bc002d'/></svg>",
             "Canada": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 12'><rect width='20' height='12' fill='#ff0000'/><rect x='6' width='8' height='12' fill='#ffffff'/><path fill='#ff0000' d='M10 2.2 8.8 3.5h0.7v1.8h0.9V3.5h0.7L10 2.2zm0 6.6-1.4-2.1h0.9v-1h0.9v1h0.9L10 8.8z'/></svg>"
-        };
-
-        const certificates = {
-            "2024": "certificate/2024.pdf",
-            "2025": "certificate/2025.pdf"
         };
 
         const medals = {
@@ -766,7 +746,7 @@
             results.forEach(student => {
                 const item = document.createElement('div');
                 item.className = 'search-result-item';
-                item.textContent = student.name;
+                item.textContent = `${student.name} (${student.category}, ${student.year})`;
                 item.addEventListener('click', () => {
                     selectStudent(student);
                 });
@@ -782,6 +762,7 @@
             studentNameInput.value = student.name;
             searchResults.style.display = 'none';
             displayStudentDetails(student);
+            generateCertificate(student, student.year);
         }
 
         // Display student details
@@ -804,9 +785,6 @@
             
             studentDetails.style.display = 'block';
             noResults.style.display = 'none';
-            
-            // Auto-generate certificate
-            generateCertificate(student, student.year);
         }
 
         // Generate certificate
@@ -849,7 +827,6 @@
         // Show loading indicator
         function showLoading() {
             loadingIndicator.style.display = 'block';
-            certificateContainer.style.display = 'none';
         }
 
         // Hide loading indicator
@@ -859,21 +836,43 @@
 
         // Download PDF
         function downloadPDF() {
+            if (!currentStudent) {
+                alert('Please select a student first');
+                return;
+            }
+            
             showLoading();
             
-            const element = document.querySelector('.certificate-wrapper');
-            const opt = {
-                margin: 0,
-                filename: `IARCO_${currentStudent.year}_Certificate_${currentStudent.name.replace(/\s+/g, '_')}.pdf`,
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2, useCORS: true },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-            };
-            
-            // Generate PDF
-            html2pdf().set(opt).from(element).save().then(() => {
-                hideLoading();
-            });
+            // Use a timeout to ensure the certificate is fully rendered
+            setTimeout(() => {
+                const element = document.querySelector('.certificate-wrapper');
+                const opt = {
+                    margin: 0,
+                    filename: `IARCO_${currentStudent.year}_Certificate_${currentStudent.name.replace(/\s+/g, '_')}.pdf`,
+                    image: { type: 'jpeg', quality: 0.98 },
+                    html2canvas: { 
+                        scale: 2, 
+                        useCORS: true,
+                        logging: false,
+                        letterRendering: true
+                    },
+                    jsPDF: { 
+                        unit: 'mm', 
+                        format: 'a4', 
+                        orientation: 'portrait'
+                    },
+                    pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+                };
+                
+                // Generate PDF
+                html2pdf().set(opt).from(element).save().then(() => {
+                    hideLoading();
+                }).catch(err => {
+                    console.error('PDF generation error:', err);
+                    hideLoading();
+                    alert('Error generating PDF. Please try again.');
+                });
+            }, 500);
         }
 
         // Event listeners
@@ -882,6 +881,8 @@
             
             if (name.length < 2) {
                 searchResults.style.display = 'none';
+                studentDetails.style.display = 'none';
+                certificateContainer.style.display = 'none';
                 return;
             }
             
@@ -898,6 +899,8 @@
         generateBtn.addEventListener('click', function() {
             if (currentStudent) {
                 generateCertificate(currentStudent, currentStudent.year);
+            } else {
+                alert('Please select a student first');
             }
         });
 
@@ -907,9 +910,6 @@
         window.addEventListener('DOMContentLoaded', function() {
             // Calculate initial ranks
             calculateRanks(students);
-            
-            // Hide certificate initially
-            certificateContainer.style.display = 'none';
         });
     </script>
 </body>

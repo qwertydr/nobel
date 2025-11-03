@@ -3,386 +3,735 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ultimate Editors - Master Video Editing</title>
-    <!-- Load Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>IARCO Certificate Generator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Great+Vibes&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     <style>
-        /* Custom styles for the dark theme and smooth scrolling */
+        :root {
+            --primary-color: #0b0b0b;
+            --secondary-color: #2b2b2b;
+            --accent-color: #1a5276;
+            --light-color: #f5f5f5;
+            --border-radius: 8px;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #0d0d0d; /* Very dark background */
-            color: #e5e5e5; /* Light grey text */
-            scroll-behavior: smooth;
+            font-family: 'Libre Baskerville', serif;
+            background-color: #f9f9f9;
+            color: var(--primary-color);
+            line-height: 1.6;
         }
-
-        /* Custom CTA Button Styling */
-        .cta-button {
-            transition: all 0.2s ease-in-out;
-            box-shadow: 0 4px 15px rgba(250, 204, 21, 0.4);
+        
+        .container {
+            display: flex;
+            min-height: 100vh;
+            padding: 20px;
+            gap: 20px;
         }
-        .cta-button:hover {
-            box-shadow: 0 6px 20px rgba(250, 204, 21, 0.6);
-            transform: translateY(-2px);
+        
+        .search-section {
+            flex: 1;
+            max-width: 350px;
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
         }
-
-        /* Star SVG (5 points) */
-        .star-icon {
-            width: 1rem;
-            height: 1rem;
-            fill: currentColor;
+        
+        .preview-section {
+            flex: 2;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .student-details {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+        }
+        
+        .preview-area {
+            flex: 1;
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        h1 {
+            color: var(--accent-color);
+            margin-bottom: 20px;
+            text-align: center;
+            font-family: 'Playfair Display', serif;
+        }
+        
+        h2 {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: var(--secondary-color);
+            border-bottom: 1px solid #eee;
+            padding-bottom: 8px;
+        }
+        
+        .search-box {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            margin-bottom: 15px;
+            font-family: inherit;
+            font-size: 1rem;
+        }
+        
+        .search-results {
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid #eee;
+            border-radius: var(--border-radius);
+        }
+        
+        .result-item {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .result-item:hover {
+            background-color: #f0f0f0;
+        }
+        
+        .result-item.selected {
+            background-color: #e6f2ff;
+            border-left: 3px solid var(--accent-color);
+        }
+        
+        .student-info {
+            margin-bottom: 15px;
+        }
+        
+        .student-info p {
+            margin-bottom: 8px;
+        }
+        
+        .flag {
+            display: inline-block;
+            width: 24px;
+            height: 16px;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+        
+        .buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: var(--border-radius);
+            background-color: var(--accent-color);
+            color: white;
+            font-family: inherit;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            flex: 1;
+        }
+        
+        button:hover {
+            background-color: #144a74;
+        }
+        
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        
+        .preview-container {
+            flex: 1;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            overflow: auto;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+        
+        #certificateCanvas {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            border-top: 4px solid var(--accent-color);
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .certificate-id {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 10px;
+        }
+        
+        .generate-animation {
+            animation: generatePulse 0.7s ease-in-out;
+        }
+        
+        @keyframes generatePulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(0.95); box-shadow: 0 0 20px rgba(26, 82, 118, 0.5); }
+            100% { transform: scale(1); }
         }
     </style>
 </head>
-<body class="antialiased">
-
-    <!-- Navbar -->
-    <header class="sticky top-0 z-50 bg-[#0d0d0d]/90 backdrop-blur-sm shadow-xl">
-        <nav class="container mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-            <!-- Logo -->
-            <div class="text-2xl font-black text-yellow-400">
-                ULTIMATE EDITORS
-            </div>
+<body>
+    <div class="container">
+        <div class="search-section">
+            <h1>IARCO Certificate Generator</h1>
             
-            <!-- Desktop Navigation -->
-            <div class="hidden lg:flex space-x-8 items-center text-sm font-medium">
-                <a href="#courses" class="hover:text-yellow-400 transition">Courses</a>
-                <a href="#roadmap" class="hover:text-yellow-400 transition">Roadmap</a>
-                <a href="#testimonials" class="hover:text-yellow-400 transition">Testimonials</a>
-                <a href="#pricing" class="hover:text-yellow-400 transition">Pricing</a>
-                <a href="#" class="hover:text-yellow-400 transition">Why Us</a>
-            </div>
-
-            <!-- CTA Button -->
-            <a href="#access" class="hidden sm:inline-block cta-button bg-yellow-400 text-gray-900 font-extrabold py-2 px-6 rounded-full text-sm">
-                Get Access - $497
-            </a>
-
-            <!-- Mobile Menu Icon (Placeholder for functionality) -->
-            <button class="lg:hidden text-yellow-400">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
-                </svg>
-            </button>
-        </nav>
-    </header>
-
-    <main>
-        <!-- Hero Section -->
-        <section class="py-20 md:py-32 text-center overflow-hidden">
-            <div class="container mx-auto px-4">
-                <h1 class="text-4xl sm:text-6xl md:text-7xl font-extrabold leading-tight text-white mb-6">
-                    Master Video Editing <br class="hidden sm:block"> & Make <span class="text-yellow-400">$1,000/Month</span>
-                </h1>
-                <p class="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-10">
-                    Learn how beginner editors are becoming Viral Editors and making $1,000 working part-time in 90 days.
-                </p>
-                <div class="flex flex-col sm:flex-row justify-center gap-4">
-                    <a href="#access" class="cta-button bg-yellow-400 text-gray-900 font-extrabold py-3 px-10 rounded-full text-lg w-full sm:w-auto">
-                        Get Access - $497
-                    </a>
-                    <a href="#courses" class="bg-gray-800 text-white font-bold py-3 px-10 rounded-full text-lg border border-gray-700 hover:bg-gray-700 transition w-full sm:w-auto">
-                        View Courses
-                    </a>
-                </div>
-            </div>
-        </section>
-
-        <!-- Courses/Masterclasses Section -->
-        <section id="courses" class="py-16 md:py-24 bg-[#141414]">
-            <div class="container mx-auto px-4">
-                <h2 class="text-3xl sm:text-4xl font-extrabold text-white text-center mb-4">
-                    What's Inside Ultimate Editors?
-                </h2>
-                <p class="text-center text-gray-400 mb-12 max-w-xl mx-auto">
-                    The Masterclasses that create Viral Editors. Everything you need from foundational programs to viral styles and client acquisition.
-                </p>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <!-- Course Card 1: Premiere Pro -->
-                    <div class="bg-gray-900 p-6 rounded-xl shadow-2xl hover:shadow-yellow-500/10 transition duration-300">
-                        <div class="h-40 bg-gray-800 rounded-lg mb-4 flex items-center justify-center text-xl font-bold text-yellow-400">
-                            Premiere Pro
-                        </div>
-                        <h3 class="text-xl font-bold text-white mb-2">Premiere Pro Masterclass</h3>
-                        <p class="text-gray-400 text-sm">Go from zero to hero in the industry standard Adobe Premiere Pro, mastering timelines, cuts, and effects.</p>
-                    </div>
-
-                    <!-- Course Card 2: After Effects -->
-                    <div class="bg-gray-900 p-6 rounded-xl shadow-2xl hover:shadow-yellow-500/10 transition duration-300">
-                        <div class="h-40 bg-gray-800 rounded-lg mb-4 flex items-center justify-center text-xl font-bold text-yellow-400">
-                            After Effects
-                        </div>
-                        <h3 class="text-xl font-bold text-white mb-2">After Effects Masterclass</h3>
-                        <p class="text-gray-400 text-sm">Become an expert at the animating program Adobe After Effects, creating stunning motion graphics and visual effects.</p>
-                    </div>
-
-                    <!-- Course Card 3: Viral Style - Josh Lyon -->
-                    <div class="bg-gray-900 p-6 rounded-xl shadow-2xl hover:shadow-yellow-500/10 transition duration-300">
-                        <div class="h-40 bg-gray-800 rounded-lg mb-4 flex items-center justify-center text-xl font-bold text-yellow-400">
-                            Josh Lyon Style
-                        </div>
-                        <h3 class="text-xl font-bold text-white mb-2">Josh Lyon Masterclass</h3>
-                        <p class="text-gray-400 text-sm">Learn the viral, attention-grabbing editing style popularized by Josh Lyon for social media dominance.</p>
-                    </div>
-
-                    <!-- Course Card 4: Viral Style - Devin Jatho -->
-                    <div class="bg-gray-900 p-6 rounded-xl shadow-2xl hover:shadow-yellow-500/10 transition duration-300">
-                        <div class="h-40 bg-gray-800 rounded-lg mb-4 flex items-center justify-center text-xl font-bold text-yellow-400">
-                            Devin Jatho Style
-                        </div>
-                        <h3 class="text-xl font-bold text-white mb-2">Devin Jatho Masterclass</h3>
-                        <p class="text-gray-400 text-sm">Master the dynamic and fast-paced editing style of Devin Jatho, perfect for YouTube and long-form content.</p>
-                    </div>
-                    
-                    <!-- Course Card 5: Viral Style - Iman Gadzhi -->
-                    <div class="bg-gray-900 p-6 rounded-xl shadow-2xl hover:shadow-yellow-500/10 transition duration-300">
-                        <div class="h-40 bg-gray-800 rounded-lg mb-4 flex items-center justify-center text-xl font-bold text-yellow-400">
-                            Iman Gadzhi Style
-                        </div>
-                        <h3 class="text-xl font-bold text-white mb-2">Iman Gadzhi Masterclass</h3>
-                        <p class="text-gray-400 text-sm">Learn the minimal, high-end, and clean editing approach used by Iman Gadzhi for high-ticket clients.</p>
-                    </div>
-
-                    <!-- Course Card 6: Client Acquisition -->
-                    <div class="bg-gray-900 p-6 rounded-xl shadow-2xl hover:shadow-yellow-500/10 transition duration-300">
-                        <div class="h-40 bg-gray-800 rounded-lg mb-4 flex items-center justify-center text-xl font-bold text-yellow-400">
-                            Client Plan
-                        </div>
-                        <h3 class="text-xl font-bold text-white mb-2">The 30 Day Land A Client</h3>
-                        <p class="text-gray-400 text-sm">Master outreach, pitching, and negotiation to make your first $1,000 as an editor in 30 days or less.</p>
-                    </div>
-                </div>
-
-                <div class="text-center mt-10">
-                    <a href="#access" class="text-yellow-400 font-semibold hover:text-yellow-300 transition text-lg">
-                        View All Courses &rarr;
-                    </a>
-                </div>
-            </div>
-        </section>
-
-        <!-- Roadmap Section -->
-        <section id="roadmap" class="py-16 md:py-24">
-            <div class="container mx-auto px-4">
-                <h2 class="text-3xl sm:text-4xl font-extrabold text-white text-center mb-4">
-                    The 90 Day Ultimate Editors Plan
-                </h2>
-                <p class="text-center text-gray-400 mb-16 max-w-xl mx-auto">
-                    How to master video editing, master viral editing styles, and make $1,000/mo in just 90 days.
-                </p>
-
-                <div class="relative max-w-4xl mx-auto">
-                    <!-- Vertical Line for Desktop -->
-                    <div class="hidden md:block absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-gray-800"></div>
-
-                    <!-- Step 1 -->
-                    <div class="mb-12 md:flex md:justify-start md:odd:flex-row-reverse relative">
-                        <!-- Circle Indicator -->
-                        <div class="absolute left-0 md:left-1/2 transform md:-translate-x-1/2 -translate-y-1/2 md:translate-y-0 w-8 h-8 bg-yellow-400 rounded-full flex items-center justify-center font-bold text-gray-900 border-4 border-gray-900 md:top-4 z-10">
-                            1
-                        </div>
-                        <!-- Content Card -->
-                        <div class="bg-gray-900 p-8 rounded-xl w-full md:w-5/12 shadow-2xl md:odd:text-right">
-                            <h3 class="text-2xl font-bold text-white mb-3">Learn the Editing Programs</h3>
-                            <p class="text-gray-400">Master Premiere Pro and After Effects at an expert level. We cover every tool, technique, and workflow needed for professional projects.</p>
-                        </div>
-                    </div>
-
-                    <!-- Step 2 -->
-                    <div class="mb-12 md:flex md:justify-end md:odd:flex-row-reverse relative">
-                        <!-- Circle Indicator -->
-                        <div class="absolute left-0 md:left-1/2 transform md:-translate-x-1/2 -translate-y-1/2 md:translate-y-0 w-8 h-8 bg-yellow-400 rounded-full flex items-center justify-center font-bold text-gray-900 border-4 border-gray-900 md:top-4 z-10">
-                            2
-                        </div>
-                        <!-- Content Card -->
-                        <div class="bg-gray-900 p-8 rounded-xl w-full md:w-5/12 shadow-2xl md:odd:text-right">
-                            <h3 class="text-2xl font-bold text-white mb-3">Learn the Viral Editing Styles</h3>
-                            <p class="text-gray-400">Become an editor who knows the Viral Editing Styles of 2025. We provide step-by-step breakdowns of the most profitable video formats.</p>
-                        </div>
-                    </div>
-
-                    <!-- Step 3 -->
-                    <div class="mb-12 md:flex md:justify-start md:odd:flex-row-reverse relative">
-                        <!-- Circle Indicator -->
-                        <div class="absolute left-0 md:left-1/2 transform md:-translate-x-1/2 -translate-y-1/2 md:translate-y-0 w-8 h-8 bg-yellow-400 rounded-full flex items-center justify-center font-bold text-gray-900 border-4 border-gray-900 md:top-4 z-10">
-                            3
-                        </div>
-                        <!-- Content Card -->
-                        <div class="bg-gray-900 p-8 rounded-xl w-full md:w-5/12 shadow-2xl md:odd:text-right">
-                            <h3 class="text-2xl font-bold text-white mb-3">Land Your First $1,000 Client</h3>
-                            <p class="text-gray-400">Use our 30-day client acquisition plan to make your first $1,000 with video editing, focusing on proven outreach strategies and negotiation.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="text-center mt-10">
-                    <a href="#access" class="cta-button bg-yellow-400 text-gray-900 font-extrabold py-3 px-10 rounded-full text-lg w-full sm:w-auto">
-                        Start Your 90-Day Plan
-                    </a>
-                </div>
-
-            </div>
-        </section>
-
-        <!-- Testimonials Section -->
-        <section id="testimonials" class="py-16 md:py-24 bg-[#141414]">
-            <div class="container mx-auto px-4">
-                <h2 class="text-3xl sm:text-4xl font-extrabold text-white text-center mb-4">
-                    Does Ultimate Editors actually work?
-                </h2>
-                <p class="text-center text-gray-400 mb-12 max-w-xl mx-auto">
-                    Here's what the Editors in our community are achieving and making.
-                </p>
-
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    
-                    <!-- Testimonial Card 1 -->
-                    <div class="bg-gray-900 p-6 rounded-xl shadow-2xl border-t-4 border-yellow-400">
-                        <!-- Rating Stars -->
-                        <div class="flex mb-4">
-                            <!-- 5 Stars -->
-                            <svg class="star-icon text-yellow-400 mr-1" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26l6.91.99l-5 4.88l1.18 6.88L12 17.27l-6.18 3.26l1.18-6.88l-5-4.88l6.91-.99L12 2z"/></svg>
-                            <svg class="star-icon text-yellow-400 mr-1" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26l6.91.99l-5 4.88l1.18 6.88L12 17.27l-6.18 3.26l1.18-6.88l-5-4.88l6.91-.99L12 2z"/></svg>
-                            <svg class="star-icon text-yellow-400 mr-1" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26l6.91.99l-5 4.88l1.18 6.88L12 17.27l-6.18 3.26l1.18-6.88l-5-4.88l6.91-.99L12 2z"/></svg>
-                            <svg class="star-icon text-yellow-400 mr-1" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26l6.91.99l-5 4.88l1.18 6.88L12 17.27l-6.18 3.26l1.18-6.88l-5-4.88l6.91-.99L12 2z"/></svg>
-                            <svg class="star-icon text-gray-700 mr-1" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26l6.91.99l-5 4.88l1.18 6.88L12 17.27l-6.18 3.26l1.18-6.88l-5-4.88l6.91-.99L12 2z"/></svg>
-                        </div>
-                        <p class="text-white text-lg italic mb-4">"🔥 After 4 Months of Struggling – I Finally Landed My First $1.2K/Month Client 🔥"</p>
-                        <p class="text-sm text-gray-400 leading-relaxed">
-                            "I've been grinding for the last 4 months... But I didn't stop. And now, it finally paid off. I just signed my first long-term client and I'm officially earning $1,200/month as a video editor. It's proof that all those sleepless nights meant something."
-                        </p>
-                        <div class="mt-4 flex items-center">
-                            <div class="h-10 w-10 bg-gray-700 rounded-full mr-3"></div>
-                            <div>
-                                <p class="font-bold text-white">Philipp K</p>
-                                <p class="text-xs text-gray-500">Editor, Germany</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Testimonial Card 2 -->
-                    <div class="bg-gray-900 p-6 rounded-xl shadow-2xl border-t-4 border-yellow-400">
-                        <!-- Rating Stars -->
-                        <div class="flex mb-4">
-                            <!-- 5 Stars -->
-                            <svg class="star-icon text-yellow-400 mr-1" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26l6.91.99l-5 4.88l1.18 6.88L12 17.27l-6.18 3.26l1.18-6.88l-5-4.88l6.91-.99L12 2z"/></svg>
-                            <svg class="star-icon text-yellow-400 mr-1" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26l6.91.99l-5 4.88l1.18 6.88L12 17.27l-6.18 3.26l1.18-6.88l-5-4.88l6.91-.99L12 2z"/></svg>
-                            <svg class="star-icon text-yellow-400 mr-1" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26l6.91.99l-5 4.88l1.18 6.88L12 17.27l-6.18 3.26l1.18-6.88l-5-4.88l6.91-.99L12 2z"/></svg>
-                            <svg class="star-icon text-yellow-400 mr-1" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26l6.91.99l-5 4.88l1.18 6.88L12 17.27l-6.18 3.26l1.18-6.88l-5-4.88l6.91-.99L12 2z"/></svg>
-                            <svg class="star-icon text-gray-700 mr-1" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26l6.91.99l-5 4.88l1.18 6.88L12 17.27l-6.18 3.26l1.18-6.88l-5-4.88l6.91-.99L12 2z"/></svg>
-                        </div>
-                        <p class="text-white text-lg italic mb-4">"Just closed a 2k/month deal!! No more low paying clients."</p>
-                        <p class="text-sm text-gray-400 leading-relaxed">
-                            "The client acquisition module was a game-changer. I stopped chasing low-ball offers and was able to negotiate a high-ticket retainer thanks to the strategies taught inside the community."
-                        </p>
-                        <div class="mt-4 flex items-center">
-                            <div class="h-10 w-10 bg-gray-700 rounded-full mr-3"></div>
-                            <div>
-                                <p class="font-bold text-white">Lucas Coburn</p>
-                                <p class="text-xs text-gray-500">Editor, USA</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Testimonial Card 3 -->
-                    <div class="bg-gray-900 p-6 rounded-xl shadow-2xl border-t-4 border-yellow-400">
-                        <!-- Rating Stars -->
-                        <div class="flex mb-4">
-                            <!-- 5 Stars -->
-                            <svg class="star-icon text-yellow-400 mr-1" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26l6.91.99l-5 4.88l1.18 6.88L12 17.27l-6.18 3.26l1.18-6.88l-5-4.88l6.91-.99L12 2z"/></svg>
-                            <svg class="star-icon text-yellow-400 mr-1" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26l6.91.99l-5 4.88l1.18 6.88L12 17.27l-6.18 3.26l1.18-6.88l-5-4.88l6.91-.99L12 2z"/></svg>
-                            <svg class="star-icon text-yellow-400 mr-1" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26l6.91.99l-5 4.88l1.18 6.88L12 17.27l-6.18 3.26l1.18-6.88l-5-4.88l6.91-.99L12 2z"/></svg>
-                            <svg class="star-icon text-yellow-400 mr-1" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26l6.91.99l-5 4.88l1.18 6.88L12 17.27l-6.18 3.26l1.18-6.88l-5-4.88l6.91-.99L12 2z"/></svg>
-                            <svg class="star-icon text-gray-700 mr-1" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26l6.91.99l-5 4.88l1.18 6.88L12 17.27l-6.18 3.26l1.18-6.88l-5-4.88l6.91-.99L12 2z"/></svg>
-                        </div>
-                        <p class="text-white text-lg italic mb-4">"First client booked today (i started 23 days ago ahah) around $1K per month."</p>
-                        <p class="text-sm text-gray-400 leading-relaxed">
-                            "I joined Ultimate Editor the 4th of August and I booked my first client today. She's a nurse asking for a long-term work... that's crazy ahah!! Thanks a lot Joseph and all of you for the help."
-                        </p>
-                        <div class="mt-4 flex items-center">
-                            <div class="h-10 w-10 bg-gray-700 rounded-full mr-3"></div>
-                            <div>
-                                <p class="font-bold text-white">Bruce Trade</p>
-                                <p class="text-xs text-gray-500">Editor, France</p>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </section>
-
-        <!-- CTA / Still Not Sure Section -->
-        <section id="pricing" class="py-16 md:py-24">
-            <div class="container mx-auto px-4">
-                <h2 class="text-3xl sm:text-4xl font-extrabold text-white text-center mb-12">
-                    Still Not Sure? Discover if Ultimate Editors is for you.
-                </h2>
-
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    
-                    <!-- Beginner Card -->
-                    <div class="bg-gray-900 p-8 rounded-xl shadow-2xl border-l-4 border-teal-400">
-                        <h3 class="text-2xl font-bold text-teal-400 mb-2">Beginner Editor</h3>
-                        <p class="text-gray-400 mb-6">Just started editing? Want to learn Premiere Pro and After Effects?</p>
-                        <ul class="space-y-3 text-sm">
-                            <li class="flex items-start text-white"><svg class="w-5 h-5 text-yellow-400 mr-3 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Premiere Pro & After Effects Masterclasses</li>
-                            <li class="flex items-start text-white"><svg class="w-5 h-5 text-yellow-400 mr-3 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Step-By-Step friendly courses</li>
-                            <li class="flex items-start text-white"><svg class="w-5 h-5 text-yellow-400 mr-3 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Weekly Q&A calls for questions</li>
-                        </ul>
-                    </div>
-
-                    <!-- Intermediate Card (Featured) -->
-                    <div class="bg-gray-900 p-8 rounded-xl shadow-2xl ring-4 ring-yellow-400 transform scale-105 transition duration-300">
-                        <h3 class="text-2xl font-bold text-yellow-400 mb-2">Intermediate Editor</h3>
-                        <p class="text-gray-400 mb-6">Finding it hard to learn advanced styles and become a viral editor?</p>
-                        <ul class="space-y-3 text-sm">
-                            <li class="flex items-start text-white"><svg class="w-5 h-5 text-yellow-400 mr-3 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Viral Editing Style Masterclasses</li>
-                            <li class="flex items-start text-white"><svg class="w-5 h-5 text-yellow-400 mr-3 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Master advanced editing techniques</li>
-                            <li class="flex items-start text-white"><svg class="w-5 h-5 text-yellow-400 mr-3 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> New Masterclasses Every Month</li>
-                        </ul>
-                    </div>
-
-                    <!-- Professional Card -->
-                    <div class="bg-gray-900 p-8 rounded-xl shadow-2xl border-l-4 border-purple-400">
-                        <h3 class="text-2xl font-bold text-purple-400 mb-2">Professional Editor</h3>
-                        <p class="text-gray-400 mb-6">Already a good editor but struggling to land high-ticket clients?</p>
-                        <ul class="space-y-3 text-sm">
-                            <li class="flex items-start text-white"><svg class="w-5 h-5 text-yellow-400 mr-3 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Master the 30-day client plan</li>
-                            <li class="flex items-start text-white"><svg class="w-5 h-5 text-yellow-400 mr-3 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Build strong personal brands</li>
-                            <li class="flex items-start text-white"><svg class="w-5 h-5 text-yellow-400 mr-3 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Weekly coaching with Joseph</li>
-                        </ul>
-                    </div>
-
-                </div>
-
-                <!-- Final CTA -->
-                <div id="access" class="mt-16 text-center bg-gray-900 p-10 rounded-xl max-w-2xl mx-auto shadow-2xl">
-                    <h3 class="text-3xl font-extrabold text-white mb-4">Ready to Master Editing?</h3>
-                    <p class="text-gray-400 mb-6 text-lg">Secure lifetime access to all masterclasses, coaching calls, and the exclusive community.</p>
-                    <a href="#" class="cta-button bg-yellow-400 text-gray-900 font-extrabold py-4 px-12 rounded-full text-xl w-full sm:w-auto">
-                        Get Access Today - $497
-                    </a>
-                </div>
-
-            </div>
-        </section>
-
-    </main>
-
-    <!-- Footer -->
-    <footer class="bg-black py-10">
-        <div class="container mx-auto px-4 text-center">
-            <p class="text-sm text-gray-500 mb-4">&copy; 2025 Ultimate Editors Clone. All rights reserved.</p>
-            <div class="space-x-4 text-xs">
-                <a href="#" class="text-gray-400 hover:text-yellow-400 transition">Terms of Service</a>
-                <span class="text-gray-500">|</span>
-                <a href="#" class="text-gray-400 hover:text-yellow-400 transition">Privacy Policy</a>
-                <span class="text-gray-500">|</span>
-                <a href="#" class="text-gray-400 hover:text-yellow-400 transition">Support</a>
+            <input type="search" class="search-box" placeholder="Search by student name (word-by-word)" id="searchInput">
+            
+            <h2>Search Results</h2>
+            <div class="search-results" id="searchResults">
+                <!-- Search results will be populated here -->
             </div>
         </div>
-    </footer>
+        
+        <div class="preview-section">
+            <div class="student-details">
+                <h2>Selected Student</h2>
+                <div id="selectedStudent">
+                    <p>No student selected</p>
+                </div>
+                
+                <div class="buttons">
+                    <button id="previewBtn" disabled>Preview Certificate</button>
+                    <button id="generateBtn" disabled>Generate & Download</button>
+                </div>
+                
+                <div class="certificate-id" id="certIdDisplay"></div>
+            </div>
+            
+            <div class="preview-area">
+                <h2>Certificate Preview</h2>
+                <div class="preview-container">
+                    <canvas id="certificateCanvas"></canvas>
+                </div>
+                
+                <div class="loading" id="loadingIndicator">
+                    <div class="spinner"></div>
+                    <p>Generating certificate...</p>
+                </div>
+            </div>
+        </div>
+    </div>
 
+    <script>
+        // Global variables
+        let students = [];
+        let flags = {};
+        let medals = {};
+        let certificateTemplates = {};
+        let selectedStudent = null;
+        let pdfjsLib = window['pdfjs-dist/build/pdf'];
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
+        const { jsPDF } = window.jspdf;
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', async function() {
+            await loadAllData();
+            setupEventListeners();
+        });
+
+        // Load all required data
+        async function loadAllData() {
+            try {
+                // In a real implementation, these would be actual fetch requests
+                // For demo purposes, we'll use sample data
+                students = [
+                    {
+                        "student_id": "v1MrV4dT",
+                        "name": "Sarhan Alan Khan",
+                        "school": "Scholastica",
+                        "category": "Junior",
+                        "year": 2024,
+                        "country": "Bangladesh",
+                        "research_proposal_title": "Enhancing IoT Security with Machine Learning for Real-Time Threat Detection",
+                        "research_paper": {
+                            "research_problem": 17,
+                            "existing_literature": 7,
+                            "research_question": 20,
+                            "methodology": 18,
+                            "research_topic": 12,
+                            "quality_of_writing": 4,
+                            "plagiarism_check_percentile": 3,
+                            "presentation": {
+                                "persuasiveness": 15,
+                                "video_quality": 15,
+                                "research_problem": 15,
+                                "research_question": 13,
+                                "methodology": 10
+                            }
+                        },
+                        "plagiarismPenalty": 0,
+                        "researchPaperScore": 70,
+                        "presentationScore": 64,
+                        "submissionScore": 134,
+                        "scaledFinalScore": 134,
+                        "viewProposal": "https://drive.google.com/open?id=1aBuuRXyiIBx-908Tujbzt2vXRqBq_rzX",
+                        "videoPitch": "https://drive.google.com/drive/folders/17Xg1wH9C8eD0wmfxn1Z3FnDZmHy3OTIV",
+                        "proposal_comment": "No Comment.",
+                        "presentation_comment": "No Comment.",
+                        "classLevel": "A Level"
+                    }
+                ];
+                
+                flags = {
+                    "Bangladesh": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 12'><rect width='20' height='12' fill='#006a4e'/><circle cx='9.4' cy='6' r='3.2' fill='#f42a41'/></svg>"
+                };
+                
+                medals = {
+                    "gold": "svg/gold_medal.svg",
+                    "silver": "svg/silver_medal.svg",
+                    "bronze": "svg/bronze_medal.svg",
+                    "honorable": "svg/honorable_mention.svg",
+                    "finalist": "svg/finalist.svg"
+                };
+                
+                certificateTemplates = {
+                    "2024": "certificate/2024.pdf",
+                    "2025": "certificate/2025.pdf"
+                };
+                
+                // Compute ranks for all students
+                computeRanksPerYearCategory(students);
+                
+                console.log('All data loaded successfully');
+            } catch (error) {
+                console.error('Error loading data:', error);
+                alert('Failed to load data. Please check if the JSON files are available.');
+            }
+        }
+
+        // Compute ranks per year and category
+        function computeRanksPerYearCategory(students) {
+            const groups = {};
+            students.forEach(s => {
+                const key = `${s.year}||${s.category}`;
+                if (!groups[key]) groups[key] = [];
+                groups[key].push(s);
+            });
+
+            Object.keys(groups).forEach(key => {
+                const arr = groups[key];
+                arr.sort((a, b) => b.scaledFinalScore - a.scaledFinalScore || b.submissionScore - a.submissionScore);
+                arr.forEach((stu, idx) => {
+                    stu.rank = idx + 1;
+                    stu.totalCountCategory = arr.length;
+                });
+            });
+        }
+
+        // Set up event listeners
+        function setupEventListeners() {
+            const searchInput = document.getElementById('searchInput');
+            const searchResults = document.getElementById('searchResults');
+            const previewBtn = document.getElementById('previewBtn');
+            const generateBtn = document.getElementById('generateBtn');
+            
+            // Search input event
+            searchInput.addEventListener('input', function() {
+                const query = this.value;
+                const results = searchStudentsByName(students, query);
+                displaySearchResults(results);
+            });
+            
+            // Preview button event
+            previewBtn.addEventListener('click', function() {
+                if (selectedStudent) {
+                    renderCertificate(selectedStudent, false);
+                }
+            });
+            
+            // Generate button event
+            generateBtn.addEventListener('click', function() {
+                if (selectedStudent) {
+                    generateCertificatePDF(selectedStudent);
+                }
+            });
+            
+            // Auto-select the first student for demo
+            if (students.length > 0) {
+                selectStudent(students[0]);
+            }
+        }
+
+        // Search students by name (word-by-word)
+        function searchStudentsByName(students, query) {
+            const tokens = query.trim().toLowerCase().split(/\s+/).filter(Boolean);
+            if (!tokens.length) return [];
+            return students.filter(s => {
+                const name = s.name.toLowerCase();
+                return tokens.every(t => name.includes(t));
+            });
+        }
+
+        // Display search results
+        function displaySearchResults(results) {
+            const searchResults = document.getElementById('searchResults');
+            searchResults.innerHTML = '';
+            
+            if (results.length === 0) {
+                searchResults.innerHTML = '<div class="result-item">No students found</div>';
+                return;
+            }
+            
+            results.forEach(student => {
+                const div = document.createElement('div');
+                div.className = 'result-item';
+                div.innerHTML = `
+                    <strong>${student.name}</strong><br>
+                    ${student.school} - ${student.category} (${student.year})
+                `;
+                div.addEventListener('click', () => selectStudent(student));
+                searchResults.appendChild(div);
+            });
+        }
+
+        // Select a student
+        function selectStudent(student) {
+            selectedStudent = student;
+            
+            // Update UI
+            document.querySelectorAll('.result-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+            
+            // Update selected student display
+            const selectedStudentDiv = document.getElementById('selectedStudent');
+            const flagSvg = flags[student.country] || '';
+            
+            selectedStudentDiv.innerHTML = `
+                <div class="student-info">
+                    <p><strong>Name:</strong> ${student.name}</p>
+                    <p><strong>School:</strong> ${student.school}</p>
+                    <p><strong>Category:</strong> ${student.category}</p>
+                    <p><strong>Year:</strong> ${student.year}</p>
+                    <p><strong>Country:</strong> <span class="flag">${flagSvg}</span> ${student.country}</p>
+                    <p><strong>Research Title:</strong> ${student.research_proposal_title}</p>
+                    <p><strong>Rank:</strong> ${student.rank} out of ${student.totalCountCategory}</p>
+                    <p><strong>Final Score:</strong> ${student.scaledFinalScore}/200</p>
+                </div>
+            `;
+            
+            // Enable buttons
+            document.getElementById('previewBtn').disabled = false;
+            document.getElementById('generateBtn').disabled = false;
+            
+            // Generate and display certificate ID
+            const certId = generateCertID(student);
+            document.getElementById('certIdDisplay').textContent = `Certificate ID: ${certId}`;
+            
+            // Auto-preview the certificate
+            renderCertificate(student, false);
+        }
+
+        // Generate certificate ID
+        function generateCertID(student) {
+            const year = student.year;
+            const cat = (student.category || "X").slice(0,3).toUpperCase();
+            const rank = student.rank || 0;
+            const ts = Date.now().toString().slice(-6);
+            return `CERT-${year}-${cat}-${rank}-${ts}`;
+        }
+
+        // Determine medal type based on rank
+        function medalForRank(rank) {
+            if (rank === 1) return 'gold';
+            if (rank === 2) return 'silver';
+            if (rank === 3) return 'bronze';
+            if (rank >= 4 && rank <= 10) return 'honorable';
+            return 'finalist';
+        }
+
+        // Render certificate to canvas
+        async function renderCertificate(student, isForPDF = false) {
+            const canvas = document.getElementById('certificateCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Show loading indicator
+            if (!isForPDF) {
+                document.getElementById('loadingIndicator').style.display = 'block';
+            }
+            
+            try {
+                // Set canvas size - A4 dimensions at 96 DPI for web
+                if (isForPDF) {
+                    // High resolution for PDF (300 DPI)
+                    canvas.width = 2480;
+                    canvas.height = 3508;
+                } else {
+                    // Standard resolution for preview
+                    canvas.width = 794; // A4 width at 96 DPI
+                    canvas.height = 1123; // A4 height at 96 DPI
+                }
+                
+                // Clear canvas
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                // Draw certificate background (white)
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                // Draw certificate content
+                drawCertificateContent(ctx, canvas, student, isForPDF);
+                
+            } catch (error) {
+                console.error('Error rendering certificate:', error);
+            } finally {
+                // Hide loading indicator
+                if (!isForPDF) {
+                    document.getElementById('loadingIndicator').style.display = 'none';
+                }
+            }
+        }
+
+        // Draw certificate content
+        function drawCertificateContent(ctx, canvas, student, isForPDF) {
+            const width = canvas.width;
+            const height = canvas.height;
+            
+            // Scale factor for text positioning
+            const scaleX = width / 794;
+            const scaleY = height / 1123;
+            
+            // Helper function to scale values
+            const s = (val, axis = 'x') => axis === 'x' ? val * scaleX : val * scaleY;
+            
+            // Set text styles
+            ctx.textAlign = 'center';
+            ctx.fillStyle = '#0b0b0b';
+            
+            // Title "CERTIFICATE"
+            ctx.font = `700 ${s(70)}px 'Playfair Display', serif`;
+            ctx.fillText("CERTIFICATE", s(397), s(100, 'y'));
+            
+            // Subtitle
+            ctx.font = `${s(18)}px 'Libre Baskerville', serif`;
+            ctx.letterSpacing = `${s(2)}px`;
+            ctx.fillText("OF International Academic Research Competition 2024", s(397), s(150, 'y'));
+            ctx.letterSpacing = '0px';
+            
+            // "Awarded to"
+            ctx.font = `italic ${s(16)}px 'Libre Baskerville', serif`;
+            ctx.fillText("Awarded to", s(397), s(200, 'y'));
+            
+            // Student name
+            ctx.font = `${s(60)}px 'Great Vibes', cursive`;
+            ctx.fillText(student.name, s(397), s(260, 'y'));
+            
+            // Decorative line
+            ctx.strokeStyle = '#0b0b0b';
+            ctx.lineWidth = s(1);
+            ctx.beginPath();
+            ctx.moveTo(s(297), s(300, 'y'));
+            ctx.lineTo(s(497), s(300, 'y'));
+            ctx.stroke();
+            
+            // Student details
+            ctx.font = `${s(16)}px 'Libre Baskerville', serif`;
+            ctx.fillText("Of", s(397), s(340, 'y'));
+            ctx.fillText(`${student.classLevel || "A Level"} at ${student.school},`, s(397), s(370, 'y'));
+            ctx.fillText("Dhaka, Bangladesh", s(397), s(400, 'y'));
+            
+            // Achievement text
+            ctx.font = `${s(14)}px 'Libre Baskerville', serif`;
+            const achievementText = `delivering an impressive research project and presentation, and achieved`;
+            ctx.fillText(achievementText, s(397), s(450, 'y'));
+            
+            // Rank and score
+            const rankText = `${student.rank}${getOrdinalSuffix(student.rank)} place in the ${student.category} Category with a score of ${student.scaledFinalScore} out of 200`;
+            ctx.fillText(rankText, s(397), s(480, 'y'));
+            
+            // Score breakdown
+            const breakdownText = `(Research Proposal: ${student.researchPaperScore}/100, Presentation: ${student.presentationScore}/100)`;
+            ctx.fillText(breakdownText, s(397), s(510, 'y'));
+            
+            // Research Title
+            ctx.font = `700 ${s(18)}px 'Libre Baskerville', serif`;
+            // Wrap long titles
+            const titleLines = wrapText(ctx, student.research_proposal_title, s(600));
+            titleLines.forEach((line, index) => {
+                ctx.fillText(line, s(397), s(570 + (index * 25), 'y'));
+            });
+            
+            // Rank link
+            ctx.font = `${s(12)}px 'Libre Baskerville', serif`;
+            ctx.fillText(`https://iarco.org/2024-winners?category=${student.category}&rank=${student.rank}`, s(397), s(650, 'y'));
+            
+            // Medal/badge area with rank info
+            drawRankBadge(ctx, canvas, student.rank, student.totalCountCategory, s(397), s(750, 'y'), s(150));
+            
+            // Date
+            ctx.font = `${s(16)}px 'Libre Baskerville', serif`;
+            ctx.fillText("December 30, 2024", s(397), s(900, 'y'));
+            
+            // Footer
+            ctx.font = `${s(12)}px 'Libre Baskerville', serif`;
+            ctx.fillText("Powered by:", s(397), s(1000, 'y'));
+            ctx.fillText("yjbumal.org", s(397), s(1020, 'y'));
+        }
+
+        // Draw rank badge
+        function drawRankBadge(ctx, canvas, rank, totalCount, x, y, size) {
+            ctx.save();
+            ctx.translate(x, y);
+            
+            // Draw badge background (circle)
+            ctx.beginPath();
+            ctx.arc(0, 0, size/2, 0, Math.PI * 2);
+            ctx.fillStyle = '#f5f5f5';
+            ctx.fill();
+            ctx.strokeStyle = '#d4af37';
+            ctx.lineWidth = size * 0.05;
+            ctx.stroke();
+            
+            // Draw rank text
+            ctx.fillStyle = '#333';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            
+            // "Top Xth"
+            ctx.font = `700 ${size*0.2}px 'Playfair Display', serif`;
+            ctx.fillText(`Top ${rank}${getOrdinalSuffix(rank)}`, 0, -size*0.15);
+            
+            // "out of"
+            ctx.font = `${size*0.1}px 'Libre Baskerville', serif`;
+            ctx.fillText("out of", 0, 0);
+            
+            // "Yth"
+            ctx.font = `700 ${size*0.2}px 'Playfair Display', serif`;
+            ctx.fillText(`${totalCount}${getOrdinalSuffix(totalCount)}`, 0, size*0.15);
+            
+            ctx.restore();
+        }
+
+        // Helper function to wrap text
+        function wrapText(ctx, text, maxWidth) {
+            const words = text.split(' ');
+            const lines = [];
+            let currentLine = words[0];
+            
+            for (let i = 1; i < words.length; i++) {
+                const word = words[i];
+                const width = ctx.measureText(currentLine + " " + word).width;
+                if (width < maxWidth) {
+                    currentLine += " " + word;
+                } else {
+                    lines.push(currentLine);
+                    currentLine = word;
+                }
+            }
+            lines.push(currentLine);
+            return lines;
+        }
+
+        // Helper function to get ordinal suffix
+        function getOrdinalSuffix(n) {
+            if (n % 100 >= 11 && n % 100 <= 13) return 'th';
+            switch (n % 10) {
+                case 1: return 'st';
+                case 2: return 'nd';
+                case 3: return 'rd';
+                default: return 'th';
+            }
+        }
+
+        // Generate and download PDF certificate
+        async function generateCertificatePDF(student) {
+            const generateBtn = document.getElementById('generateBtn');
+            
+            // Disable button and show animation
+            generateBtn.disabled = true;
+            generateBtn.classList.add('generate-animation');
+            
+            // Show loading indicator
+            document.getElementById('loadingIndicator').style.display = 'block';
+            
+            try {
+                // Render certificate at high resolution
+                await renderCertificate(student, true);
+                
+                // Get canvas
+                const canvas = document.getElementById('certificateCanvas');
+                
+                // Create PDF with A4 dimensions in mm
+                const pdf = new jsPDF({
+                    orientation: 'portrait',
+                    unit: 'mm',
+                    format: 'a4'
+                });
+                
+                // Calculate dimensions to fit A4
+                const imgWidth = 210; // A4 width in mm
+                const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                
+                // Add canvas image to PDF
+                const imgData = canvas.toDataURL('image/jpeg', 0.9); // Use JPEG for smaller file size
+                pdf.addImage(imgData, 'JPEG', 0, 0, imgWidth, imgHeight);
+                
+                // Download PDF
+                const fileName = `IARCO_CERT_${student.name.replace(/\s+/g, '_')}_${student.year}.pdf`;
+                pdf.save(fileName);
+                
+            } catch (error) {
+                console.error('Error generating PDF:', error);
+                alert('Failed to generate PDF. Please try again.');
+            } finally {
+                // Re-enable button and hide animation
+                generateBtn.disabled = false;
+                generateBtn.classList.remove('generate-animation');
+                document.getElementById('loadingIndicator').style.display = 'none';
+                
+                // Re-render at preview resolution
+                renderCertificate(student, false);
+            }
+        }
+    </script>
 </body>
 </html>

@@ -209,6 +209,9 @@
             font-family: 'Times New Roman', Times, serif;
             background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect x="0" y="0" width="100" height="100" fill="none" stroke="%23D4AF37" stroke-width="1" stroke-dasharray="5,5"/></svg>');
             background-size: 100px 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
         .certificate-border {
@@ -271,7 +274,7 @@
         /* Certificate specific styles */
         .cert-title {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 10px;
         }
 
         .cert-title h1 {
@@ -298,7 +301,11 @@
 
         .cert-body {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 10px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
         .awarded-to {
@@ -426,18 +433,29 @@
             margin-top: 5px;
             color: #000;
         }
+
+        .year-selector {
+            margin-bottom: 15px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>IARCO 2025 Certificate Generator</h1>
+            <h1>IARCO Certificate Generator</h1>
             <p class="subtitle">Generate your International Academic Research Competition certificate</p>
         </header>
 
         <div class="main-content">
             <section class="search-section">
                 <form class="search-form" id="searchForm">
+                    <div class="form-group year-selector">
+                        <label for="certYearSelect">Certificate Year</label>
+                        <select id="certYearSelect">
+                            <option value="2024">2024</option>
+                            <option value="2025" selected>2025</option>
+                        </select>
+                    </div>
                     <div class="form-group">
                         <label for="studentName">Search Student Name</label>
                         <input type="text" id="studentName" placeholder="Enter student name" autocomplete="off">
@@ -552,6 +570,9 @@
                     </div>
 
                     <div class="actions">
+                        <button id="previewBtn">
+                            <span>Preview Certificate</span>
+                        </button>
                         <button id="downloadBtn">
                             <span>Download PDF</span>
                         </button>
@@ -628,9 +649,14 @@
             "Canada": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 12'><rect width='20' height='12' fill='#ff0000'/><rect x='6' width='8' height='12' fill='#ffffff'/><path fill='#ff0000' d='M10 2.2 8.8 3.5h0.7v1.8h0.9V3.5h0.7L10 2.2zm0 6.6-1.4-2.1h0.9v-1h0.9v1h0.9L10 8.8z'/></svg>"
         };
 
+        const certificates = {
+            "2024": "certificate/2024.pdf",
+            "2025": "certificate/2025.pdf"
+        };
+
         const medals = {
             "gold": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMzAiIGZpbGw9IiNEM0E1MzciLz48Y2lyY2xlIGN4PSIzMiIgY3k9IjMyIiByPSIyNSIgZmlsbD0iI0ZGQ0MwMCIvPjx0ZXh0IHg9IjMyIiB5PSIzOCIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE4IiBmb250LXdlaWdodD0iYm9sZCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzAwMCI+MTwvdGV4dD48L3N2Zz4=",
-            "silver": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMzAiIGZpbGw9IiNDMEMwQzAiLz48Y2lyY2xlIGN4PSIzMiIgY3k9IjMyIiByPSIyNSIgZmlsbD0iI0U2RTZFNiIvPjx0ZXh0IHg9IjMyIiB5PSIzOCIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE4IiBmb250LXdlaWdodD0iYm9sZCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzAwMCI+MjwvdGV4dD48L3N2Zz4=",
+            "silver": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMzAiIGZpbGw9IiNDMEMwQzAiLz48Y2lyY2xlIGN4PSIzIiBjeT0iMzIiIHI9IjI1IiBmaWxsPSIjRTZFNkU2Ii8+PHRleHQgeD0iMzIiIHk9IjM4IiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTgiIGZvbnQtd2VpZ2h0PSJib2xkIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjMDAwIj4yPC90ZXh0Pjwvc3ZnPg==",
             "bronze": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMzAiIGZpbGw9IiM4QjQ1MDEiLz48Y2lyY2xlIGN4PSIzMiIgY3k9IjMyIiByPSIyNSIgZmlsbD0iI0NEOTczQyIvPjx0ZXh0IHg9IjMyIiB5PSIzOCIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE4IiBmb250LXdlaWdodD0iYm9sZCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzAwMCI+MzwvdGV4dD48L3N2Zz4=",
             "honorable": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiByeD0iOCIgZmlsbD0iIzFFM0E4QSIvPjx0ZXh0IHg9IjMyIiB5PSIzOCIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0IiBmb250LXdlaWdodD0iYm9sZCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iI0ZGRiI+SE9OT1JBQkxFPC90ZXh0Pjx0ZXh0IHg9IjMyIiB5PSI1MCIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjEyIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjRkZGIj5NRU5USU9OPC90ZXh0Pjwvc3ZnPg==",
             "finalist": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiByeD0iOCIgZmlsbD0iIzNCODJGNiIvPjx0ZXh0IHg9IjMyIiB5PSIzOCIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0IiBmb250LXdlaWdodD0iYm9sZCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iI0ZGRiI+RklOQUxJU1Q8L3RleHQ+PC9zdmc+"
@@ -639,12 +665,14 @@
         // DOM elements
         const searchForm = document.getElementById('searchForm');
         const studentNameInput = document.getElementById('studentName');
+        const certYearSelect = document.getElementById('certYearSelect');
         const searchResults = document.getElementById('searchResults');
         const studentDetails = document.getElementById('studentDetails');
         const noResults = document.getElementById('noResults');
         const loadingIndicator = document.getElementById('loadingIndicator');
         const certificateContainer = document.getElementById('certificateContainer');
         const generateBtn = document.getElementById('generateBtn');
+        const previewBtn = document.getElementById('previewBtn');
         const downloadBtn = document.getElementById('downloadBtn');
         
         // Student detail elements
@@ -680,6 +708,7 @@
 
         // Currently selected student
         let currentStudent = null;
+        let currentYear = "2025";
 
         // Function to calculate ranks per category and year
         function calculateRanks(students) {
@@ -762,7 +791,6 @@
             studentNameInput.value = student.name;
             searchResults.style.display = 'none';
             displayStudentDetails(student);
-            generateCertificate(student, student.year);
         }
 
         // Display student details
@@ -848,20 +876,21 @@
                 const element = document.querySelector('.certificate-wrapper');
                 const opt = {
                     margin: 0,
-                    filename: `IARCO_${currentStudent.year}_Certificate_${currentStudent.name.replace(/\s+/g, '_')}.pdf`,
+                    filename: `IARCO_${currentYear}_Certificate_${currentStudent.name.replace(/\s+/g, '_')}.pdf`,
                     image: { type: 'jpeg', quality: 0.98 },
                     html2canvas: { 
                         scale: 2, 
                         useCORS: true,
                         logging: false,
-                        letterRendering: true
+                        letterRendering: true,
+                        width: 794, // A4 width in pixels at 96 DPI
+                        height: 1123 // A4 height in pixels at 96 DPI
                     },
                     jsPDF: { 
                         unit: 'mm', 
                         format: 'a4', 
                         orientation: 'portrait'
-                    },
-                    pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+                    }
                 };
                 
                 // Generate PDF
@@ -890,6 +919,13 @@
             displaySearchResults(results);
         });
 
+        certYearSelect.addEventListener('change', function() {
+            currentYear = this.value;
+            if (currentStudent) {
+                generateCertificate(currentStudent, currentYear);
+            }
+        });
+
         document.addEventListener('click', function(e) {
             if (!searchResults.contains(e.target) && e.target !== studentNameInput) {
                 searchResults.style.display = 'none';
@@ -898,7 +934,17 @@
 
         generateBtn.addEventListener('click', function() {
             if (currentStudent) {
-                generateCertificate(currentStudent, currentStudent.year);
+                generateCertificate(currentStudent, currentYear);
+            } else {
+                alert('Please select a student first');
+            }
+        });
+
+        previewBtn.addEventListener('click', function() {
+            if (currentStudent) {
+                generateCertificate(currentStudent, currentYear);
+                // Scroll to certificate
+                document.querySelector('.certificate-section').scrollIntoView({ behavior: 'smooth' });
             } else {
                 alert('Please select a student first');
             }

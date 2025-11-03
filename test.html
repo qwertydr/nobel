@@ -81,6 +81,7 @@
 
         .form-group {
             width: 100%;
+            position: relative;
         }
 
         label {
@@ -97,6 +98,31 @@
             background: rgba(255, 255, 255, 0.9);
             font-size: 1rem;
             color: var(--blue);
+        }
+
+        .search-results {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border-radius: 8px;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 10;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            display: none;
+        }
+
+        .search-result-item {
+            padding: 10px 15px;
+            cursor: pointer;
+            border-bottom: 1px solid #eee;
+            color: var(--blue);
+        }
+
+        .search-result-item:hover {
+            background: #f5f5f5;
         }
 
         button {
@@ -199,7 +225,7 @@
         .certificate-title {
             font-size: 2.8rem;
             font-weight: bold;
-            color: var(--blue);
+            color: #000;
             margin-bottom: 10px;
             text-transform: uppercase;
             letter-spacing: 2px;
@@ -207,14 +233,14 @@
 
         .certificate-subtitle {
             font-size: 1.4rem;
-            color: var(--blue);
+            color: #000;
             font-weight: 600;
             margin-bottom: 5px;
         }
 
         .certificate-year {
             font-size: 1.2rem;
-            color: var(--blue);
+            color: #000;
             font-weight: 500;
         }
 
@@ -225,14 +251,14 @@
 
         .awarded-to {
             font-size: 1.2rem;
-            color: var(--blue);
+            color: #000;
             margin-bottom: 5px;
         }
 
         .student-name {
             font-size: 2.2rem;
             font-weight: bold;
-            color: var(--blue);
+            color: #000;
             margin-bottom: 15px;
             text-transform: uppercase;
             letter-spacing: 1px;
@@ -240,7 +266,7 @@
 
         .student-details-cert {
             font-size: 1.2rem;
-            color: var(--blue);
+            color: #000;
             margin-bottom: 20px;
             display: flex;
             align-items: center;
@@ -250,7 +276,7 @@
 
         .performance-text {
             font-size: 1.1rem;
-            color: var(--blue);
+            color: #000;
             margin-bottom: 25px;
             line-height: 1.6;
         }
@@ -258,7 +284,7 @@
         .research-title {
             font-size: 1.3rem;
             font-weight: bold;
-            color: var(--blue);
+            color: #000;
             margin-bottom: 25px;
             font-style: italic;
         }
@@ -275,19 +301,19 @@
 
         .score-label {
             font-size: 1rem;
-            color: var(--blue);
+            color: #000;
             margin-bottom: 5px;
         }
 
         .score-value {
             font-size: 1.4rem;
             font-weight: bold;
-            color: var(--blue);
+            color: #000;
         }
 
         .rank-link {
             font-size: 1rem;
-            color: var(--blue);
+            color: #000;
             margin-bottom: 25px;
         }
 
@@ -302,7 +328,7 @@
         .rank-text {
             font-size: 1.8rem;
             font-weight: bold;
-            color: var(--blue);
+            color: #000;
         }
 
         .medal-icon {
@@ -323,20 +349,20 @@
         .signature-name {
             font-size: 1.1rem;
             font-weight: bold;
-            color: var(--blue);
+            color: #000;
             margin-top: 10px;
         }
 
         .signature-title {
             font-size: 0.9rem;
-            color: var(--blue);
+            color: #000;
         }
 
         .certificate-id {
             text-align: center;
             margin-top: 20px;
             font-size: 0.9rem;
-            color: var(--blue);
+            color: #000;
         }
 
         .actions {
@@ -380,6 +406,17 @@
             display: none;
         }
 
+        .certificate-template {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background-color: #fff;
+            color: #000;
+            padding: 50px;
+            box-sizing: border-box;
+            font-family: 'Times New Roman', Times, serif;
+        }
+
         @media (max-width: 768px) {
             .main-content {
                 flex-direction: column;
@@ -420,12 +457,10 @@
             <section class="search-section">
                 <form class="search-form" id="searchForm">
                     <div class="form-group">
-                        <label for="studentName">Student Name</label>
-                        <input type="text" id="studentName" placeholder="Enter student name" required>
+                        <label for="studentName">Search Student Name</label>
+                        <input type="text" id="studentName" placeholder="Enter student name" autocomplete="off">
+                        <div class="search-results" id="searchResults"></div>
                     </div>
-                    <button type="submit" id="searchBtn">
-                        <span>Search Student</span>
-                    </button>
                 </form>
 
                 <div class="student-details" id="studentDetails">
@@ -463,85 +498,75 @@
 
                 <div class="certificate-container" id="certificateContainer">
                     <div class="certificate-wrapper">
-                        <div class="certificate-bg" id="certificateBg"></div>
-                        <div class="certificate-content">
-                            <div class="certificate-header">
-                                <h2 class="certificate-title">Certificate</h2>
-                                <p class="certificate-subtitle">OF International Academic Research Competition</p>
-                                <p class="certificate-year" id="certYear">2025</p>
+                        <div class="certificate-template" id="certificateTemplate">
+                            <div style="text-align: center; margin-bottom: 30px;">
+                                <h1 style="font-size: 42px; font-weight: bold; margin-bottom: 10px;">CERTIFICATE</h1>
+                                <p style="font-size: 18px; font-weight: bold; margin-bottom: 5px;">OF International Academic Research Competition <span id="certYear">2025</span></p>
                             </div>
 
-                            <div class="certificate-body">
-                                <p class="awarded-to">Awarded to</p>
-                                <h3 class="student-name" id="displayName">Student Name</h3>
-                                
-                                <div class="student-details-cert">
-                                    <span id="displayClass">Class</span>
-                                    <span>at</span>
-                                    <span id="displaySchool">School Name</span>
-                                    <span id="displayCountry">Country</span>
-                                    <span class="flag-icon" id="flagIcon"></span>
-                                </div>
+                            <div style="text-align: center; margin-bottom: 30px;">
+                                <p style="font-size: 18px; margin-bottom: 10px;">Awarded to</p>
+                                <h2 style="font-size: 32px; font-weight: bold; margin-bottom: 20px; text-transform: uppercase;" id="displayName">Student Name</h2>
+                                <hr style="width: 80%; margin: 0 auto 20px;">
+                                <p style="font-size: 18px; margin-bottom: 5px;">Of</p>
+                                <p style="font-size: 18px; margin-bottom: 5px;" id="displayClassSchool">Class at School</p>
+                                <p style="font-size: 18px; margin-bottom: 20px;" id="displayLocation">Location, Country</p>
+                            </div>
 
-                                <p class="performance-text" id="performanceText">
+                            <div style="text-align: center; margin-bottom: 30px;">
+                                <p style="font-size: 16px; line-height: 1.5; margin-bottom: 20px;">
                                     delivering an impressive research project and presentation, and achieved
-                                    <span id="displayRank">Xth</span> place in the <span id="displayCategory">Category</span> Category with a score of <span id="displayTotalScore">XXX</span> out of 200
-                                    (Research Proposal: <span id="displayProposalScore">XX</span>/100, Presentation: <span id="displayPresentationScore">XX</span>/100).
+                                    <span style="font-weight: bold;" id="displayRank">Xth</span> place in the 
+                                    <span style="font-weight: bold;" id="displayCategory">Category</span> Category with a score of 
+                                    <span style="font-weight: bold;" id="displayTotalScore">XXX</span> out of 200
+                                    (Research Proposal: <span style="font-weight: bold;" id="displayProposalScore">XX</span>/100, 
+                                    Presentation: <span style="font-weight: bold;" id="displayPresentationScore">XX</span>/100).
                                 </p>
 
-                                <p class="research-title" id="researchTitle">Research Title Here</p>
+                                <p style="font-size: 16px; font-weight: bold; font-style: italic; margin-bottom: 20px;">
+                                    Research Title: <span id="researchTitle">Research Title Here</span>
+                                </p>
 
-                                <div class="performance-details">
-                                    <div class="score-box">
-                                        <p class="score-label">Overall Rank</p>
-                                        <p class="score-value" id="overallRank">X</p>
-                                    </div>
-                                    <div class="score-box">
-                                        <p class="score-label">Research Proposal</p>
-                                        <p class="score-value" id="proposalScore">XX</p>
-                                    </div>
-                                    <div class="score-box">
-                                        <p class="score-label">Presentation</p>
-                                        <p class="score-value" id="presentationScore">XX</p>
-                                    </div>
-                                    <div class="score-box">
-                                        <p class="score-label">Total Score</p>
-                                        <p class="score-value" id="totalScore">XXX</p>
-                                    </div>
+                                <p style="font-size: 14px; margin-bottom: 20px;" id="rankLink">
+                                    https://iarco.org/2025-winners?category=Junior&rank=X
+                                </p>
+                            </div>
+
+                            <div style="text-align: center; margin-bottom: 30px;">
+                                <div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 10px;">
+                                    <span style="font-size: 20px; font-weight: bold;">Top <span id="badgeRank">X</span></span>
+                                    <img src="" alt="Medal" style="width: 50px; height: 50px;" id="medalIcon">
                                 </div>
+                                <p style="font-size: 18px; font-weight: bold;">out of <span id="totalParticipants">XX</span></p>
+                            </div>
 
-                                <p class="rank-link" id="rankLink">https://iarco.org/2025-winners?category=Junior&rank=X</p>
+                            <div style="text-align: center; margin-bottom: 20px;">
+                                <p style="font-size: 16px; font-weight: bold;">December 30, <span id="certYearFooter">2025</span></p>
+                            </div>
 
-                                <div class="rank-badge">
-                                    <span class="rank-text">Top <span id="badgeRank">X</span> out of <span id="totalParticipants">XX</span></span>
-                                    <img src="" alt="Medal" class="medal-icon" id="medalIcon">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+                                <div style="text-align: center;">
+                                    <p style="font-size: 14px; margin-bottom: 5px;">_________________________</p>
+                                    <p style="font-size: 14px; font-weight: bold;">Md. Azmann Yakin Srizon</p>
+                                    <p style="font-size: 12px;">Assistant Professor CSE, RUET</p>
+                                    <p style="font-size: 12px;">Reviewer, IEEE Access</p>
+                                </div>
+                                <div style="text-align: center;">
+                                    <p style="font-size: 14px; margin-bottom: 5px;">_________________________</p>
+                                    <p style="font-size: 14px; font-weight: bold;">Md Sanaul Haque Shanto</p>
+                                    <p style="font-size: 12px;">President & Lead</p>
+                                    <p style="font-size: 12px;">Researcher, YRJ</p>
                                 </div>
                             </div>
 
-                            <div class="certificate-footer">
-                                <div class="signature">
-                                    <p>_________________________</p>
-                                    <p class="signature-name">Md. Azmann Yakin Srizon</p>
-                                    <p class="signature-title">Assistant Professor CSE, RUET</p>
-                                    <p class="signature-title">Reviewer, IEEE Access</p>
-                                </div>
-                                <div class="signature">
-                                    <p>_________________________</p>
-                                    <p class="signature-name">Md Sanaul Haque Shanto</p>
-                                    <p class="signature-title">President & Lead Researcher, YRJ</p>
-                                </div>
-                            </div>
-
-                            <div class="certificate-id">
-                                <p>Certificate ID: <span id="certificateId">XXXX-XXXX-XXXX</span></p>
+                            <div style="text-align: center;">
+                                <p style="font-size: 12px;">Powered by: yjbumal.org</p>
+                                <p style="font-size: 10px; margin-top: 5px;">Certificate ID: <span id="certificateId">XXXX-XXXX-XXXX</span></p>
                             </div>
                         </div>
                     </div>
 
                     <div class="actions">
-                        <button id="previewBtn" class="secondary-btn">
-                            <span>Preview Certificate</span>
-                        </button>
                         <button id="downloadBtn">
                             <span>Download PDF</span>
                         </button>
@@ -595,6 +620,20 @@
                 "presentationScore": 64,
                 "submissionScore": 134,
                 "scaledFinalScore": 134
+            },
+            {
+                "student_id": "DEF67890",
+                "name": "John Smith",
+                "school": "International School",
+                "class": "A Level",
+                "category": "Senior",
+                "year": 2025,
+                "country": "Canada",
+                "research_proposal_title": "AI Applications in Environmental Conservation",
+                "researchPaperScore": 85,
+                "presentationScore": 90,
+                "submissionScore": 175,
+                "scaledFinalScore": 175
             }
         ];
 
@@ -605,8 +644,8 @@
         };
 
         const certificates = {
-            "2024": "https://via.placeholder.com/800x1131/FFFFFF/FFFFFF?text=IARCO+2024+Certificate",
-            "2025": "https://via.placeholder.com/800x1131/FFFFFF/FFFFFF?text=IARCO+2025+Certificate"
+            "2024": "certificate/2024.pdf",
+            "2025": "certificate/2025.pdf"
         };
 
         const medals = {
@@ -620,14 +659,12 @@
         // DOM elements
         const searchForm = document.getElementById('searchForm');
         const studentNameInput = document.getElementById('studentName');
-        const searchBtn = document.getElementById('searchBtn');
+        const searchResults = document.getElementById('searchResults');
         const studentDetails = document.getElementById('studentDetails');
         const noResults = document.getElementById('noResults');
         const loadingIndicator = document.getElementById('loadingIndicator');
         const certificateContainer = document.getElementById('certificateContainer');
-        const certificateBg = document.getElementById('certificateBg');
         const generateBtn = document.getElementById('generateBtn');
-        const previewBtn = document.getElementById('previewBtn');
         const downloadBtn = document.getElementById('downloadBtn');
         
         // Student detail elements
@@ -645,22 +682,16 @@
         
         // Certificate display elements
         const certYear = document.getElementById('certYear');
+        const certYearFooter = document.getElementById('certYearFooter');
         const displayName = document.getElementById('displayName');
-        const displayClass = document.getElementById('displayClass');
-        const displaySchool = document.getElementById('displaySchool');
-        const displayCountry = document.getElementById('displayCountry');
-        const flagIcon = document.getElementById('flagIcon');
-        const performanceText = document.getElementById('performanceText');
+        const displayClassSchool = document.getElementById('displayClassSchool');
+        const displayLocation = document.getElementById('displayLocation');
         const displayRank = document.getElementById('displayRank');
         const displayCategory = document.getElementById('displayCategory');
         const displayTotalScore = document.getElementById('displayTotalScore');
         const displayProposalScore = document.getElementById('displayProposalScore');
         const displayPresentationScore = document.getElementById('displayPresentationScore');
         const researchTitle = document.getElementById('researchTitle');
-        const overallRank = document.getElementById('overallRank');
-        const proposalScore = document.getElementById('proposalScore');
-        const presentationScore = document.getElementById('presentationScore');
-        const totalScore = document.getElementById('totalScore');
         const rankLink = document.getElementById('rankLink');
         const badgeRank = document.getElementById('badgeRank');
         const totalParticipants = document.getElementById('totalParticipants');
@@ -695,13 +726,6 @@
             return students;
         }
 
-        // Generate certificate ID
-        function generateCertificateId(student, year) {
-            const timestamp = Date.now().toString(36).toUpperCase();
-            const random = Math.random().toString(36).substring(2, 6).toUpperCase();
-            return `${year}-${student.category.substring(0, 3)}-${student.rank}-${random}`;
-        }
-
         // Get medal based on rank
         function getMedal(rank) {
             if (rank === 1) return medals.gold;
@@ -719,11 +743,45 @@
             return `${rank}th`;
         }
 
-        // Find student data
-        function findStudent(name) {
-            return students.find(student => 
-                student.name.toLowerCase().includes(name.toLowerCase())
-            );
+        // Find student data by name (word by word search)
+        function findStudentsByName(name) {
+            if (!name) return [];
+            
+            const searchTerms = name.toLowerCase().split(' ');
+            return students.filter(student => {
+                const studentName = student.name.toLowerCase();
+                return searchTerms.every(term => studentName.includes(term));
+            });
+        }
+
+        // Display search results
+        function displaySearchResults(results) {
+            searchResults.innerHTML = '';
+            
+            if (results.length === 0) {
+                searchResults.style.display = 'none';
+                return;
+            }
+            
+            results.forEach(student => {
+                const item = document.createElement('div');
+                item.className = 'search-result-item';
+                item.textContent = student.name;
+                item.addEventListener('click', () => {
+                    selectStudent(student);
+                });
+                searchResults.appendChild(item);
+            });
+            
+            searchResults.style.display = 'block';
+        }
+
+        // Select a student from search results
+        function selectStudent(student) {
+            currentStudent = student;
+            studentNameInput.value = student.name;
+            searchResults.style.display = 'none';
+            displayStudentDetails(student);
         }
 
         // Display student details
@@ -746,6 +804,9 @@
             
             studentDetails.style.display = 'block';
             noResults.style.display = 'none';
+            
+            // Auto-generate certificate
+            generateCertificate(student, student.year);
         }
 
         // Generate certificate
@@ -753,22 +814,12 @@
             // Calculate ranks
             calculateRanks(students);
             
-            // Set certificate background
-            certificateBg.style.backgroundImage = `url('${certificates[year] || certificates["2025"]}')`;
-            certificateBg.style.backgroundSize = 'cover';
-            certificateBg.style.backgroundPosition = 'center';
-            
             // Set certificate content
             certYear.textContent = year;
+            certYearFooter.textContent = year;
             displayName.textContent = student.name;
-            displayClass.textContent = student.class;
-            displaySchool.textContent = student.school;
-            displayCountry.textContent = student.country;
-            
-            // Set flag
-            if (flags[student.country]) {
-                flagIcon.innerHTML = flags[student.country];
-            }
+            displayClassSchool.textContent = `${student.class} at ${student.school}`;
+            displayLocation.textContent = `Dhaka, ${student.country}`;
             
             // Set performance details
             const formattedRank = formatRank(student.rank);
@@ -780,21 +831,16 @@
             
             researchTitle.textContent = student.research_proposal_title;
             
-            overallRank.textContent = student.rank;
-            proposalScore.textContent = student.researchPaperScore;
-            presentationScore.textContent = student.presentationScore;
-            totalScore.textContent = student.scaledFinalScore;
-            
             rankLink.textContent = `https://iarco.org/${year}-winners?category=${student.category}&rank=${student.rank}`;
             
-            badgeRank.textContent = student.rank;
+            badgeRank.textContent = formattedRank;
             totalParticipants.textContent = student.totalInCategory;
             
             // Set medal
             medalIcon.src = getMedal(student.rank);
             
-            // Set certificate ID
-            certificateId.textContent = generateCertificateId(student, year);
+            // Set certificate ID (using student_id)
+            certificateId.textContent = student.student_id;
             
             // Show certificate
             certificateContainer.style.display = 'block';
@@ -831,39 +877,25 @@
         }
 
         // Event listeners
-        searchForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
+        studentNameInput.addEventListener('input', function() {
             const name = studentNameInput.value.trim();
             
-            if (!name) {
-                alert('Please enter a student name');
+            if (name.length < 2) {
+                searchResults.style.display = 'none';
                 return;
             }
             
-            // Simulate AJAX search
-            setTimeout(() => {
-                const student = findStudent(name);
-                
-                if (student) {
-                    currentStudent = student;
-                    displayStudentDetails(student);
-                } else {
-                    studentDetails.style.display = 'none';
-                    noResults.style.display = 'block';
-                }
-            }, 500);
+            const results = findStudentsByName(name);
+            displaySearchResults(results);
         });
 
-        generateBtn.addEventListener('click', function() {
-            if (currentStudent) {
-                generateCertificate(currentStudent, currentStudent.year);
-                previewBtn.style.display = 'flex';
-                downloadBtn.style.display = 'flex';
+        document.addEventListener('click', function(e) {
+            if (!searchResults.contains(e.target) && e.target !== studentNameInput) {
+                searchResults.style.display = 'none';
             }
         });
 
-        previewBtn.addEventListener('click', function() {
+        generateBtn.addEventListener('click', function() {
             if (currentStudent) {
                 generateCertificate(currentStudent, currentStudent.year);
             }
@@ -873,12 +905,10 @@
 
         // Initialize with sample data for demonstration
         window.addEventListener('DOMContentLoaded', function() {
-            // Pre-populate form with sample data for testing
-            studentNameInput.value = "Sarhan Alan Khan";
+            // Calculate initial ranks
+            calculateRanks(students);
             
-            // Hide buttons initially
-            previewBtn.style.display = 'none';
-            downloadBtn.style.display = 'none';
+            // Hide certificate initially
             certificateContainer.style.display = 'none';
         });
     </script>

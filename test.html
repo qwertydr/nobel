@@ -12,6 +12,7 @@
             --light-blue: #3B82F6;
             --white: #FFFFFF;
             --gray: #F3F4F6;
+            --dark-gray: #6B7280;
         }
 
         * {
@@ -55,26 +56,31 @@
             opacity: 0.9;
         }
 
+        .main-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+
         .search-section {
+            flex: 1;
+            min-width: 300px;
             background: rgba(255, 255, 255, 0.1);
             padding: 25px;
             border-radius: 15px;
-            margin-bottom: 30px;
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.2);
+            height: fit-content;
         }
 
         .search-form {
             display: flex;
-            flex-wrap: wrap;
+            flex-direction: column;
             gap: 15px;
-            align-items: center;
-            justify-content: center;
         }
 
         .form-group {
-            flex: 1;
-            min-width: 200px;
+            width: 100%;
         }
 
         label {
@@ -105,7 +111,9 @@
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 8px;
+            width: 100%;
         }
 
         button:hover {
@@ -114,25 +122,60 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
 
-        .certificate-container {
+        .student-details {
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
             display: none;
-            margin-top: 30px;
+        }
+
+        .student-info {
+            margin-bottom: 15px;
+        }
+
+        .student-info h3 {
+            color: var(--gold);
+            margin-bottom: 10px;
+        }
+
+        .student-info p {
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .flag-icon {
+            width: 20px;
+            height: 14px;
+            display: inline-block;
+        }
+
+        .certificate-section {
+            flex: 2;
+            min-width: 300px;
+        }
+
+        .certificate-container {
             position: relative;
         }
 
         .certificate-wrapper {
             position: relative;
             width: 100%;
-            max-width: 800px;
             margin: 0 auto;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
             border-radius: 10px;
             overflow: hidden;
+            background-color: white;
+            aspect-ratio: 1.414 / 1; /* A4 ratio */
         }
 
         .certificate-bg {
             width: 100%;
-            height: auto;
+            height: 100%;
+            object-fit: cover;
             display: block;
         }
 
@@ -195,7 +238,7 @@
             letter-spacing: 1px;
         }
 
-        .student-details {
+        .student-details-cert {
             font-size: 1.2rem;
             color: var(--blue);
             margin-bottom: 20px;
@@ -203,12 +246,6 @@
             align-items: center;
             justify-content: center;
             gap: 10px;
-        }
-
-        .flag-icon {
-            width: 24px;
-            height: 16px;
-            display: inline-block;
         }
 
         .performance-text {
@@ -309,6 +346,10 @@
             margin-top: 30px;
         }
 
+        .secondary-btn {
+            background: var(--light-blue);
+        }
+
         .loading {
             display: none;
             text-align: center;
@@ -330,7 +371,20 @@
             100% { transform: rotate(360deg); }
         }
 
+        .no-results {
+            text-align: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            margin-top: 20px;
+            display: none;
+        }
+
         @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
             .certificate-content {
                 padding: 30px;
             }
@@ -362,125 +416,139 @@
             <p class="subtitle">Generate your International Academic Research Competition certificate</p>
         </header>
 
-        <section class="search-section">
-            <form class="search-form" id="searchForm">
-                <div class="form-group">
-                    <label for="studentName">Student Name</label>
-                    <input type="text" id="studentName" placeholder="Enter student name" required>
-                </div>
-                <div class="form-group">
-                    <label for="category">Category</label>
-                    <select id="category" required>
-                        <option value="">Select Category</option>
-                        <option value="Junior">Junior</option>
-                        <option value="Senior">Senior</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="year">Year</label>
-                    <select id="year" required>
-                        <option value="">Select Year</option>
-                        <option value="2024">2024</option>
-                        <option value="2025">2025</option>
-                    </select>
-                </div>
-                <button type="submit" id="generateBtn">
-                    <span>Generate Certificate</span>
-                </button>
-            </form>
-        </section>
+        <div class="main-content">
+            <section class="search-section">
+                <form class="search-form" id="searchForm">
+                    <div class="form-group">
+                        <label for="studentName">Student Name</label>
+                        <input type="text" id="studentName" placeholder="Enter student name" required>
+                    </div>
+                    <button type="submit" id="searchBtn">
+                        <span>Search Student</span>
+                    </button>
+                </form>
 
-        <div class="loading" id="loadingIndicator">
-            <div class="spinner"></div>
-            <p>Generating your certificate...</p>
+                <div class="student-details" id="studentDetails">
+                    <div class="student-info">
+                        <h3>Student Information</h3>
+                        <p><strong>Name:</strong> <span id="detailName"></span></p>
+                        <p><strong>School:</strong> <span id="detailSchool"></span></p>
+                        <p><strong>Class:</strong> <span id="detailClass"></span></p>
+                        <p><strong>Category:</strong> <span id="detailCategory"></span></p>
+                        <p><strong>Country:</strong> <span id="detailCountry"></span> <span class="flag-icon" id="detailFlag"></span></p>
+                        <p><strong>Research Title:</strong> <span id="detailResearchTitle"></span></p>
+                    </div>
+                    <div class="student-info">
+                        <h3>Performance Details</h3>
+                        <p><strong>Research Proposal Score:</strong> <span id="detailProposalScore"></span>/100</p>
+                        <p><strong>Presentation Score:</strong> <span id="detailPresentationScore"></span>/100</p>
+                        <p><strong>Total Score:</strong> <span id="detailTotalScore"></span>/200</p>
+                        <p><strong>Rank:</strong> <span id="detailRank"></span></p>
+                    </div>
+                    <button id="generateBtn">
+                        <span>Generate Certificate</span>
+                    </button>
+                </div>
+
+                <div class="no-results" id="noResults">
+                    <p>No student found with that name. Please check the spelling and try again.</p>
+                </div>
+            </section>
+
+            <section class="certificate-section">
+                <div class="loading" id="loadingIndicator">
+                    <div class="spinner"></div>
+                    <p>Generating your certificate...</p>
+                </div>
+
+                <div class="certificate-container" id="certificateContainer">
+                    <div class="certificate-wrapper">
+                        <div class="certificate-bg" id="certificateBg"></div>
+                        <div class="certificate-content">
+                            <div class="certificate-header">
+                                <h2 class="certificate-title">Certificate</h2>
+                                <p class="certificate-subtitle">OF International Academic Research Competition</p>
+                                <p class="certificate-year" id="certYear">2025</p>
+                            </div>
+
+                            <div class="certificate-body">
+                                <p class="awarded-to">Awarded to</p>
+                                <h3 class="student-name" id="displayName">Student Name</h3>
+                                
+                                <div class="student-details-cert">
+                                    <span id="displayClass">Class</span>
+                                    <span>at</span>
+                                    <span id="displaySchool">School Name</span>
+                                    <span id="displayCountry">Country</span>
+                                    <span class="flag-icon" id="flagIcon"></span>
+                                </div>
+
+                                <p class="performance-text" id="performanceText">
+                                    delivering an impressive research project and presentation, and achieved
+                                    <span id="displayRank">Xth</span> place in the <span id="displayCategory">Category</span> Category with a score of <span id="displayTotalScore">XXX</span> out of 200
+                                    (Research Proposal: <span id="displayProposalScore">XX</span>/100, Presentation: <span id="displayPresentationScore">XX</span>/100).
+                                </p>
+
+                                <p class="research-title" id="researchTitle">Research Title Here</p>
+
+                                <div class="performance-details">
+                                    <div class="score-box">
+                                        <p class="score-label">Overall Rank</p>
+                                        <p class="score-value" id="overallRank">X</p>
+                                    </div>
+                                    <div class="score-box">
+                                        <p class="score-label">Research Proposal</p>
+                                        <p class="score-value" id="proposalScore">XX</p>
+                                    </div>
+                                    <div class="score-box">
+                                        <p class="score-label">Presentation</p>
+                                        <p class="score-value" id="presentationScore">XX</p>
+                                    </div>
+                                    <div class="score-box">
+                                        <p class="score-label">Total Score</p>
+                                        <p class="score-value" id="totalScore">XXX</p>
+                                    </div>
+                                </div>
+
+                                <p class="rank-link" id="rankLink">https://iarco.org/2025-winners?category=Junior&rank=X</p>
+
+                                <div class="rank-badge">
+                                    <span class="rank-text">Top <span id="badgeRank">X</span> out of <span id="totalParticipants">XX</span></span>
+                                    <img src="" alt="Medal" class="medal-icon" id="medalIcon">
+                                </div>
+                            </div>
+
+                            <div class="certificate-footer">
+                                <div class="signature">
+                                    <p>_________________________</p>
+                                    <p class="signature-name">Md. Azmann Yakin Srizon</p>
+                                    <p class="signature-title">Assistant Professor CSE, RUET</p>
+                                    <p class="signature-title">Reviewer, IEEE Access</p>
+                                </div>
+                                <div class="signature">
+                                    <p>_________________________</p>
+                                    <p class="signature-name">Md Sanaul Haque Shanto</p>
+                                    <p class="signature-title">President & Lead Researcher, YRJ</p>
+                                </div>
+                            </div>
+
+                            <div class="certificate-id">
+                                <p>Certificate ID: <span id="certificateId">XXXX-XXXX-XXXX</span></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="actions">
+                        <button id="previewBtn" class="secondary-btn">
+                            <span>Preview Certificate</span>
+                        </button>
+                        <button id="downloadBtn">
+                            <span>Download PDF</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
         </div>
-
-        <section class="certificate-container" id="certificateContainer">
-            <div class="certificate-wrapper">
-                <img src="" alt="Certificate Background" class="certificate-bg" id="certificateBg">
-                <div class="certificate-content">
-                    <div class="certificate-header">
-                        <h2 class="certificate-title">Certificate</h2>
-                        <p class="certificate-subtitle">OF International Academic Research Competition</p>
-                        <p class="certificate-year" id="certYear">2025</p>
-                    </div>
-
-                    <div class="certificate-body">
-                        <p class="awarded-to">Awarded to</p>
-                        <h3 class="student-name" id="displayName">Student Name</h3>
-                        
-                        <div class="student-details">
-                            <span id="displayClass">Class</span>
-                            <span>at</span>
-                            <span id="displaySchool">School Name</span>
-                            <span id="displayCountry">Country</span>
-                            <span class="flag-icon" id="flagIcon"></span>
-                        </div>
-
-                        <p class="performance-text" id="performanceText">
-                            delivering an impressive research project and presentation, and achieved
-                            <span id="displayRank">Xth</span> place in the <span id="displayCategory">Category</span> Category with a score of <span id="displayTotalScore">XXX</span> out of 200
-                            (Research Proposal: <span id="displayProposalScore">XX</span>/100, Presentation: <span id="displayPresentationScore">XX</span>/100).
-                        </p>
-
-                        <p class="research-title" id="researchTitle">Research Title Here</p>
-
-                        <div class="performance-details">
-                            <div class="score-box">
-                                <p class="score-label">Overall Rank</p>
-                                <p class="score-value" id="overallRank">X</p>
-                            </div>
-                            <div class="score-box">
-                                <p class="score-label">Research Proposal</p>
-                                <p class="score-value" id="proposalScore">XX</p>
-                            </div>
-                            <div class="score-box">
-                                <p class="score-label">Presentation</p>
-                                <p class="score-value" id="presentationScore">XX</p>
-                            </div>
-                            <div class="score-box">
-                                <p class="score-label">Total Score</p>
-                                <p class="score-value" id="totalScore">XXX</p>
-                            </div>
-                        </div>
-
-                        <p class="rank-link" id="rankLink">https://iarco.org/2025-winners?category=Junior&rank=X</p>
-
-                        <div class="rank-badge">
-                            <span class="rank-text">Top <span id="badgeRank">X</span> out of <span id="totalParticipants">XX</span></span>
-                            <img src="" alt="Medal" class="medal-icon" id="medalIcon">
-                        </div>
-                    </div>
-
-                    <div class="certificate-footer">
-                        <div class="signature">
-                            <p>_________________________</p>
-                            <p class="signature-name">Md. Azmann Yakin Srizon</p>
-                            <p class="signature-title">Assistant Professor CSE, RUET</p>
-                            <p class="signature-title">Reviewer, IEEE Access</p>
-                        </div>
-                        <div class="signature">
-                            <p>_________________________</p>
-                            <p class="signature-name">Md Sanaul Haque Shanto</p>
-                            <p class="signature-title">President & Lead Researcher, YRJ</p>
-                        </div>
-                    </div>
-
-                    <div class="certificate-id">
-                        <p>Certificate ID: <span id="certificateId">XXXX-XXXX-XXXX</span></p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="actions">
-                <button id="downloadBtn">
-                    <span>Download PDF</span>
-                </button>
-                <button id="newCertificateBtn">
-                    <span>Generate New Certificate</span>
-                </button>
-            </div>
-        </section>
     </div>
 
     <script>
@@ -537,8 +605,8 @@
         };
 
         const certificates = {
-            "2024": "certificate/2024.pdf",
-            "2025": "certificate/2025.pdf"
+            "2024": "https://via.placeholder.com/800x1131/FFFFFF/FFFFFF?text=IARCO+2024+Certificate",
+            "2025": "https://via.placeholder.com/800x1131/FFFFFF/FFFFFF?text=IARCO+2025+Certificate"
         };
 
         const medals = {
@@ -552,12 +620,30 @@
         // DOM elements
         const searchForm = document.getElementById('searchForm');
         const studentNameInput = document.getElementById('studentName');
-        const categorySelect = document.getElementById('category');
-        const yearSelect = document.getElementById('year');
-        const generateBtn = document.getElementById('generateBtn');
+        const searchBtn = document.getElementById('searchBtn');
+        const studentDetails = document.getElementById('studentDetails');
+        const noResults = document.getElementById('noResults');
         const loadingIndicator = document.getElementById('loadingIndicator');
         const certificateContainer = document.getElementById('certificateContainer');
         const certificateBg = document.getElementById('certificateBg');
+        const generateBtn = document.getElementById('generateBtn');
+        const previewBtn = document.getElementById('previewBtn');
+        const downloadBtn = document.getElementById('downloadBtn');
+        
+        // Student detail elements
+        const detailName = document.getElementById('detailName');
+        const detailSchool = document.getElementById('detailSchool');
+        const detailClass = document.getElementById('detailClass');
+        const detailCategory = document.getElementById('detailCategory');
+        const detailCountry = document.getElementById('detailCountry');
+        const detailFlag = document.getElementById('detailFlag');
+        const detailResearchTitle = document.getElementById('detailResearchTitle');
+        const detailProposalScore = document.getElementById('detailProposalScore');
+        const detailPresentationScore = document.getElementById('detailPresentationScore');
+        const detailTotalScore = document.getElementById('detailTotalScore');
+        const detailRank = document.getElementById('detailRank');
+        
+        // Certificate display elements
         const certYear = document.getElementById('certYear');
         const displayName = document.getElementById('displayName');
         const displayClass = document.getElementById('displayClass');
@@ -580,8 +666,9 @@
         const totalParticipants = document.getElementById('totalParticipants');
         const medalIcon = document.getElementById('medalIcon');
         const certificateId = document.getElementById('certificateId');
-        const downloadBtn = document.getElementById('downloadBtn');
-        const newCertificateBtn = document.getElementById('newCertificateBtn');
+
+        // Currently selected student
+        let currentStudent = null;
 
         // Function to calculate ranks per category and year
         function calculateRanks(students) {
@@ -633,12 +720,32 @@
         }
 
         // Find student data
-        function findStudent(name, category, year) {
+        function findStudent(name) {
             return students.find(student => 
-                student.name.toLowerCase() === name.toLowerCase() && 
-                student.category === category && 
-                student.year === parseInt(year)
+                student.name.toLowerCase().includes(name.toLowerCase())
             );
+        }
+
+        // Display student details
+        function displayStudentDetails(student) {
+            detailName.textContent = student.name;
+            detailSchool.textContent = student.school;
+            detailClass.textContent = student.class;
+            detailCategory.textContent = student.category;
+            detailCountry.textContent = student.country;
+            detailResearchTitle.textContent = student.research_proposal_title;
+            detailProposalScore.textContent = student.researchPaperScore;
+            detailPresentationScore.textContent = student.presentationScore;
+            detailTotalScore.textContent = student.scaledFinalScore;
+            detailRank.textContent = formatRank(student.rank);
+            
+            // Set flag
+            if (flags[student.country]) {
+                detailFlag.innerHTML = flags[student.country];
+            }
+            
+            studentDetails.style.display = 'block';
+            noResults.style.display = 'none';
         }
 
         // Generate certificate
@@ -647,7 +754,9 @@
             calculateRanks(students);
             
             // Set certificate background
-            certificateBg.src = certificates[year] || certificates["2025"];
+            certificateBg.style.backgroundImage = `url('${certificates[year] || certificates["2025"]}')`;
+            certificateBg.style.backgroundSize = 'cover';
+            certificateBg.style.backgroundPosition = 'center';
             
             // Set certificate content
             certYear.textContent = year;
@@ -709,10 +818,10 @@
             const element = document.querySelector('.certificate-wrapper');
             const opt = {
                 margin: 0,
-                filename: `IARCO_${yearSelect.value}_Certificate_${studentNameInput.value.replace(/\s+/g, '_')}.pdf`,
+                filename: `IARCO_${currentStudent.year}_Certificate_${currentStudent.name.replace(/\s+/g, '_')}.pdf`,
                 image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2 },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
+                html2canvas: { scale: 2, useCORS: true },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
             };
             
             // Generate PDF
@@ -726,43 +835,51 @@
             e.preventDefault();
             
             const name = studentNameInput.value.trim();
-            const category = categorySelect.value;
-            const year = yearSelect.value;
             
-            if (!name || !category || !year) {
-                alert('Please fill in all fields');
+            if (!name) {
+                alert('Please enter a student name');
                 return;
             }
             
-            showLoading();
-            
-            // Simulate API call delay
+            // Simulate AJAX search
             setTimeout(() => {
-                const student = findStudent(name, category, year);
+                const student = findStudent(name);
                 
                 if (student) {
-                    generateCertificate(student, year);
+                    currentStudent = student;
+                    displayStudentDetails(student);
                 } else {
-                    alert('Student not found. Please check the details and try again.');
+                    studentDetails.style.display = 'none';
+                    noResults.style.display = 'block';
                 }
-                
-                hideLoading();
-            }, 1500);
+            }, 500);
+        });
+
+        generateBtn.addEventListener('click', function() {
+            if (currentStudent) {
+                generateCertificate(currentStudent, currentStudent.year);
+                previewBtn.style.display = 'flex';
+                downloadBtn.style.display = 'flex';
+            }
+        });
+
+        previewBtn.addEventListener('click', function() {
+            if (currentStudent) {
+                generateCertificate(currentStudent, currentStudent.year);
+            }
         });
 
         downloadBtn.addEventListener('click', downloadPDF);
-        
-        newCertificateBtn.addEventListener('click', function() {
-            certificateContainer.style.display = 'none';
-            searchForm.reset();
-        });
 
         // Initialize with sample data for demonstration
         window.addEventListener('DOMContentLoaded', function() {
             // Pre-populate form with sample data for testing
             studentNameInput.value = "Sarhan Alan Khan";
-            categorySelect.value = "Junior";
-            yearSelect.value = "2024";
+            
+            // Hide buttons initially
+            previewBtn.style.display = 'none';
+            downloadBtn.style.display = 'none';
+            certificateContainer.style.display = 'none';
         });
     </script>
 </body>

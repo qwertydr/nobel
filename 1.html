@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IARCO Certificate Generator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Great+Vibes&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #0b0b0b;
+            --secondary-color: #2b2b2b;
+            --accent-color: #1a5276;
+            --light-color: #f5f5f5;
+            --border-radius: 8px;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Libre Baskerville', serif;
+            background-color: #f9f9f9;
+            color: var(--primary-color);
+            line-height: 1.6;
+        }
+        
+        .container {
+            display: flex;
+            min-height: 100vh;
+            padding: 20px;
+            gap: 20px;
+        }
+        
+        .search-section {
+            flex: 1;
+            max-width: 350px;
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+        }
+        
+        .preview-section {
+            flex: 2;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .student-details {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+        }
+        
+        .preview-area {
+            flex: 1;
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        h1 {
+            color: var(--accent-color);
+            margin-bottom: 20px;
+            text-align: center;
+            font-family: 'Playfair Display', serif;
+        }
+        
+        h2 {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: var(--secondary-color);
+            border-bottom: 1px solid #eee;
+            padding-bottom: 8px;
+        }
+        
+        .search-box {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            margin-bottom: 15px;
+            font-family: inherit;
+            font-size: 1rem;
+        }
+        
+        .search-results {
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid #eee;
+            border-radius: var(--border-radius);
+        }
+        
+        .result-item {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .result-item:hover {
+            background-color: #f0f0f0;
+        }
+        
+        .result-item.selected {
+            background-color: #e6f2ff;
+            border-left: 3px solid var(--accent-color);
+        }
+        
+        .student-info {
+            margin-bottom: 15px;
+        }
+        
+        .student-info p {
+            margin-bottom: 8px;
+        }
+        
+        .flag {
+            display: inline-block;
+            width: 24px;
+            height: 16px;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+        
+        .buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: var(--border-radius);
+            background-color: var(--accent-color);
+            color: white;
+            font-family: inherit;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            flex: 1;
+        }
+        
+        button:hover {
+            background-color: #144a74;
+        }
+        
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        
+        .preview-container {
+            flex: 1;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            overflow: auto;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+        
+        #certificateCanvas {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            border-top: 4px solid var(--accent-color);
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .certificate-id {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 10px;
+        }
+        
+        .generate-animation {
+            animation: generatePulse 0.7s ease-in-out;
+        }
+        
+        @keyframes generatePulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(0.95); box-shadow: 0 0 20px rgba(26, 82, 118, 0.5); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="search-section">
+            <h1>IARCO Certificate Generator</h1>
+            
+            <input type="search" class="search-box" placeholder="Search by student name (word-by-word)" id="searchInput">
+            
+            <h2>Search Results</h2>
+            <div class="search-results" id="searchResults">
+                <!-- Search results will be populated here -->
+            </div>
+        </div>
+        
+        <div class="preview-section">
+            <div class="student-details">
+                <h2>Selected Student</h2>
+                <div id="selectedStudent">
+                    <p>No student selected</p>
+                </div>
+                
+                <div class="buttons">
+                    <button id="previewBtn" disabled>Preview Certificate</button>
+                    <button id="generateBtn" disabled>Generate & Download</button>
+                </div>
+                
+                <div class="certificate-id" id="certIdDisplay"></div>
+            </div>
+            
+            <div class="preview-area">
+                <h2>Certificate Preview</h2>
+                <div class="preview-container">
+                    <canvas id="certificateCanvas"></canvas>
+                </div>
+                
+                <div class="loading" id="loadingIndicator">
+                    <div class="spinner"></div>
+                    <p>Generating certificate...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let students = [];
+        let flags = {};
+        let medals = {};
+        let certificateTemplates = {};
+        let selectedStudent = null;
+        let pdfjsLib = window['pdfjs-dist/build/pdf'];
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
+        const { jsPDF } = window.jspdf;
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', async function() {
+            await loadAllData();
+            setupEventListeners();
+        });
+
+        // Load all required data
+        async function loadAllData() {
+            try {
+                const [studentsResp, flagsResp, medalsResp, certResp] = await Promise.all([
+                    fetch('data/student.json'),
+                    fetch('data/flags.json'),
+                    fetch('data/medal.json'),
+                    fetch('data/certificate.json')
+                ]);
+                
+                students = await studentsResp.json();
+                flags = await flagsResp.json();
+                medals = await medalsResp.json();
+                certificateTemplates = await certResp.json();
+                
+                // Preload flag images
+                await preloadFlagImages();
+                
+                // Compute ranks for all students
+                calculateRanks(students);
+                
+                console.log('All data loaded successfully');
+            } catch (error) {
+                console.error('Error loading data:', error);
+                alert('Failed to load data. Please check if the JSON files are available.');
+                
+                // Load sample data for demo if files not found
+                await loadSampleData();
+            }
+        }
+
+        // Function to calculate and sort students by their scaledFinalScore to determine rank
+        function calculateRanks(students) {
+            // Group by year and category
+            const groups = {};
+            students.forEach(s => {
+                const key = `${s.year}||${s.category}`;
+                if (!groups[key]) groups[key] = [];
+                groups[key].push(s);
+            });
+
+            // Sort each group by scaledFinalScore
+            Object.keys(groups).forEach(key => {
+                const arr = groups[key];
+                arr.sort((a, b) => b.scaledFinalScore - a.scaledFinalScore);
+                arr.forEach((stu, idx) => {
+                    stu.rank = idx + 1;
+                    stu.totalCountCategory = arr.length;
+                });
+            });
+        }
+
+        // Preload flag images for better rendering
+        async function preloadFlagImages() {
+            const flagPromises = Object.keys(flags).map(country => {
+                return new Promise((resolve) => {
+                    const img = new Image();
+                    img.onload = resolve;
+                    img.onerror = resolve; // Resolve even if error to not block loading
+                    const svgBlob = new Blob([flags[country]], {type: 'image/svg+xml;charset=utf-8'});
+                    img.src = URL.createObjectURL(svgBlob);
+                });
+            });
+            
+            await Promise.all(flagPromises);
+        }
+
+        // Load sample data if JSON files not available
+        async function loadSampleData() {
+            students = [
+                {
+                    "student_id": "LXd6a9ey",
+                    "name": "Sarhan Alan Khan",
+                    "school": "Scholastica",
+                    "category": "Junior",
+                    "year": 2024,
+                    "country": "Bangladesh",
+                    "research_proposal_title": "Enhancing IoT Security with Machine Learning for Real-Time Threat Detection",
+                    "research_paper": {
+                        "research_problem": 17,
+                        "existing_literature": 7,
+                        "research_question": 20,
+                        "methodology": 18,
+                        "research_topic": 12,
+                        "quality_of_writing": 4,
+                        "plagiarism_check_percentile": 3,
+                        "presentation": {
+                            "persuasiveness": 15,
+                            "video_quality": 15,
+                            "research_problem": 15,
+                            "research_question": 13,
+                            "methodology": 10
+                        }
+                    },
+                    "plagiarismPenalty": 0,
+                    "researchPaperScore": 70,
+                    "presentationScore": 64,
+                    "submissionScore": 134,
+                    "scaledFinalScore": 134,
+                    "viewProposal": "https://drive.google.com/open?id=1aBuuRXyiIBx-908Tujbzt2vXRqBq_rzX",
+                    "videoPitch": "https://drive.google.com/drive/folders/17Xg1wH9C8eD0wmfxn1Z3FnDZmHy3OTIV",
+                    "proposal_comment": "No Comment.",
+                    "presentation_comment": "No Comment.",
+                    "classLevel": "A Level",
+                    "researchPaperPercentile": 85,
+                    "presentationPercentile": 72
+                },
+                {
+                    "student_id": "v1MrV4dT",
+                    "name": "Afia Anjum Aboni",
+                    "school": "Rajuk Uttara Model College",
+                    "category": "Junior",
+                    "year": 2024,
+                    "country": "Bangladesh",
+                    "research_proposal_title": "The Relevance of Class Disparity in the Implementation of Climate-Related Policies; an Investigation into the Different Socioeconomic Classes of Dhaka",
+                    "research_paper": {
+                        "research_problem": 17,
+                        "existing_literature": 7,
+                        "research_question": 20,
+                        "methodology": 18,
+                        "research_topic": 12,
+                        "quality_of_writing": 4,
+                        "plagiarism_check_percentile": 3,
+                        "presentation": {
+                            "persuasiveness": 15,
+                            "video_quality": 15,
+                            "research_problem": 15,
+                            "research_question": 13,
+                            "methodology": 10
+                        }
+                    },
+                    "plagiarismPenalty": 15,
+                    "researchPaperScore": 78,
+                    "presentationScore": 68,
+                    "submissionScore": 146,
+                    "scaledFinalScore": 131,
+                    "viewProposal": "https://drive.google.com/open?id=1aBuuRXyiIBx-908Tujbzt2vXRqBq_rzX",
+                    "videoPitch": "https://drive.google.com/drive/folders/17Xg1wH9C8eD0wmfxn1Z3FnDZmHy3OTIV",
+                    "proposal_comment": "No Comment.",
+                    "presentation_comment": "No Comment.",
+                    "classLevel": "A Level",
+                    "researchPaperPercentile": 92,
+                    "presentationPercentile": 78
+                }
+            ];
+            
+            flags = {
+                "Bangladesh": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 12'><rect width='20' height='12' fill='#006a4e'/><circle cx='9.4' cy='6' r='3.2' fill='#f42a41'/></svg>",
+                "United States": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 12'><rect width='20' height='12' fill='#b22234'/><path fill='#3c3b6e' d='M0 0h20v7H0z'/><path fill='#fff' d='M0 0h20v1H0zm0 2h20v1H0zm0 2h20v1H0zm0 2h20v1H0z'/><path fill='#fff' d='M0 0h8.3v7H0z'/><g fill='#fff'><path d='M1.3 1h1.3v1H1.3zm1.3 2h1.3v1H2.6zm1.3-2h1.3v1H3.9zm1.3 2h1.3v1H5.2zm1.3-2h1.3v1H6.5zm0 2h1.3v1H6.5zM1.3 3h1.3v1H1.3zm2.6 0h1.3v1H3.9zM1.3 5h1.3v1H1.3zm2.6 0h1.3v1H3.9z'/></g></svg>"
+            };
+            
+            medals = {
+                "gold": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='#FFD700' stroke='#D4AF37' stroke-width='3'/><circle cx='50' cy='50' r='35' fill='#FFF' stroke='#D4AF37' stroke-width='2'/><path d='M30 30 L50 15 L70 30 L65 55 L50 70 L35 55 Z' fill='#FFD700' stroke='#D4AF37' stroke-width='2'/><circle cx='50' cy='50' r='15' fill='#FFF' stroke='#D4AF37' stroke-width='1'/></svg>",
+                "silver": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='#C0C0C0' stroke='#A0A0A0' stroke-width='3'/><circle cx='50' cy='50' r='35' fill='#FFF' stroke='#A0A0A0' stroke-width='2'/><path d='M30 30 L50 15 L70 30 L65 55 L50 70 L35 55 Z' fill='#C0C0C0' stroke='#A0A0A0' stroke-width='2'/><circle cx='50' cy='50' r='15' fill='#FFF' stroke='#A0A0A0' stroke-width='1'/></svg>",
+                "bronze": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='#CD7F32' stroke='#8B4513' stroke-width='3'/><circle cx='50' cy='50' r='35' fill='#FFF' stroke='#8B4513' stroke-width='2'/><path d='M30 30 L50 15 L70 30 L65 55 L50 70 L35 55 Z' fill='#CD7F32' stroke='#8B4513' stroke-width='2'/><circle cx='50' cy='50' r='15' fill='#FFF' stroke='#8B4513' stroke-width='1'/></svg>",
+                "honorable": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='#1a5276' stroke='#0d3b5c' stroke-width='3'/><circle cx='50' cy='50' r='35' fill='#FFF' stroke='#0d3b5c' stroke-width='2'/><path d='M30 30 L50 15 L70 30 L65 55 L50 70 L35 55 Z' fill='#1a5276' stroke='#0d3b5c' stroke-width='2'/><circle cx='50' cy='50' r='15' fill='#FFF' stroke='#0d3b5c' stroke-width='1'/></svg>",
+                "finalist": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='#7d3c98' stroke='#5e2a7a' stroke-width='3'/><circle cx='50' cy='50' r='35' fill='#FFF' stroke='#5e2a7a' stroke-width='2'/><path d='M30 30 L50 15 L70 30 L65 55 L50 70 L35 55 Z' fill='#7d3c98' stroke='#5e2a7a' stroke-width='2'/><circle cx='50' cy='50' r='15' fill='#FFF' stroke='#5e2a7a' stroke-width='1'/></svg>"
+            };
+            
+            certificateTemplates = {
+                "2024": "certificate/2024.pdf",
+                "2025": "certificate/2025.pdf",
+                "2023": "certificate/2023.pdf"
+            };
+            
+            // Preload flag images
+            await preloadFlagImages();
+            
+            // Compute ranks for all students
+            calculateRanks(students);
+        }
+
+        // Set up event listeners
+        function setupEventListeners() {
+            const searchInput = document.getElementById('searchInput');
+            const searchResults = document.getElementById('searchResults');
+            const previewBtn = document.getElementById('previewBtn');
+            const generateBtn = document.getElementById('generateBtn');
+            
+            // Search input event
+            searchInput.addEventListener('input', function() {
+                const query = this.value;
+                const results = searchStudentsByName(students, query);
+                displaySearchResults(results);
+            });
+            
+            // Preview button event
+            previewBtn.addEventListener('click', function() {
+                if (selectedStudent) {
+                    renderCertificate(selectedStudent, false);
+                }
+            });
+            
+            // Generate button event
+            generateBtn.addEventListener('click', function() {
+                if (selectedStudent) {
+                    generateCertificatePDF(selectedStudent);
+                }
+            });
+        }
+
+        // Search students by name (word-by-word)
+        function searchStudentsByName(students, query) {
+            const tokens = query.trim().toLowerCase().split(/\s+/).filter(Boolean);
+            if (!tokens.length) return [];
+            return students.filter(s => {
+                const name = s.name.toLowerCase();
+                return tokens.every(t => name.includes(t));
+            });
+        }
+
+        // Display search results
+        function displaySearchResults(results) {
+            const searchResults = document.getElementById('searchResults');
+            searchResults.innerHTML = '';
+            
+            if (results.length === 0) {
+                searchResults.innerHTML = '<div class="result-item">No students found</div>';
+                return;
+            }
+            
+            results.forEach(student => {
+                const div = document.createElement('div');
+                div.className = 'result-item';
+                div.innerHTML = `
+                    <strong>${student.name}</strong><br>
+                    ${student.school} - ${student.category} (${student.year})
+                `;
+                div.addEventListener('click', () => selectStudent(student));
+                searchResults.appendChild(div);
+            });
+        }
+
+        // Select a student
+        function selectStudent(student) {
+            selectedStudent = student;
+            
+            // Update UI
+            document.querySelectorAll('.result-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+            event.currentTarget.classList.add('selected');
+            
+            // Update selected student display
+            const selectedStudentDiv = document.getElementById('selectedStudent');
+            const flagSvg = flags[student.country] || '';
+            
+            selectedStudentDiv.innerHTML = `
+                <div class="student-info">
+                    <p><strong>Name:</strong> ${student.name}</p>
+                    <p><strong>School:</strong> ${student.school}</p>
+                    <p><strong>Category:</strong> ${student.category}</p>
+                    <p><strong>Year:</strong> ${student.year}</p>
+                    <p><strong>Country:</strong> <span class="flag">${flagSvg}</span> ${student.country}</p>
+                    <p><strong>Research Title:</strong> ${student.research_proposal_title}</p>
+                    <p><strong>Rank:</strong> ${student.rank} out of ${student.totalCountCategory}</p>
+                    <p><strong>Final Score:</strong> ${student.scaledFinalScore}/200</p>
+                    <p><strong>Plagiarism Similarity:</strong> ${student.scaledFinalScore}/200</p>
+                </div>
+            `;
+            
+            // Enable buttons
+            document.getElementById('previewBtn').disabled = false;
+            document.getElementById('generateBtn').disabled = false;
+            
+            // Use student_id as certificate ID
+            document.getElementById('certIdDisplay').textContent = `Certificate ID: ${student.student_id}`;
+            
+            // Auto-preview the certificate
+            renderCertificate(student, false);
+        }
+
+        // Determine medal type based on rank
+        function medalForRank(rank) {
+            if (rank === 1) return 'gold';
+            if (rank === 2) return 'silver';
+            if (rank === 3) return 'bronze';
+            if (rank >= 4 && rank <= 10) return 'honorable';
+            return 'finalist';
+        }
+
+        // Render certificate to canvas
+        async function renderCertificate(student, isForPDF = false) {
+            const canvas = document.getElementById('certificateCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Show loading indicator
+            if (!isForPDF) {
+                document.getElementById('loadingIndicator').style.display = 'block';
+            }
+            
+            try {
+                // Set canvas size - A4 dimensions at 96 DPI for web
+                if (isForPDF) {
+                    // High resolution for PDF (300 DPI)
+                    canvas.width = 2480;
+                    canvas.height = 3508;
+                } else {
+                    // Standard resolution for preview
+                    canvas.width = 794; // A4 width at 96 DPI
+                    canvas.height = 1123; // A4 height at 96 DPI
+                }
+                
+                // Clear canvas
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                // Get certificate template path
+                const templatePath = certificateTemplates[student.year] || certificateTemplates['2024'];
+                
+                // Try to draw PDF background, fallback to simple background if fails
+                try {
+                    await drawPDFBackground(ctx, canvas, templatePath);
+                } catch (error) {
+                    console.warn('Could not load PDF template, using fallback background:', error);
+                    drawFallbackBackground(ctx, canvas);
+                }
+                
+                // Draw certificate content
+                await drawCertificateContent(ctx, canvas, student, isForPDF);
+                
+            } catch (error) {
+                console.error('Error rendering certificate:', error);
+                // Fallback: draw a simple certificate background
+                drawFallbackBackground(ctx, canvas);
+                await drawCertificateContent(ctx, canvas, student, isForPDF);
+            } finally {
+                // Hide loading indicator
+                if (!isForPDF) {
+                    document.getElementById('loadingIndicator').style.display = 'none';
+                }
+            }
+        }
+
+        // Draw PDF background
+        async function drawPDFBackground(ctx, canvas, pdfPath) {
+            return new Promise((resolve, reject) => {
+                pdfjsLib.getDocument(pdfPath).promise.then(pdf => {
+                    pdf.getPage(1).then(page => {
+                        const viewport = page.getViewport({ scale: canvas.width / page.getViewport({ scale: 1 }).width });
+                        
+                        const renderContext = {
+                            canvasContext: ctx,
+                            viewport: viewport
+                        };
+                        
+                        page.render(renderContext).promise.then(() => {
+                            resolve();
+                        }).catch(reject);
+                    }).catch(reject);
+                }).catch(reject);
+            });
+        }
+
+        // Draw fallback background (if PDF loading fails)
+        function drawFallbackBackground(ctx, canvas) {
+            // Draw a simple certificate-like background
+            ctx.fillStyle = '#fefefe';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Add a border
+            ctx.strokeStyle = '#d4af37';
+            ctx.lineWidth = 15;
+            ctx.strokeRect(50, 50, canvas.width - 100, canvas.height - 100);
+            
+            // Add a decorative element
+            ctx.fillStyle = '#f5f5f5';
+            ctx.fillRect(100, 100, canvas.width - 200, canvas.height - 200);
+        }
+
+        // Draw certificate content
+        async function drawCertificateContent(ctx, canvas, student, isForPDF) {
+            const width = canvas.width;
+            const height = canvas.height;
+            
+            // Scale factor for text positioning
+            const scaleX = width / 794;
+            const scaleY = height / 1123;
+            
+            // Helper function to scale values
+            const s = (val, axis = 'x') => axis === 'x' ? val * scaleX : val * scaleY;
+            
+            // Set text styles
+            ctx.textAlign = 'center';
+            ctx.fillStyle = '#0b0b0b';
+            
+            // Add space for logo at top (approx 100px)
+            const logoSpace = s(100, 'y');
+            
+            // Title "CERTIFICATE" - decreased font size
+            ctx.font = `700 ${s(65)}px 'Playfair Display', serif`;
+            ctx.fillText("CERTIFICATE", s(397), s(100, 'y') + logoSpace);
+            
+            // Subtitle - decreased font size
+            ctx.font = `${s(17)}px 'Libre Baskerville', serif`;
+            ctx.letterSpacing = `${s(2)}px`;
+            ctx.fillText("Of International Academic Research Competition "+`${student.year}`, s(397), s(150, 'y') + logoSpace);
+            ctx.letterSpacing = '0px';
+            
+            // "Awarded to" - decreased font size
+            ctx.font = `italic ${s(15)}px 'Libre Baskerville', serif`;
+            ctx.fillText("Awarded to", s(397), s(200, 'y') + logoSpace);
+            
+            // Student name - decreased font size
+            ctx.font = `${s(55)}px 'Great Vibes', cursive`;
+            ctx.fillText(student.name, s(397), s(260, 'y') + logoSpace);
+            
+            // Decorative line
+            ctx.strokeStyle = '#0b0b0b';
+            ctx.lineWidth = s(1);
+            ctx.beginPath();
+            ctx.moveTo(s(297), s(300, 'y') + logoSpace);
+            ctx.lineTo(s(497), s(300, 'y') + logoSpace);
+            ctx.stroke();
+            
+            // Student details - decreased font size
+            ctx.font = `${s(15)}px 'Libre Baskerville', serif`;
+            ctx.fillText("Of", s(397), s(340, 'y') + logoSpace);
+            const classLevel = student.classLevel || "Student";
+            ctx.fillText(`${classLevel} at ${student.school},`, s(397), s(370, 'y') + logoSpace);
+            
+            // Country with flag - flag after country name
+            const countryText = student.country;
+            const countryTextWidth = ctx.measureText(countryText).width;
+            ctx.fillText(countryText, s(397), s(400, 'y') + logoSpace);
+            
+            // Draw flag SVG after country name
+            const flagSvg = flags[student.country];
+            if (flagSvg) {
+                const flagX = s(397) + countryTextWidth/2 + s(10);
+                const flagY = s(400, 'y') + logoSpace - s(8);
+                await drawFlagFromSVG(ctx, flagSvg, flagX, flagY, s(20), s(12));
+            }
+            
+            // Achievement text - decreased font size
+            ctx.font = `${s(13)}px 'Libre Baskerville', serif`;
+            const achievementText = `delivering an impressive research project and presentation, and achieved`;
+            ctx.fillText(achievementText, s(397), s(450, 'y') + logoSpace);
+            
+            // Rank and score with numbers bold and italic
+            const rankText = `${student.rank}${getOrdinalSuffix(student.rank)} place out of ${student.totalCountCategory}${getOrdinalSuffix(student.totalCountCategory)} in the ${student.category} Category with a score of ${student.scaledFinalScore} out of 200`;
+            ctx.fillText(rankText, s(397), s(480, 'y') + logoSpace);
+            
+            // Make numbers bold and italic
+            const rankNum = `${student.rank}${getOrdinalSuffix(student.rank)}`;
+            const scoreNum = `${student.scaledFinalScore}`;
+            
+            const beforeRank = rankText.split(rankNum)[0];
+            const afterRank = rankText.split(rankNum)[1].split(scoreNum)[0];
+            const afterScore = rankText.split(scoreNum)[1];
+            
+            const beforeRankWidth = ctx.measureText(beforeRank).width;
+            const rankNumWidth = ctx.measureText(rankNum).width;
+            const afterRankWidth = ctx.measureText(afterRank).width;
+            const scoreNumWidth = ctx.measureText(scoreNum).width;
+            
+            const totalWidth = beforeRankWidth + rankNumWidth + afterRankWidth + scoreNumWidth + ctx.measureText(afterScore).width;
+            const startX = s(397) - totalWidth/2;
+            
+            ctx.fillText(beforeRank, startX + beforeRankWidth/2, s(480, 'y') + logoSpace);
+            
+            ctx.font = `italic bold ${s(13)}px 'Libre Baskerville', serif`;
+            ctx.fillText(rankNum, startX + beforeRankWidth + rankNumWidth/2, s(480, 'y') + logoSpace);
+            
+            ctx.font = `${s(13)}px 'Libre Baskerville', serif`;
+            ctx.fillText(afterRank, startX + beforeRankWidth + rankNumWidth + afterRankWidth/2, s(480, 'y') + logoSpace);
+            
+            ctx.font = `italic bold ${s(13)}px 'Libre Baskerville', serif`;
+            ctx.fillText(scoreNum, startX + beforeRankWidth + rankNumWidth + afterRankWidth + scoreNumWidth/2, s(480, 'y') + logoSpace);
+            
+            ctx.font = `${s(13)}px 'Libre Baskerville', serif`;
+            ctx.fillText(afterScore, startX + beforeRankWidth + rankNumWidth + afterRankWidth + scoreNumWidth + ctx.measureText(afterScore).width/2, s(480, 'y') + logoSpace);
+            
+            // Score breakdown with percentiles - decreased font size
+            const researchPercentile = `${student.plagiarism_check_percentile}` || 0;
+            const plagiarismPercentile = student.research_paper.plagiarism_check_percentile;
+            const breakdownText = `(Research Proposal: ${student.researchPaperScore}/100 | Presentation: ${student.presentationScore}/100 | Similarity: ${plagiarismPercentile}%/100%)`;
+            ctx.fillText(breakdownText, s(397), s(510, 'y') + logoSpace);
+            
+            // Research Title with label - decreased font size
+            ctx.font = `700 ${s(17)}px 'Libre Baskerville', serif`;
+            ctx.fillText("Research Title:", s(397), s(570, 'y') + logoSpace);
+            
+            // Wrap long titles with enough space - decreased font size
+            ctx.font = `${s(16)}px 'Libre Baskerville', serif`;
+            const titleLines = wrapText(ctx, student.research_proposal_title, s(600));
+            titleLines.forEach((line, index) => {
+                ctx.fillText(line, s(397), s(600 + (index * 28), 'y') + logoSpace);
+            });
+            
+            // Rank link with enough space after title - decreased font size
+            const titleBottom = s(600 + (titleLines.length * 28), 'y') + logoSpace;
+            ctx.font = `${s(11)}px 'Libre Baskerville', serif`;
+            ctx.fillText(`https://iarco.org/${student.year}-winners?category=${student.category}&rank=${student.rank}`, s(397), titleBottom + s(40, 'y'));
+            
+            // Medal/badge area with rank info - smaller size
+            await drawRankMedal(ctx, canvas, student.rank, s(397), titleBottom + s(120, 'y'), s(80));
+            
+            // Date at bottom left
+            ctx.textAlign = 'left';
+            ctx.font = `${s(10)}px 'Libre Baskerville', serif`;
+            ctx.fillText("November 15, 2025", s(100), titleBottom + s(270, 'y'));
+            
+            // Certificate ID at bottom right (using student_id)
+            ctx.textAlign = 'right';
+            ctx.font = `${s(10)}px 'Libre Baskerville', serif`;
+            ctx.fillStyle = '#666666';
+            ctx.fillText(`Certificate ID: ${student.student_id}`, s(694), titleBottom + s(270, 'y'));
+        }
+
+        // Draw flag from SVG string
+        function drawFlagFromSVG(ctx, svgString, x, y, width, height) {
+            return new Promise((resolve) => {
+                // Create a temporary image element
+                const img = new Image();
+                const svgBlob = new Blob([svgString], {type: 'image/svg+xml;charset=utf-8'});
+                const url = URL.createObjectURL(svgBlob);
+                
+                img.onload = function() {
+                    ctx.drawImage(img, x, y, width, height);
+                    URL.revokeObjectURL(url);
+                    resolve();
+                };
+                img.onerror = function() {
+                    URL.revokeObjectURL(url);
+                    resolve(); // Resolve even if error to not block rendering
+                };
+                img.src = url;
+            });
+        }
+
+        // Draw rank medal with proper medal type
+        async function drawRankMedal(ctx, canvas, rank, x, y, size) {
+            ctx.save();
+            
+            // Get medal type
+            const medalType = medalForRank(rank);
+            
+            // Draw medal based on type
+            await drawMedalByType(ctx, medalType, x, y, size);
+            
+            // Draw rank text on medal
+            ctx.fillStyle = '#333';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.font = `700 ${size*0.3}px 'Playfair Display', serif`;
+            ctx.fillText(rank, x, y);
+            
+            ctx.restore();
+        }
+
+        // Draw medal based on type
+        async function drawMedalByType(ctx, medalType, x, y, size) {
+            // Get medal SVG
+            const medalSvg = medals[medalType];
+            if (medalSvg) {
+                await drawMedalFromSVG(ctx, medalSvg, x - size/2, y - size/2, size, size);
+            } else {
+                // Fallback to drawn medal if SVG fails
+                drawFallbackMedal(ctx, medalType, x, y, size);
+            }
+        }
+
+        // Draw medal from SVG
+        function drawMedalFromSVG(ctx, svgString, x, y, width, height) {
+            return new Promise((resolve) => {
+                const img = new Image();
+                const svgBlob = new Blob([svgString], {type: 'image/svg+xml;charset=utf-8'});
+                const url = URL.createObjectURL(svgBlob);
+                
+                img.onload = function() {
+                    ctx.drawImage(img, x, y, width, height);
+                    URL.revokeObjectURL(url);
+                    resolve();
+                };
+                img.onerror = function() {
+                    URL.revokeObjectURL(url);
+                    resolve(); // Resolve even if error to not block rendering
+                };
+                img.src = url;
+            });
+        }
+
+        // Fallback medal drawing if SVG fails
+        function drawFallbackMedal(ctx, medalType, x, y, size) {
+            // Draw medal background (circle)
+            ctx.beginPath();
+            ctx.arc(x, y, size/2, 0, Math.PI * 2);
+            
+            // Color based on medal type
+            switch(medalType) {
+                case 'gold':
+                    ctx.fillStyle = '#FFD700';
+                    break;
+                case 'silver':
+                    ctx.fillStyle = '#C0C0C0';
+                    break;
+                case 'bronze':
+                    ctx.fillStyle = '#CD7F32';
+                    break;
+                case 'honorable':
+                    ctx.fillStyle = '#1a5276';
+                    break;
+                default: // finalist
+                    ctx.fillStyle = '#7d3c98';
+            }
+            
+            ctx.fill();
+            ctx.strokeStyle = '#333';
+            ctx.lineWidth = size * 0.03;
+            ctx.stroke();
+            
+            // Add inner circle for medal design
+            ctx.beginPath();
+            ctx.arc(x, y, size*0.4, 0, Math.PI * 2);
+            ctx.fillStyle = '#fff';
+            ctx.fill();
+            ctx.stroke();
+        }
+
+        // Helper function to wrap text
+        function wrapText(ctx, text, maxWidth) {
+            const words = text.split(' ');
+            const lines = [];
+            let currentLine = words[0];
+            
+            for (let i = 1; i < words.length; i++) {
+                const word = words[i];
+                const width = ctx.measureText(currentLine + " " + word).width;
+                if (width < maxWidth) {
+                    currentLine += " " + word;
+                } else {
+                    lines.push(currentLine);
+                    currentLine = word;
+                }
+            }
+            lines.push(currentLine);
+            return lines;
+        }
+
+        // Helper function to get ordinal suffix
+        function getOrdinalSuffix(n) {
+            if (n % 100 >= 11 && n % 100 <= 13) return 'th';
+            switch (n % 10) {
+                case 1: return 'st';
+                case 2: return 'nd';
+                case 3: return 'rd';
+                default: return 'th';
+            }
+        }
+
+        // Generate and download PDF certificate
+        async function generateCertificatePDF(student) {
+            const generateBtn = document.getElementById('generateBtn');
+            
+            // Disable button and show animation
+            generateBtn.disabled = true;
+            generateBtn.classList.add('generate-animation');
+            
+            // Show loading indicator
+            document.getElementById('loadingIndicator').style.display = 'block';
+            
+            try {
+                // Render certificate at high resolution
+                await renderCertificate(student, true);
+                
+                // Get canvas
+                const canvas = document.getElementById('certificateCanvas');
+                
+                // Create PDF with A4 dimensions in mm
+                const pdf = new jsPDF({
+                    orientation: 'portrait',
+                    unit: 'mm',
+                    format: 'a4'
+                });
+                
+                // Calculate dimensions to fit A4
+                const imgWidth = 210; // A4 width in mm
+                const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                
+                // Add canvas image to PDF
+                const imgData = canvas.toDataURL('image/jpeg', 0.9); // Use JPEG for smaller file size
+                pdf.addImage(imgData, 'JPEG', 0, 0, imgWidth, imgHeight);
+                
+                // Download PDF
+                const fileName = `IARCO_CERT_${student.name.replace(/\s+/g, '_')}_${student.year}.pdf`;
+                pdf.save(fileName);
+                
+            } catch (error) {
+                console.error('Error generating PDF:', error);
+                alert('Failed to generate PDF. Please try again.');
+            } finally {
+                // Re-enable button and hide animation
+                generateBtn.disabled = false;
+                generateBtn.classList.remove('generate-animation');
+                document.getElementById('loadingIndicator').style.display = 'none';
+                
+                // Re-render at preview resolution
+                renderCertificate(student, false);
+            }
+        }
+    </script>
+</body>
+</html>

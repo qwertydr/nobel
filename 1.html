@@ -297,7 +297,7 @@
                 await preloadFlagImages();
                 
                 // Compute ranks for all students
-                calculateRanks(students);
+                computeRanksPerYearCategory(students);
                 
                 console.log('All data loaded successfully');
             } catch (error) {
@@ -307,27 +307,6 @@
                 // Load sample data for demo if files not found
                 await loadSampleData();
             }
-        }
-
-        // Function to calculate and sort students by their scaledFinalScore to determine rank
-        function calculateRanks(students) {
-            // Group by year and category
-            const groups = {};
-            students.forEach(s => {
-                const key = `${s.year}||${s.category}`;
-                if (!groups[key]) groups[key] = [];
-                groups[key].push(s);
-            });
-
-            // Sort each group by scaledFinalScore
-            Object.keys(groups).forEach(key => {
-                const arr = groups[key];
-                arr.sort((a, b) => b.scaledFinalScore - a.scaledFinalScore);
-                arr.forEach((stu, idx) => {
-                    stu.rank = idx + 1;
-                    stu.totalCountCategory = arr.length;
-                });
-            });
         }
 
         // Preload flag images for better rendering
@@ -430,11 +409,11 @@
             };
             
             medals = {
-                "gold": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='#FFD700' stroke='#D4AF37' stroke-width='3'/><circle cx='50' cy='50' r='35' fill='#FFF' stroke='#D4AF37' stroke-width='2'/><path d='M30 30 L50 15 L70 30 L65 55 L50 70 L35 55 Z' fill='#FFD700' stroke='#D4AF37' stroke-width='2'/><circle cx='50' cy='50' r='15' fill='#FFF' stroke='#D4AF37' stroke-width='1'/></svg>",
-                "silver": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='#C0C0C0' stroke='#A0A0A0' stroke-width='3'/><circle cx='50' cy='50' r='35' fill='#FFF' stroke='#A0A0A0' stroke-width='2'/><path d='M30 30 L50 15 L70 30 L65 55 L50 70 L35 55 Z' fill='#C0C0C0' stroke='#A0A0A0' stroke-width='2'/><circle cx='50' cy='50' r='15' fill='#FFF' stroke='#A0A0A0' stroke-width='1'/></svg>",
-                "bronze": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='#CD7F32' stroke='#8B4513' stroke-width='3'/><circle cx='50' cy='50' r='35' fill='#FFF' stroke='#8B4513' stroke-width='2'/><path d='M30 30 L50 15 L70 30 L65 55 L50 70 L35 55 Z' fill='#CD7F32' stroke='#8B4513' stroke-width='2'/><circle cx='50' cy='50' r='15' fill='#FFF' stroke='#8B4513' stroke-width='1'/></svg>",
-                "honorable": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='#1a5276' stroke='#0d3b5c' stroke-width='3'/><circle cx='50' cy='50' r='35' fill='#FFF' stroke='#0d3b5c' stroke-width='2'/><path d='M30 30 L50 15 L70 30 L65 55 L50 70 L35 55 Z' fill='#1a5276' stroke='#0d3b5c' stroke-width='2'/><circle cx='50' cy='50' r='15' fill='#FFF' stroke='#0d3b5c' stroke-width='1'/></svg>",
-                "finalist": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='#7d3c98' stroke='#5e2a7a' stroke-width='3'/><circle cx='50' cy='50' r='35' fill='#FFF' stroke='#5e2a7a' stroke-width='2'/><path d='M30 30 L50 15 L70 30 L65 55 L50 70 L35 55 Z' fill='#7d3c98' stroke='#5e2a7a' stroke-width='2'/><circle cx='50' cy='50' r='15' fill='#FFF' stroke='#5e2a7a' stroke-width='1'/></svg>"
+                "gold": "svg/gold_medal.svg",
+                "silver": "svg/silver_medal.svg",
+                "bronze": "svg/bronze_medal.svg",
+                "honorable": "svg/honorable_mention.svg",
+                "finalist": "svg/finalist.svg"
             };
             
             certificateTemplates = {
@@ -447,7 +426,26 @@
             await preloadFlagImages();
             
             // Compute ranks for all students
-            calculateRanks(students);
+            computeRanksPerYearCategory(students);
+        }
+
+        // Compute ranks per year and category
+        function computeRanksPerYearCategory(students) {
+            const groups = {};
+            students.forEach(s => {
+                const key = `${s.year}||${s.category}`;
+                if (!groups[key]) groups[key] = [];
+                groups[key].push(s);
+            });
+
+            Object.keys(groups).forEach(key => {
+                const arr = groups[key];
+                arr.sort((a, b) => b.scaledFinalScore - a.scaledFinalScore || b.submissionScore - a.submissionScore);
+                arr.forEach((stu, idx) => {
+                    stu.rank = idx + 1;
+                    stu.totalCountCategory = arr.length;
+                });
+            });
         }
 
         // Set up event listeners
@@ -830,38 +828,9 @@
 
         // Draw medal based on type
         async function drawMedalByType(ctx, medalType, x, y, size) {
-            // Get medal SVG
-            const medalSvg = medals[medalType];
-            if (medalSvg) {
-                await drawMedalFromSVG(ctx, medalSvg, x - size/2, y - size/2, size, size);
-            } else {
-                // Fallback to drawn medal if SVG fails
-                drawFallbackMedal(ctx, medalType, x, y, size);
-            }
-        }
-
-        // Draw medal from SVG
-        function drawMedalFromSVG(ctx, svgString, x, y, width, height) {
-            return new Promise((resolve) => {
-                const img = new Image();
-                const svgBlob = new Blob([svgString], {type: 'image/svg+xml;charset=utf-8'});
-                const url = URL.createObjectURL(svgBlob);
-                
-                img.onload = function() {
-                    ctx.drawImage(img, x, y, width, height);
-                    URL.revokeObjectURL(url);
-                    resolve();
-                };
-                img.onerror = function() {
-                    URL.revokeObjectURL(url);
-                    resolve(); // Resolve even if error to not block rendering
-                };
-                img.src = url;
-            });
-        }
-
-        // Fallback medal drawing if SVG fails
-        function drawFallbackMedal(ctx, medalType, x, y, size) {
+            // If we have actual medal SVGs, we would load and draw them here
+            // For now, we'll draw a simple circle with the appropriate color
+            
             // Draw medal background (circle)
             ctx.beginPath();
             ctx.arc(x, y, size/2, 0, Math.PI * 2);
@@ -895,6 +864,41 @@
             ctx.fillStyle = '#fff';
             ctx.fill();
             ctx.stroke();
+            
+            // If we had actual SVG medals, we would load and draw them here:
+            /*
+            const medalPath = medals[medalType];
+            if (medalPath) {
+                try {
+                    const response = await fetch(medalPath);
+                    const svgText = await response.text();
+                    await drawMedalFromSVG(ctx, svgText, x - size/2, y - size/2, size, size);
+                } catch (error) {
+                    console.error('Error loading medal SVG:', error);
+                    // Fallback to drawn medal if SVG fails
+                }
+            }
+            */
+        }
+
+        // Draw medal from SVG (for when actual medal SVGs are available)
+        function drawMedalFromSVG(ctx, svgString, x, y, width, height) {
+            return new Promise((resolve) => {
+                const img = new Image();
+                const svgBlob = new Blob([svgString], {type: 'image/svg+xml;charset=utf-8'});
+                const url = URL.createObjectURL(svgBlob);
+                
+                img.onload = function() {
+                    ctx.drawImage(img, x, y, width, height);
+                    URL.revokeObjectURL(url);
+                    resolve();
+                };
+                img.onerror = function() {
+                    URL.revokeObjectURL(url);
+                    resolve(); // Resolve even if error to not block rendering
+                };
+                img.src = url;
+            });
         }
 
         // Helper function to wrap text

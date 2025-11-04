@@ -512,6 +512,7 @@
                     <p><strong>Research Title:</strong> ${student.research_proposal_title}</p>
                     <p><strong>Rank:</strong> ${student.rank} out of ${student.totalCountCategory}</p>
                     <p><strong>Final Score:</strong> ${student.scaledFinalScore}/200</p>
+                    <p><strong>Plagiarism Similarity:</strong> ${student.scaledFinalScore}/200</p>
                 </div>
             `;
             
@@ -728,7 +729,8 @@
             
             // Score breakdown with percentiles - decreased font size
             const researchPercentile = `${student.plagiarism_check_percentile}` || 0;
-            const breakdownText = `(Research Proposal: ${student.researchPaperScore}/100 | Presentation: ${student.presentationScore}/100 | Similarity: ${student.plagiarism_check_percentile}%/100%)`;
+            const plagiarismPercentile = student.research_paper.plagiarism_check_percentile;
+            const breakdownText = `(Research Proposal: ${student.researchPaperScore}/100 | Presentation: ${student.presentationScore}/100 | Similarity: ${plagiarismPercentile}%/100%)`;
             ctx.fillText(breakdownText, s(397), s(510, 'y') + logoSpace);
             
             // Research Title with label - decreased font size

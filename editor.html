@@ -281,62 +281,17 @@
         // Load all required data
         async function loadAllData() {
             try {
-                // In a real implementation, these would be actual fetch requests
-                // For demo purposes, we'll use sample data
-                students = [
-                    {
-                        "student_id": "v1MrV4dT",
-                        "name": "Sarhan Alan Khan",
-                        "school": "Scholastica",
-                        "category": "Junior",
-                        "year": 2024,
-                        "country": "Bangladesh",
-                        "research_proposal_title": "Enhancing IoT Security with Machine Learning for Real-Time Threat Detection",
-                        "research_paper": {
-                            "research_problem": 17,
-                            "existing_literature": 7,
-                            "research_question": 20,
-                            "methodology": 18,
-                            "research_topic": 12,
-                            "quality_of_writing": 4,
-                            "plagiarism_check_percentile": 3,
-                            "presentation": {
-                                "persuasiveness": 15,
-                                "video_quality": 15,
-                                "research_problem": 15,
-                                "research_question": 13,
-                                "methodology": 10
-                            }
-                        },
-                        "plagiarismPenalty": 0,
-                        "researchPaperScore": 70,
-                        "presentationScore": 64,
-                        "submissionScore": 134,
-                        "scaledFinalScore": 134,
-                        "viewProposal": "https://drive.google.com/open?id=1aBuuRXyiIBx-908Tujbzt2vXRqBq_rzX",
-                        "videoPitch": "https://drive.google.com/drive/folders/17Xg1wH9C8eD0wmfxn1Z3FnDZmHy3OTIV",
-                        "proposal_comment": "No Comment.",
-                        "presentation_comment": "No Comment.",
-                        "classLevel": "A Level"
-                    }
-                ];
+                const [studentsResp, flagsResp, medalsResp, certResp] = await Promise.all([
+                    fetch('data/student.json'),
+                    fetch('data/flags.json'),
+                    fetch('data/medal.json'),
+                    fetch('data/certificate.json')
+                ]);
                 
-                flags = {
-                    "Bangladesh": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 12'><rect width='20' height='12' fill='#006a4e'/><circle cx='9.4' cy='6' r='3.2' fill='#f42a41'/></svg>"
-                };
-                
-                medals = {
-                    "gold": "svg/gold_medal.svg",
-                    "silver": "svg/silver_medal.svg",
-                    "bronze": "svg/bronze_medal.svg",
-                    "honorable": "svg/honorable_mention.svg",
-                    "finalist": "svg/finalist.svg"
-                };
-                
-                certificateTemplates = {
-                    "2024": "certificate/2024.pdf",
-                    "2025": "certificate/2025.pdf"
-                };
+                students = await studentsResp.json();
+                flags = await flagsResp.json();
+                medals = await medalsResp.json();
+                certificateTemplates = await certResp.json();
                 
                 // Compute ranks for all students
                 computeRanksPerYearCategory(students);
@@ -345,7 +300,112 @@
             } catch (error) {
                 console.error('Error loading data:', error);
                 alert('Failed to load data. Please check if the JSON files are available.');
+                
+                // Load sample data for demo if files not found
+                await loadSampleData();
             }
+        }
+
+        // Load sample data if JSON files not available
+        async function loadSampleData() {
+            students = [
+                {
+                    "student_id": "LXd6a9ey",
+                    "name": "Sarhan Alan Khan",
+                    "school": "Scholastica",
+                    "category": "Junior",
+                    "year": 2024,
+                    "country": "Bangladesh",
+                    "research_proposal_title": "Enhancing IoT Security with Machine Learning for Real-Time Threat Detection",
+                    "research_paper": {
+                        "research_problem": 17,
+                        "existing_literature": 7,
+                        "research_question": 20,
+                        "methodology": 18,
+                        "research_topic": 12,
+                        "quality_of_writing": 4,
+                        "plagiarism_check_percentile": 3,
+                        "presentation": {
+                            "persuasiveness": 15,
+                            "video_quality": 15,
+                            "research_problem": 15,
+                            "research_question": 13,
+                            "methodology": 10
+                        }
+                    },
+                    "plagiarismPenalty": 0,
+                    "researchPaperScore": 70,
+                    "presentationScore": 64,
+                    "submissionScore": 134,
+                    "scaledFinalScore": 134,
+                    "viewProposal": "https://drive.google.com/open?id=1aBuuRXyiIBx-908Tujbzt2vXRqBq_rzX",
+                    "videoPitch": "https://drive.google.com/drive/folders/17Xg1wH9C8eD0wmfxn1Z3FnDZmHy3OTIV",
+                    "proposal_comment": "No Comment.",
+                    "presentation_comment": "No Comment.",
+                    "classLevel": "A Level",
+                    "researchPaperPercentile": 85,
+                    "presentationPercentile": 72
+                },
+                {
+                    "student_id": "v1MrV4dT",
+                    "name": "Afia Anjum Aboni",
+                    "school": "Rajuk Uttara Model College",
+                    "category": "Junior",
+                    "year": 2024,
+                    "country": "Bangladesh",
+                    "research_proposal_title": "The Relevance of Class Disparity in the Implementation of Climate-Related Policies; an Investigation into the Different Socioeconomic Classes of Dhaka",
+                    "research_paper": {
+                        "research_problem": 17,
+                        "existing_literature": 7,
+                        "research_question": 20,
+                        "methodology": 18,
+                        "research_topic": 12,
+                        "quality_of_writing": 4,
+                        "plagiarism_check_percentile": 3,
+                        "presentation": {
+                            "persuasiveness": 15,
+                            "video_quality": 15,
+                            "research_problem": 15,
+                            "research_question": 13,
+                            "methodology": 10
+                        }
+                    },
+                    "plagiarismPenalty": 15,
+                    "researchPaperScore": 78,
+                    "presentationScore": 68,
+                    "submissionScore": 146,
+                    "scaledFinalScore": 131,
+                    "viewProposal": "https://drive.google.com/open?id=1aBuuRXyiIBx-908Tujbzt2vXRqBq_rzX",
+                    "videoPitch": "https://drive.google.com/drive/folders/17Xg1wH9C8eD0wmfxn1Z3FnDZmHy3OTIV",
+                    "proposal_comment": "No Comment.",
+                    "presentation_comment": "No Comment.",
+                    "classLevel": "A Level",
+                    "researchPaperPercentile": 92,
+                    "presentationPercentile": 78
+                }
+            ];
+            
+            flags = {
+                "Bangladesh": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 12'><rect width='20' height='12' fill='#006a4e'/><circle cx='9.4' cy='6' r='3.2' fill='#f42a41'/></svg>",
+                "United States": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 12'><rect width='20' height='12' fill='#b22234'/><path fill='#3c3b6e' d='M0 0h20v7H0z'/><path fill='#fff' d='M0 0h20v1H0zm0 2h20v1H0zm0 2h20v1H0zm0 2h20v1H0z'/><path fill='#fff' d='M0 0h8.3v7H0z'/><g fill='#fff'><path d='M1.3 1h1.3v1H1.3zm1.3 2h1.3v1H2.6zm1.3-2h1.3v1H3.9zm1.3 2h1.3v1H5.2zm1.3-2h1.3v1H6.5zm0 2h1.3v1H6.5zM1.3 3h1.3v1H1.3zm2.6 0h1.3v1H3.9zM1.3 5h1.3v1H1.3zm2.6 0h1.3v1H3.9z'/></g></svg>"
+            };
+            
+            medals = {
+                "gold": "svg/gold_medal.svg",
+                "silver": "svg/silver_medal.svg",
+                "bronze": "svg/bronze_medal.svg",
+                "honorable": "svg/honorable_mention.svg",
+                "finalist": "svg/finalist.svg"
+            };
+            
+            certificateTemplates = {
+                "2024": "certificate/2024.pdf",
+                "2025": "certificate/2025.pdf",
+                "2023": "certificate/2023.pdf"
+            };
+            
+            // Compute ranks for all students
+            computeRanksPerYearCategory(students);
         }
 
         // Compute ranks per year and category
@@ -394,11 +454,6 @@
                     generateCertificatePDF(selectedStudent);
                 }
             });
-            
-            // Auto-select the first student for demo
-            if (students.length > 0) {
-                selectStudent(students[0]);
-            }
         }
 
         // Search students by name (word-by-word)
@@ -441,6 +496,7 @@
             document.querySelectorAll('.result-item').forEach(item => {
                 item.classList.remove('selected');
             });
+            event.currentTarget.classList.add('selected');
             
             // Update selected student display
             const selectedStudentDiv = document.getElementById('selectedStudent');
@@ -463,21 +519,11 @@
             document.getElementById('previewBtn').disabled = false;
             document.getElementById('generateBtn').disabled = false;
             
-            // Generate and display certificate ID
-            const certId = generateCertID(student);
-            document.getElementById('certIdDisplay').textContent = `Certificate ID: ${certId}`;
+            // Use student_id as certificate ID
+            document.getElementById('certIdDisplay').textContent = `Certificate ID: ${student.student_id}`;
             
             // Auto-preview the certificate
             renderCertificate(student, false);
-        }
-
-        // Generate certificate ID
-        function generateCertID(student) {
-            const year = student.year;
-            const cat = (student.category || "X").slice(0,3).toUpperCase();
-            const rank = student.rank || 0;
-            const ts = Date.now().toString().slice(-6);
-            return `CERT-${year}-${cat}-${rank}-${ts}`;
         }
 
         // Determine medal type based on rank
@@ -514,21 +560,67 @@
                 // Clear canvas
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 
-                // Draw certificate background (white)
-                ctx.fillStyle = '#ffffff';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                // Get certificate template path
+                const templatePath = certificateTemplates[student.year] || certificateTemplates['2024'];
+                
+                // Try to draw PDF background, fallback to simple background if fails
+                try {
+                    await drawPDFBackground(ctx, canvas, templatePath);
+                } catch (error) {
+                    console.warn('Could not load PDF template, using fallback background:', error);
+                    drawFallbackBackground(ctx, canvas);
+                }
                 
                 // Draw certificate content
                 drawCertificateContent(ctx, canvas, student, isForPDF);
                 
             } catch (error) {
                 console.error('Error rendering certificate:', error);
+                // Fallback: draw a simple certificate background
+                drawFallbackBackground(ctx, canvas);
+                drawCertificateContent(ctx, canvas, student, isForPDF);
             } finally {
                 // Hide loading indicator
                 if (!isForPDF) {
                     document.getElementById('loadingIndicator').style.display = 'none';
                 }
             }
+        }
+
+        // Draw PDF background
+        async function drawPDFBackground(ctx, canvas, pdfPath) {
+            return new Promise((resolve, reject) => {
+                pdfjsLib.getDocument(pdfPath).promise.then(pdf => {
+                    pdf.getPage(1).then(page => {
+                        const viewport = page.getViewport({ scale: canvas.width / page.getViewport({ scale: 1 }).width });
+                        
+                        const renderContext = {
+                            canvasContext: ctx,
+                            viewport: viewport
+                        };
+                        
+                        page.render(renderContext).promise.then(() => {
+                            resolve();
+                        }).catch(reject);
+                    }).catch(reject);
+                }).catch(reject);
+            });
+        }
+
+        // Draw fallback background (if PDF loading fails)
+        function drawFallbackBackground(ctx, canvas) {
+            // Draw a simple certificate-like background
+            ctx.fillStyle = '#fefefe';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Add a border
+            ctx.strokeStyle = '#d4af37';
+            ctx.lineWidth = 15;
+            ctx.strokeRect(50, 50, canvas.width - 100, canvas.height - 100);
+            
+            // Add a decorative element
+            ctx.fillStyle = '#f5f5f5';
+            ctx.fillRect(100, 100, canvas.width - 200, canvas.height - 200);
         }
 
         // Draw certificate content
@@ -547,108 +639,207 @@
             ctx.textAlign = 'center';
             ctx.fillStyle = '#0b0b0b';
             
+            // Add space for logo at top (approx 100px)
+            const logoSpace = s(100, 'y');
+            
             // Title "CERTIFICATE"
             ctx.font = `700 ${s(70)}px 'Playfair Display', serif`;
-            ctx.fillText("CERTIFICATE", s(397), s(100, 'y'));
+            ctx.fillText("CERTIFICATE", s(397), s(100, 'y') + logoSpace);
             
             // Subtitle
             ctx.font = `${s(18)}px 'Libre Baskerville', serif`;
             ctx.letterSpacing = `${s(2)}px`;
-            ctx.fillText("OF International Academic Research Competition 2024", s(397), s(150, 'y'));
+            ctx.fillText("OF International Academic Research Competition 2024", s(397), s(150, 'y') + logoSpace);
             ctx.letterSpacing = '0px';
             
             // "Awarded to"
             ctx.font = `italic ${s(16)}px 'Libre Baskerville', serif`;
-            ctx.fillText("Awarded to", s(397), s(200, 'y'));
+            ctx.fillText("Awarded to", s(397), s(200, 'y') + logoSpace);
             
             // Student name
             ctx.font = `${s(60)}px 'Great Vibes', cursive`;
-            ctx.fillText(student.name, s(397), s(260, 'y'));
+            ctx.fillText(student.name, s(397), s(260, 'y') + logoSpace);
             
             // Decorative line
             ctx.strokeStyle = '#0b0b0b';
             ctx.lineWidth = s(1);
             ctx.beginPath();
-            ctx.moveTo(s(297), s(300, 'y'));
-            ctx.lineTo(s(497), s(300, 'y'));
+            ctx.moveTo(s(297), s(300, 'y') + logoSpace);
+            ctx.lineTo(s(497), s(300, 'y') + logoSpace);
             ctx.stroke();
             
             // Student details
             ctx.font = `${s(16)}px 'Libre Baskerville', serif`;
-            ctx.fillText("Of", s(397), s(340, 'y'));
-            ctx.fillText(`${student.classLevel || "A Level"} at ${student.school},`, s(397), s(370, 'y'));
-            ctx.fillText("Dhaka, Bangladesh", s(397), s(400, 'y'));
+            ctx.fillText("Of", s(397), s(340, 'y') + logoSpace);
+            const classLevel = student.classLevel || "A Level";
+            ctx.fillText(`${classLevel} at ${student.school},`, s(397), s(370, 'y') + logoSpace);
+            
+            // Country with flag
+            ctx.fillText("Dhaka, ", s(397), s(400, 'y') + logoSpace);
+            // Draw flag inline with country name
+            const countryText = "Bangladesh";
+            const countryWidth = ctx.measureText(countryText).width;
+            ctx.fillText(countryText, s(397) + countryWidth/2 + s(15), s(400, 'y') + logoSpace);
+            
+            // Draw flag SVG
+            const flagSvg = flags[student.country];
+            if (flagSvg) {
+                const flagX = s(397) - countryWidth/2 - s(20);
+                const flagY = s(400, 'y') + logoSpace - s(8);
+                drawFlagFromSVG(ctx, flagSvg, flagX, flagY, s(20), s(12));
+            }
             
             // Achievement text
             ctx.font = `${s(14)}px 'Libre Baskerville', serif`;
             const achievementText = `delivering an impressive research project and presentation, and achieved`;
-            ctx.fillText(achievementText, s(397), s(450, 'y'));
+            ctx.fillText(achievementText, s(397), s(450, 'y') + logoSpace);
             
-            // Rank and score
-            const rankText = `${student.rank}${getOrdinalSuffix(student.rank)} place in the ${student.category} Category with a score of ${student.scaledFinalScore} out of 200`;
-            ctx.fillText(rankText, s(397), s(480, 'y'));
+            // Rank and score with bold and italic for "place" and "score"
+            const rankText1 = `${student.rank}${getOrdinalSuffix(student.rank)} `;
+            const rankText2 = "place";
+            const rankText3 = " in the ";
+            const rankText4 = `${student.category} Category with a `;
+            const rankText5 = "score";
+            const rankText6 = ` of ${student.scaledFinalScore} out of 200`;
             
-            // Score breakdown
-            const breakdownText = `(Research Proposal: ${student.researchPaperScore}/100, Presentation: ${student.presentationScore}/100)`;
-            ctx.fillText(breakdownText, s(397), s(510, 'y'));
+            const rankText1Width = ctx.measureText(rankText1).width;
+            const rankText2Width = ctx.measureText(rankText2).width;
+            const rankText3Width = ctx.measureText(rankText3).width;
+            const rankText4Width = ctx.measureText(rankText4).width;
+            const rankText5Width = ctx.measureText(rankText5).width;
             
-            // Research Title
+            const totalRankWidth = rankText1Width + rankText2Width + rankText3Width + 
+                                 rankText4Width + rankText5Width + ctx.measureText(rankText6).width;
+            const startX = s(397) - totalRankWidth/2;
+            
+            ctx.fillText(rankText1, startX + rankText1Width/2, s(480, 'y') + logoSpace);
+            
+            ctx.font = `italic bold ${s(14)}px 'Libre Baskerville', serif`;
+            ctx.fillText(rankText2, startX + rankText1Width + rankText2Width/2, s(480, 'y') + logoSpace);
+            
+            ctx.font = `${s(14)}px 'Libre Baskerville', serif`;
+            ctx.fillText(rankText3, startX + rankText1Width + rankText2Width + rankText3Width/2, s(480, 'y') + logoSpace);
+            ctx.fillText(rankText4, startX + rankText1Width + rankText2Width + rankText3Width + rankText4Width/2, s(480, 'y') + logoSpace);
+            
+            ctx.font = `italic bold ${s(14)}px 'Libre Baskerville', serif`;
+            ctx.fillText(rankText5, startX + rankText1Width + rankText2Width + rankText3Width + rankText4Width + rankText5Width/2, s(480, 'y') + logoSpace);
+            
+            ctx.font = `${s(14)}px 'Libre Baskerville', serif`;
+            ctx.fillText(rankText6, startX + rankText1Width + rankText2Width + rankText3Width + rankText4Width + rankText5Width + ctx.measureText(rankText6).width/2, s(480, 'y') + logoSpace);
+            
+            // Score breakdown with percentiles
+            const researchPercentile = student.researchPaperPercentile || 0;
+            const presentationPercentile = student.presentationPercentile || 0;
+            const breakdownText = `(Research Proposal: ${student.researchPaperScore}/100, ${researchPercentile}% | Presentation: ${student.presentationScore}/100, ${presentationPercentile}%)`;
+            ctx.fillText(breakdownText, s(397), s(510, 'y') + logoSpace);
+            
+            // Research Title with label
             ctx.font = `700 ${s(18)}px 'Libre Baskerville', serif`;
-            // Wrap long titles
+            ctx.fillText("Research Title:", s(397), s(570, 'y') + logoSpace);
+            
+            // Wrap long titles with enough space
             const titleLines = wrapText(ctx, student.research_proposal_title, s(600));
             titleLines.forEach((line, index) => {
-                ctx.fillText(line, s(397), s(570 + (index * 25), 'y'));
+                ctx.fillText(line, s(397), s(600 + (index * 30), 'y') + logoSpace);
             });
             
-            // Rank link
+            // Rank link with enough space after title
+            const titleBottom = s(600 + (titleLines.length * 30), 'y') + logoSpace;
             ctx.font = `${s(12)}px 'Libre Baskerville', serif`;
-            ctx.fillText(`https://iarco.org/2024-winners?category=${student.category}&rank=${student.rank}`, s(397), s(650, 'y'));
+            ctx.fillText(`https://iarco.org/2024-winners?category=${student.category}&rank=${student.rank}`, s(397), titleBottom + s(40, 'y'));
             
             // Medal/badge area with rank info
-            drawRankBadge(ctx, canvas, student.rank, student.totalCountCategory, s(397), s(750, 'y'), s(150));
+            drawRankMedal(ctx, canvas, student.rank, student.totalCountCategory, s(397), titleBottom + s(120, 'y'), s(150));
             
             // Date
             ctx.font = `${s(16)}px 'Libre Baskerville', serif`;
-            ctx.fillText("December 30, 2024", s(397), s(900, 'y'));
+            ctx.fillText("December 30, 2024", s(397), titleBottom + s(270, 'y'));
             
-            // Footer
-            ctx.font = `${s(12)}px 'Libre Baskerville', serif`;
-            ctx.fillText("Powered by:", s(397), s(1000, 'y'));
-            ctx.fillText("yjbumal.org", s(397), s(1020, 'y'));
+            // Certificate ID (using student_id)
+            ctx.font = `${s(10)}px 'Libre Baskerville', serif`;
+            ctx.fillStyle = '#666666';
+            ctx.fillText(`Certificate ID: ${student.student_id}`, s(397), titleBottom + s(320, 'y'));
         }
 
-        // Draw rank badge
-        function drawRankBadge(ctx, canvas, rank, totalCount, x, y, size) {
+        // Draw flag from SVG string
+        function drawFlagFromSVG(ctx, svgString, x, y, width, height) {
+            // Create a temporary image element
+            const img = new Image();
+            const svgBlob = new Blob([svgString], {type: 'image/svg+xml;charset=utf-8'});
+            const url = URL.createObjectURL(svgBlob);
+            
+            img.onload = function() {
+                ctx.drawImage(img, x, y, width, height);
+                URL.revokeObjectURL(url);
+            };
+            img.src = url;
+        }
+
+        // Draw rank medal with proper medal type
+        function drawRankMedal(ctx, canvas, rank, totalCount, x, y, size) {
             ctx.save();
             ctx.translate(x, y);
             
-            // Draw badge background (circle)
-            ctx.beginPath();
-            ctx.arc(0, 0, size/2, 0, Math.PI * 2);
-            ctx.fillStyle = '#f5f5f5';
-            ctx.fill();
-            ctx.strokeStyle = '#d4af37';
-            ctx.lineWidth = size * 0.05;
-            ctx.stroke();
+            // Get medal type
+            const medalType = medalForRank(rank);
             
-            // Draw rank text
+            // Draw medal based on type
+            drawMedalByType(ctx, medalType, size);
+            
+            // Draw rank text on medal
             ctx.fillStyle = '#333';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
+            ctx.font = `700 ${size*0.3}px 'Playfair Display', serif`;
+            ctx.fillText(rank, 0, 0);
             
-            // "Top Xth"
-            ctx.font = `700 ${size*0.2}px 'Playfair Display', serif`;
-            ctx.fillText(`Top ${rank}${getOrdinalSuffix(rank)}`, 0, -size*0.15);
-            
-            // "out of"
+            // Draw "Top Xth out of Yth" text below medal
+            ctx.fillStyle = '#000';
+            ctx.font = `700 ${size*0.15}px 'Playfair Display', serif`;
+            ctx.fillText(`Top ${rank}${getOrdinalSuffix(rank)}`, 0, size*0.6);
             ctx.font = `${size*0.1}px 'Libre Baskerville', serif`;
-            ctx.fillText("out of", 0, 0);
-            
-            // "Yth"
-            ctx.font = `700 ${size*0.2}px 'Playfair Display', serif`;
-            ctx.fillText(`${totalCount}${getOrdinalSuffix(totalCount)}`, 0, size*0.15);
+            ctx.fillText("out of", 0, size*0.75);
+            ctx.font = `700 ${size*0.15}px 'Playfair Display', serif`;
+            ctx.fillText(`${totalCount}${getOrdinalSuffix(totalCount)}`, 0, size*0.9);
             
             ctx.restore();
+        }
+
+        // Draw medal based on type
+        function drawMedalByType(ctx, medalType, size) {
+            // Draw medal background (circle)
+            ctx.beginPath();
+            ctx.arc(0, 0, size/2, 0, Math.PI * 2);
+            
+            // Color based on medal type
+            switch(medalType) {
+                case 'gold':
+                    ctx.fillStyle = '#FFD700';
+                    break;
+                case 'silver':
+                    ctx.fillStyle = '#C0C0C0';
+                    break;
+                case 'bronze':
+                    ctx.fillStyle = '#CD7F32';
+                    break;
+                case 'honorable':
+                    ctx.fillStyle = '#1a5276';
+                    break;
+                default: // finalist
+                    ctx.fillStyle = '#7d3c98';
+            }
+            
+            ctx.fill();
+            ctx.strokeStyle = '#333';
+            ctx.lineWidth = size * 0.03;
+            ctx.stroke();
+            
+            // Add inner circle for medal design
+            ctx.beginPath();
+            ctx.arc(0, 0, size*0.4, 0, Math.PI * 2);
+            ctx.fillStyle = '#fff';
+            ctx.fill();
+            ctx.stroke();
         }
 
         // Helper function to wrap text

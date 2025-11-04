@@ -671,7 +671,7 @@
             // Student details - decreased font size
             ctx.font = `${s(15)}px 'Libre Baskerville', serif`;
             ctx.fillText("Of", s(397), s(340, 'y') + logoSpace);
-            const classLevel = student.classLevel || "A Level";
+            const classLevel = student.classLevel || "Student";
             ctx.fillText(`${classLevel} at ${student.school},`, s(397), s(370, 'y') + logoSpace);
             
             // Country with flag - flag after country name
@@ -693,7 +693,7 @@
             ctx.fillText(achievementText, s(397), s(450, 'y') + logoSpace);
             
             // Rank and score with numbers bold and italic
-            const rankText = `${student.rank}${getOrdinalSuffix(student.rank)} place in the ${student.category} Category with a score of ${student.scaledFinalScore} out of 200`;
+            const rankText = `${student.rank}${getOrdinalSuffix(student.rank)} place out of ${student.totalCountCategory}${getOrdinalSuffix(student.totalCountCategory)} in the ${student.category} Category with a score of ${student.scaledFinalScore} out of 200`;
             ctx.fillText(rankText, s(397), s(480, 'y') + logoSpace);
             
             // Make numbers bold and italic
@@ -727,9 +727,8 @@
             ctx.fillText(afterScore, startX + beforeRankWidth + rankNumWidth + afterRankWidth + scoreNumWidth + ctx.measureText(afterScore).width/2, s(480, 'y') + logoSpace);
             
             // Score breakdown with percentiles - decreased font size
-            const researchPercentile = student.researchPaperPercentile || 0;
-            const presentationPercentile = student.presentationPercentile || 0;
-            const breakdownText = `(Research Proposal: ${student.researchPaperScore}/100, ${researchPercentile}% | Presentation: ${student.presentationScore}/100, ${presentationPercentile}%)`;
+            const researchPercentile = student.plagiarism_check_percentile || 0;
+            const breakdownText = `(Research Proposal: ${student.researchPaperScore}/100 | Presentation: ${student.presentationScore}/100 | Similarity: ${researchPercentile}%)`;
             ctx.fillText(breakdownText, s(397), s(510, 'y') + logoSpace);
             
             // Research Title with label - decreased font size
@@ -753,8 +752,8 @@
             
             // Date at bottom left
             ctx.textAlign = 'left';
-            ctx.font = `${s(15)}px 'Libre Baskerville', serif`;
-            ctx.fillText("December 30, 2024", s(100), titleBottom + s(270, 'y'));
+            ctx.font = `${s(10)}px 'Libre Baskerville', serif`;
+            ctx.fillText("November 15, 2025", s(100), titleBottom + s(270, 'y'));
             
             // Certificate ID at bottom right (using student_id)
             ctx.textAlign = 'right';

@@ -728,7 +728,7 @@
             
             // Score breakdown with percentiles - decreased font size
             const researchPercentile = `${student.plagiarism_check_percentile}` || 0;
-            const breakdownText = `(Research Proposal: ${student.researchPaperScore}/100 | Presentation: ${student.presentationScore}/100 | Similarity: `${student.plagiarism_check_percentile}`%/100%)`;
+            const breakdownText = `(Research Proposal: ${student.researchPaperScore}/100 | Presentation: ${student.presentationScore}/100 | Similarity: ${student.plagiarism_check_percentile}%/100%)`;
             ctx.fillText(breakdownText, s(397), s(510, 'y') + logoSpace);
             
             // Research Title with label - decreased font size

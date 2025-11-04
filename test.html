@@ -649,7 +649,7 @@
             // Subtitle - decreased font size
             ctx.font = `${s(17)}px 'Libre Baskerville', serif`;
             ctx.letterSpacing = `${s(2)}px`;
-            ctx.fillText("Of International Academic Research Competition `${student.year}`", s(397), s(150, 'y') + logoSpace);
+            ctx.fillText("Of International Academic Research Competition "+`${student.year}`, s(397), s(150, 'y') + logoSpace);
             ctx.letterSpacing = '0px';
             
             // "Awarded to" - decreased font size
@@ -727,8 +727,8 @@
             ctx.fillText(afterScore, startX + beforeRankWidth + rankNumWidth + afterRankWidth + scoreNumWidth + ctx.measureText(afterScore).width/2, s(480, 'y') + logoSpace);
             
             // Score breakdown with percentiles - decreased font size
-            const researchPercentile = student.plagiarism_check_percentile || 0;
-            const breakdownText = `(Research Proposal: ${student.researchPaperScore}/100 | Presentation: ${student.presentationScore}/100 | Similarity: ${student.plagiarism_check_percentile}%/100%)`;
+            const researchPercentile = `${student.plagiarism_check_percentile}` || 0;
+            const breakdownText = `(Research Proposal: ${student.researchPaperScore}/100 | Presentation: ${student.presentationScore}/100 | Similarity: `${student.plagiarism_check_percentile}`%/100%)`;
             ctx.fillText(breakdownText, s(397), s(510, 'y') + logoSpace);
             
             // Research Title with label - decreased font size

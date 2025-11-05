@@ -1127,7 +1127,7 @@
                 
                 // Create download link
                 const link = document.createElement('a');
-                link.download = `IARCO_${student.year}_Finalist_${student.name.replace(/\s+/g, '_')}_${generateRandomId()}.jpg`;
+                link.download = `IARCO_CERT_${student.name.replace(/\s+/g, '_')}_${student.year}_${generateRandomId()}.jpg`;
                 link.href = jpgDataUrl;
                 
                 // Trigger download

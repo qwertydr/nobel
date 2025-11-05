@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IARCO Certificate Generator</title>
+    <title>IARCO Finalist Certificate</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Great+Vibes&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
@@ -144,6 +144,7 @@
             display: flex;
             gap: 10px;
             margin-top: 20px;
+            flex-wrap: wrap;
         }
         
         button {
@@ -157,6 +158,7 @@
             cursor: pointer;
             transition: background-color 0.3s;
             flex: 1;
+            min-width: 120px;
         }
         
         button:hover {
@@ -256,7 +258,7 @@
 <body>
     <div class="container">
         <div class="search-section">
-            <h1>IARCO Certificate Generator</h1>
+            <h1>IARCO Finalist Certificate</h1>
             
             <input type="search" class="search-box" placeholder="Search by student name (word-by-word)" id="searchInput">
             
@@ -275,7 +277,8 @@
                 
                 <div class="buttons">
                     <button id="previewBtn" disabled>Preview Certificate</button>
-                    <button id="generateBtn" disabled>Generate & Download</button>
+                    <button id="generatePdfBtn" disabled>Download PDF</button>
+                    <button id="generateJpgBtn" disabled>Download JPG</button>
                 </div>
                 
                 <div class="certificate-id" id="certIdDisplay"></div>
@@ -344,7 +347,7 @@
             }
         }
 
-        // Create medal SVGs programmatically - with larger size
+        // Create medal SVGs programmatically - with even larger size
         function createMedalSVGs() {
             medals = {
                 "gold": createMedalSVG('#FFD700', '#D4AF37'),
@@ -355,24 +358,24 @@
             };
         }
 
-        // Create a medal SVG with given colors - larger size
+        // Create a medal SVG with given colors - even larger size
         function createMedalSVG(primaryColor, secondaryColor) {
             return `
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 140">
                     <!-- Medal ribbon -->
-                    <path d="M30,15 L90,15 L82,40 L38,40 Z" fill="${secondaryColor}" opacity="0.8"/>
+                    <path d="M35,18 L105,18 L95,47 L45,47 Z" fill="${secondaryColor}" opacity="0.8"/>
                     
                     <!-- Medal body -->
-                    <circle cx="60" cy="70" r="42" fill="${primaryColor}" stroke="${secondaryColor}" stroke-width="4"/>
+                    <circle cx="70" cy="82" r="50" fill="${primaryColor}" stroke="${secondaryColor}" stroke-width="5"/>
                     
                     <!-- Inner circle -->
-                    <circle cx="60" cy="70" r="30" fill="${secondaryColor}" opacity="0.2"/>
+                    <circle cx="70" cy="82" r="35" fill="${secondaryColor}" opacity="0.2"/>
                     
                     <!-- Decorative ring -->
-                    <circle cx="60" cy="70" r="34" fill="none" stroke="${secondaryColor}" stroke-width="2" opacity="0.7"/>
+                    <circle cx="70" cy="82" r="40" fill="none" stroke="${secondaryColor}" stroke-width="2.5" opacity="0.7"/>
                     
                     <!-- Top loop for ribbon -->
-                    <path d="M50,15 L70,15 L67,30 L53,30 Z" fill="${secondaryColor}"/>
+                    <path d="M58,18 L82,18 L78,35 L62,35 Z" fill="${secondaryColor}"/>
                 </svg>
             `;
         }
@@ -516,7 +519,8 @@
             const searchInput = document.getElementById('searchInput');
             const searchResults = document.getElementById('searchResults');
             const previewBtn = document.getElementById('previewBtn');
-            const generateBtn = document.getElementById('generateBtn');
+            const generatePdfBtn = document.getElementById('generatePdfBtn');
+            const generateJpgBtn = document.getElementById('generateJpgBtn');
             
             // Search input event
             searchInput.addEventListener('input', function() {
@@ -532,10 +536,17 @@
                 }
             });
             
-            // Generate button event
-            generateBtn.addEventListener('click', function() {
+            // PDF button event
+            generatePdfBtn.addEventListener('click', function() {
                 if (selectedStudent) {
                     generateCertificatePDF(selectedStudent);
+                }
+            });
+            
+            // JPG button event
+            generateJpgBtn.addEventListener('click', function() {
+                if (selectedStudent) {
+                    generateCertificateJPG(selectedStudent);
                 }
             });
         }
@@ -588,21 +599,24 @@
             
             selectedStudentDiv.innerHTML = `
                 <div class="student-info">
+                     <p><strong>Certificate ID: </strong> ${student.student_id}</p>
                     <p><strong>Name:</strong> ${student.name}</p>
                     <p><strong>School:</strong> ${student.school}</p>
                     <p><strong>Category:</strong> ${student.category}</p>
                     <p><strong>Year:</strong> ${student.year}</p>
                     <p><strong>Country:</strong> <span class="flag">${flagSvg}</span> ${student.country}</p>
                     <p><strong>Research Title:</strong> ${student.research_proposal_title}</p>
+                    <p><strong>Plagiarism Similarity:</strong> ${student.research_paper.plagiarism_check_percentile}%/20%</p>
                     <p><strong>Rank:</strong> ${student.rank} out of ${student.totalCountCategory}</p>
                     <p><strong>Final Score:</strong> ${student.scaledFinalScore}/200</p>
-                    <p><strong>Plagiarism Similarity:</strong> ${student.scaledFinalScore}/200</p>
+                    
                 </div>
             `;
             
             // Enable buttons
             document.getElementById('previewBtn').disabled = false;
-            document.getElementById('generateBtn').disabled = false;
+            document.getElementById('generatePdfBtn').disabled = false;
+            document.getElementById('generateJpgBtn').disabled = false;
             
             // Use student_id as certificate ID
             document.getElementById('certIdDisplay').textContent = `Certificate ID: ${student.student_id}`;
@@ -708,7 +722,7 @@
             ctx.fillRect(100, 100, canvas.width - 200, canvas.height - 200);
         }
 
-        // Draw certificate content
+        // Draw certificate content - FIXED VERSION
         async function drawCertificateContent(ctx, canvas, student, isForPDF) {
             const width = canvas.width;
             const height = canvas.height;
@@ -778,69 +792,75 @@
             ctx.fillText(achievementText, s(397), s(450, 'y') + logoSpace);
             
             // Rank and score with numbers bold and italic - FIXED VERSION
-            // First, let's create the full text and measure it
             const rankNum = `${student.rank}`;
             const ordinalSuffix = getOrdinalSuffix(student.rank);
             const totalNum = `${student.totalCountCategory}`;
             const totalOrdinal = getOrdinalSuffix(student.totalCountCategory);
             const scoreNum = `${student.scaledFinalScore}`;
             
-            const rankText = `${rankNum}${ordinalSuffix} place out of ${totalNum}${totalOrdinal} in the ${student.category} Category with a score of ${scoreNum} out of 200`;
+            // Create the full rank text
+            const rankText = `${rankNum}${ordinalSuffix} place out of ${totalNum}${totalOrdinal} Top Finalist in the ${student.category} Category with a score of ${scoreNum} out of 200`;
             
-            // Calculate the starting position for the text
-            const totalWidth = ctx.measureText(rankText).width;
-            const startX = s(397) - totalWidth/2;
+            // Draw the complete text first to get positioning right
+            ctx.font = `${s(12)}px 'Libre Baskerville', serif`;
+            ctx.fillText(rankText, s(397), s(480, 'y') + logoSpace);
             
-            // Draw the text in parts
+            // Now draw the bold/italic parts over the regular text
+            const regularFont = `${s(12)}px 'Libre Baskerville', serif`;
+            const boldItalicFont = `italic bold ${s(12)}px 'Libre Baskerville', serif`;
+            
+            // Measure the text to position the bold parts correctly
+            const fullTextWidth = ctx.measureText(rankText).width;
+            const startX = s(397) - fullTextWidth / 2;
+            
+            // Set initial position
             let currentX = startX;
             
-            // Part 1: before the first number
-            const part1 = `${rankNum}`;
+            // Part 1: rank number (bold & italic)
+            const part1 = rankNum;
             const part1Width = ctx.measureText(part1).width;
-            
-            // Draw the first number with bold and italic
-            ctx.font = `italic bold ${s(12)}px 'Libre Baskerville', serif`;
-            ctx.fillText(rankNum, currentX + part1Width/2, s(480, 'y') + logoSpace);
+            ctx.font = boldItalicFont;
+            ctx.fillText(part1, currentX + part1Width/2, s(480, 'y') + logoSpace);
             currentX += part1Width;
             
-            // Part 2: ordinal suffix
-            ctx.font = `${s(12)}px 'Libre Baskerville', serif`;
-            const part2 = `${ordinalSuffix} place out of `;
+            // Part 2: ordinal suffix (regular)
+            const part2 = ordinalSuffix + " place out of ";
             const part2Width = ctx.measureText(part2).width;
+            ctx.font = regularFont;
             ctx.fillText(part2, currentX + part2Width/2, s(480, 'y') + logoSpace);
             currentX += part2Width;
             
-            // Part 3: total number
-            ctx.font = `italic bold ${s(12)}px 'Libre Baskerville', serif`;
-            const part3 = `${totalNum}`;
+            // Part 3: total number (bold & italic)
+            const part3 = totalNum;
             const part3Width = ctx.measureText(part3).width;
+            ctx.font = boldItalicFont;
             ctx.fillText(part3, currentX + part3Width/2, s(480, 'y') + logoSpace);
             currentX += part3Width;
             
-            // Part 4: after total number
-            ctx.font = `${s(12)}px 'Libre Baskerville', serif`;
-            const part4 = `${totalOrdinal} in the ${student.category} Category with a score of `;
+            // Part 4: text after total number (regular)
+            const part4 = totalOrdinal + " Top Finalist in the " + student.category + " Category with a score of ";
             const part4Width = ctx.measureText(part4).width;
+            ctx.font = regularFont;
             ctx.fillText(part4, currentX + part4Width/2, s(480, 'y') + logoSpace);
             currentX += part4Width;
             
-            // Part 5: score number
-            ctx.font = `italic bold ${s(12)}px 'Libre Baskerville', serif`;
-            const part5 = `${scoreNum}`;
+            // Part 5: score number (bold & italic)
+            const part5 = scoreNum;
             const part5Width = ctx.measureText(part5).width;
+            ctx.font = boldItalicFont;
             ctx.fillText(part5, currentX + part5Width/2, s(480, 'y') + logoSpace);
             currentX += part5Width;
             
-            // Part 6: " out of 200"
-            ctx.font = `${s(12)}px 'Libre Baskerville', serif`;
+            // Part 6: " out of 200" (regular)
             const part6 = " out of 200";
             const part6Width = ctx.measureText(part6).width;
+            ctx.font = regularFont;
             ctx.fillText(part6, currentX + part6Width/2, s(480, 'y') + logoSpace);
             
             // Score breakdown with percentiles - decreased font size by 1px
             const researchPercentile = `${student.plagiarism_check_percentile}` || 0;
             const plagiarismPercentile = student.research_paper.plagiarism_check_percentile;
-            const breakdownText = `(Research Proposal: ${student.researchPaperScore}/100 | Presentation: ${student.presentationScore}/100 | Similarity: ${plagiarismPercentile}%/100%)`;
+            const breakdownText = `(Research Proposal: ${student.researchPaperScore}/100 | Presentation: ${student.presentationScore}/100 | Similarity: ${plagiarismPercentile}% | P: ${student.plagiarismPenalty})`;
             ctx.fillText(breakdownText, s(397), s(510, 'y') + logoSpace);
             
             // Research Title with label - decreased font size by 1px
@@ -859,8 +879,8 @@
             ctx.font = `${s(10)}px 'Libre Baskerville', serif`;
             ctx.fillText(`https://iarco.org/${student.year}-winners?category=${student.category}&rank=${student.rank}`, s(397), titleBottom + s(40, 'y'));
             
-            // Medal/badge area with rank info - larger size
-            await drawRankMedal(ctx, canvas, student.rank, s(397), titleBottom + s(120, 'y'), s(90)); // Increased from s(80) to s(90)
+            // Medal/badge area with rank info - even larger size
+            await drawRankMedal(ctx, canvas, student.rank, s(397), titleBottom + s(120, 'y'), s(110)); // Increased from s(90) to s(110)
             
             // FIXED POSITION for date and certificate ID
             // Always position these at a fixed distance from the bottom
@@ -869,7 +889,7 @@
             // Date at bottom left
             ctx.textAlign = 'left';
             ctx.font = `${s(9)}px 'Libre Baskerville', serif`;
-            ctx.fillText("November 15, 2025", s(100), fixedBottomY);
+            ctx.fillText("November 15, "+`${student.year}`, s(100), fixedBottomY);
             
             // Certificate ID at bottom right (using student_id)
             ctx.textAlign = 'right';
@@ -956,10 +976,10 @@
                     ctx.fillStyle = '#CD7F32';
                     break;
                 case 'honorable':
-                    ctx.fillStyle = '#1a5276';
+                    ctx.fillStyle = '#3ab573';
                     break;
                 default: // finalist
-                    ctx.fillStyle = '#7d3c98';
+                    ctx.fillStyle = '#c985e6';
             }
             
             ctx.fill();
@@ -1026,13 +1046,13 @@
             }
         }
 
-        // Generate and download PDF certificate
+        // Generate and download PDF certificate with metadata
         async function generateCertificatePDF(student) {
-            const generateBtn = document.getElementById('generateBtn');
+            const generatePdfBtn = document.getElementById('generatePdfBtn');
             
             // Disable button and show animation
-            generateBtn.disabled = true;
-            generateBtn.classList.add('generate-animation');
+            generatePdfBtn.disabled = true;
+            generatePdfBtn.classList.add('generate-animation');
             
             // Show loading indicator
             document.getElementById('loadingIndicator').style.display = 'block';
@@ -1051,6 +1071,19 @@
                     format: 'a4'
                 });
                 
+                // Set PDF metadata
+                pdf.setProperties({
+                    title: `IARCO ${student.year} - ${student.name}`,
+                    subject: `Certificate of Achievement - IARCO ${student.year}`,
+                    author: 'International Academic Research Competition (IARCO)',
+                    keywords: 'iarco, certificate, achievement, research, competition, academic',
+                    creator: 'Md Sanaul Haque Shanto'
+                });
+                
+                // Generate random number for file naming
+                function generateRandomId1() {
+                    return Math.floor(1000 + Math.random() * 9000); // Generates 4-digit random number
+                }
                 // Calculate dimensions to fit A4
                 const imgWidth = 210; // A4 width in mm
                 const imgHeight = (canvas.height * imgWidth) / canvas.width;
@@ -1060,7 +1093,7 @@
                 pdf.addImage(imgData, 'JPEG', 0, 0, imgWidth, imgHeight);
                 
                 // Download PDF
-                const fileName = `IARCO_CERT_${student.name.replace(/\s+/g, '_')}_${student.year}.pdf`;
+                const fileName = `IARCO_${student.year}_Finalist_${student.name.replace(/\s+/g, '_')}_${generateRandomId1()}.pdf`;
                 pdf.save(fileName);
                 
             } catch (error) {
@@ -1068,8 +1101,57 @@
                 alert('Failed to generate PDF. Please try again.');
             } finally {
                 // Re-enable button and hide animation
-                generateBtn.disabled = false;
-                generateBtn.classList.remove('generate-animation');
+                generatePdfBtn.disabled = false;
+                generatePdfBtn.classList.remove('generate-animation');
+                document.getElementById('loadingIndicator').style.display = 'none';
+                
+                // Re-render at preview resolution
+                renderCertificate(student, false);
+            }
+        }
+
+        // Generate and download JPG certificate
+        async function generateCertificateJPG(student) {
+            const generateJpgBtn = document.getElementById('generateJpgBtn');
+            
+            // Disable button and show animation
+            generateJpgBtn.disabled = true;
+            generateJpgBtn.classList.add('generate-animation');
+            
+            // Show loading indicator
+            document.getElementById('loadingIndicator').style.display = 'block';
+            
+            try {
+                // Render certificate at high resolution
+                await renderCertificate(student, true);
+                
+                // Get canvas
+                const canvas = document.getElementById('certificateCanvas');
+                
+                // Convert canvas to JPG data URL
+                const jpgDataUrl = canvas.toDataURL('image/jpeg', 0.95);
+                
+                // Generate random number for file naming
+                function generateRandomId2() {
+                    return Math.floor(1000 + Math.random() * 9000); // Generates 4-digit random number
+                }
+                // Create download link
+                const link = document.createElement('a');
+                link.download = `IARCO_${student.year}_Finalist_${student.name.replace(/\s+/g, '_')}_${generateRandomId2()}.jpg`;
+                link.href = jpgDataUrl;
+                
+                // Trigger download
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+            } catch (error) {
+                console.error('Error generating JPG:', error);
+                alert('Failed to generate JPG. Please try again.');
+            } finally {
+                // Re-enable button and hide animation
+                generateJpgBtn.disabled = false;
+                generateJpgBtn.classList.remove('generate-animation');
                 document.getElementById('loadingIndicator').style.display = 'none';
                 
                 // Re-render at preview resolution

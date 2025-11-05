@@ -1075,7 +1075,7 @@
                 });
                 
                 // Generate random number for file naming
-                function generateRandomId() {
+                function generateRandomId1() {
                     return Math.floor(1000 + Math.random() * 9000); // Generates 4-digit random number
                 }
                 // Calculate dimensions to fit A4
@@ -1087,7 +1087,7 @@
                 pdf.addImage(imgData, 'JPEG', 0, 0, imgWidth, imgHeight);
                 
                 // Download PDF
-                const fileName = `IARCO_${student.year}_Finalist_${student.name.replace(/\s+/g, '_')}_${generateRandomId()}.pdf`;
+                const fileName = `IARCO_${student.year}_Finalist_${student.name.replace(/\s+/g, '_')}_${generateRandomId1()}.pdf`;
                 pdf.save(fileName);
                 
             } catch (error) {
@@ -1125,9 +1125,13 @@
                 // Convert canvas to JPG data URL
                 const jpgDataUrl = canvas.toDataURL('image/jpeg', 0.95);
                 
+                // Generate random number for file naming
+                function generateRandomId2() {
+                    return Math.floor(1000 + Math.random() * 9000); // Generates 4-digit random number
+                }
                 // Create download link
                 const link = document.createElement('a');
-                link.download = `IARCO_CERT_${student.name.replace(/\s+/g, '_')}_${student.year}_${generateRandomId()}.jpg`;
+                link.download = `IARCO_${student.year}_Finalist_${student.name.replace(/\s+/g, '_')}_${generateRandomId2()}.jpg`;
                 link.href = jpgDataUrl;
                 
                 // Trigger download

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IARCO Certificate Generator</title>
+    <title>IARCO Finalist Certificate</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Great+Vibes&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
@@ -258,7 +258,7 @@
 <body>
     <div class="container">
         <div class="search-section">
-            <h1>IARCO Certificate Generator</h1>
+            <h1>IARCO Finalist Certificate</h1>
             
             <input type="search" class="search-box" placeholder="Search by student name (word-by-word)" id="searchInput">
             
@@ -599,15 +599,17 @@
             
             selectedStudentDiv.innerHTML = `
                 <div class="student-info">
+                     <p><strong>Certificate ID: </strong> ${student.student_id}</p>
                     <p><strong>Name:</strong> ${student.name}</p>
                     <p><strong>School:</strong> ${student.school}</p>
                     <p><strong>Category:</strong> ${student.category}</p>
                     <p><strong>Year:</strong> ${student.year}</p>
                     <p><strong>Country:</strong> <span class="flag">${flagSvg}</span> ${student.country}</p>
                     <p><strong>Research Title:</strong> ${student.research_proposal_title}</p>
+                    <p><strong>Plagiarism Similarity:</strong> ${student.research_paper.plagiarism_check_percentile}%/20%</p>
                     <p><strong>Rank:</strong> ${student.rank} out of ${student.totalCountCategory}</p>
                     <p><strong>Final Score:</strong> ${student.scaledFinalScore}/200</p>
-                    <p><strong>Plagiarism Similarity:</strong> ${student.scaledFinalScore}/200</p>
+                    
                 </div>
             `;
             
@@ -797,7 +799,7 @@
             const totalOrdinal = getOrdinalSuffix(student.totalCountCategory);
             const scoreNum = `${student.scaledFinalScore}`;
             
-            const rankText = `${rankNum}${ordinalSuffix} place out of ${totalNum}${totalOrdinal} in the ${student.category} Category with a score of ${scoreNum} out of 200`;
+            const rankText = `${rankNum}${ordinalSuffix} place out of ${totalNum}${totalOrdinal} Top Finalist in the ${student.category} Category with a score of ${scoreNum} out of 200`;
             
             // Calculate the starting position for the text
             const totalWidth = ctx.measureText(rankText).width;
@@ -852,7 +854,7 @@
             // Score breakdown with percentiles - decreased font size by 1px
             const researchPercentile = `${student.plagiarism_check_percentile}` || 0;
             const plagiarismPercentile = student.research_paper.plagiarism_check_percentile;
-            const breakdownText = `(Research Proposal: ${student.researchPaperScore}/100 | Presentation: ${student.presentationScore}/100 | Similarity: ${plagiarismPercentile}%/100%)`;
+            const breakdownText = `(Research Proposal: ${student.researchPaperScore}/100 | Presentation: ${student.presentationScore}/100 | Similarity: ${plagiarismPercentile}% | P: ${student.plagiarismPenalty})`;
             ctx.fillText(breakdownText, s(397), s(510, 'y') + logoSpace);
             
             // Research Title with label - decreased font size by 1px
@@ -881,7 +883,7 @@
             // Date at bottom left
             ctx.textAlign = 'left';
             ctx.font = `${s(9)}px 'Libre Baskerville', serif`;
-            ctx.fillText("November 15, 2025", s(100), fixedBottomY);
+            ctx.fillText("November 15, "+`${student.year}`, s(100), fixedBottomY);
             
             // Certificate ID at bottom right (using student_id)
             ctx.textAlign = 'right';
@@ -968,10 +970,10 @@
                     ctx.fillStyle = '#CD7F32';
                     break;
                 case 'honorable':
-                    ctx.fillStyle = '#1a5276';
+                    ctx.fillStyle = '#3ab573';
                     break;
                 default: // finalist
-                    ctx.fillStyle = '#7d3c98';
+                    ctx.fillStyle = '#c985e6';
             }
             
             ctx.fill();
@@ -1065,13 +1067,17 @@
                 
                 // Set PDF metadata
                 pdf.setProperties({
-                    title: `IARCO Certificate - ${student.name}`,
-                    subject: `Certificate of Achievement - International Academic Research Competition ${student.year}`,
+                    title: `IARCO ${student.year} - ${student.name}`,
+                    subject: `Certificate of Achievement - IARCO ${student.year}`,
                     author: 'International Academic Research Competition (IARCO)',
-                    keywords: 'certificate, achievement, research, competition, academic',
-                    creator: 'IARCO Certificate Generator'
+                    keywords: 'iarco, certificate, achievement, research, competition, academic',
+                    creator: 'Md Sanaul Haque Shanto'
                 });
                 
+                // Generate random number for file naming
+                function generateRandomId() {
+                    return Math.floor(1000 + Math.random() * 9000); // Generates 4-digit random number
+                }
                 // Calculate dimensions to fit A4
                 const imgWidth = 210; // A4 width in mm
                 const imgHeight = (canvas.height * imgWidth) / canvas.width;
@@ -1081,7 +1087,7 @@
                 pdf.addImage(imgData, 'JPEG', 0, 0, imgWidth, imgHeight);
                 
                 // Download PDF
-                const fileName = `IARCO_CERT_${student.name.replace(/\s+/g, '_')}_${student.year}.pdf`;
+                const fileName = `IARCO_${student.year}_Finalist_${student.name.replace(/\s+/g, '_')}_${generateRandomId()}.pdf`;
                 pdf.save(fileName);
                 
             } catch (error) {
@@ -1121,7 +1127,7 @@
                 
                 // Create download link
                 const link = document.createElement('a');
-                link.download = `IARCO_CERT_${student.name.replace(/\s+/g, '_')}_${student.year}.jpg`;
+                link.download = `IARCO_${student.year}_Finalist_${student.name.replace(/\s+/g, '_')}_${generateRandomId()}.jpg`;
                 link.href = jpgDataUrl;
                 
                 // Trigger download
